@@ -1,0 +1,62 @@
+{
+    "name": "xray-client-js",
+    "version": "1.0.0",
+    "description": "Xray Javascript Client is a javascript library, which wraps some of the REST APIs exposed by JFrog Xray.",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jfrog/xray-client-js"
+    },
+    "bugs": {
+        "url": "https://github.com/jfrog/xray-client-js/issues"
+    },
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"model/**/*.ts\"",
+        "build": "tsc --declaration",
+        "lint": "tslint -p tsconfig.json",
+        "prepare": "npm run build",
+        "prepublishOnly": "npm test && npm run lint",
+        "preversion": "npm run lint",
+        "watch": "tsc -watch -p ./",
+        "compile": "tsc -p ./",
+        "pretest": "npm run compile",
+        "test": "jest --verbose"
+    },
+    "files": [
+        "dist/**/*"
+    ],
+    "dependencies": {
+        "axios": "^0.19.0",
+        "https-proxy-agent": "^2.2.2"
+    },
+    "devDependencies": {
+        "@types/faker": "^4.1.5",
+        "@types/jest": "^24.0.18",
+        "@types/nock": "^10.0.3",
+        "@types/http-proxy": "^1.17.0",
+        "faker": "^4.1.0",
+        "jest": "^24.9.0",
+        "nock": "^10.0.6",
+        "prettier": "^1.18.2",
+        "ts-jest": "^24.0.2",
+        "tslint": "^5.19.0",
+        "tslint-config-prettier": "^1.18.0",
+        "typescript": "^3.5.3",
+        "http-proxy": "^1.17.0"
+    },
+    "keywords": [
+        "artifactory",
+        "javascript",
+        "typescript",
+        "security",
+        "nodejs",
+        "devops",
+        "jfrog",
+        "xray",
+        "scan",
+        "js",
+        "ts"
+    ]
+}
