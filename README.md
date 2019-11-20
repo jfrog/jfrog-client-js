@@ -1,3 +1,5 @@
+[![Build status](https://github.com/jfrog/xray-client-js/workflows/Build/badge.svg)](https://github.com/jfrog/xray-client-js/actions)
+
 # Xray Javascript Client
 
 Xray Javascript Client is a Javascript library, which wraps some of the REST APIs exposed by JFrog Xray.
@@ -8,7 +10,7 @@ Add xray-client-js as a dependency to your package.json file:
 
 ```json
 "dependencies": {
-  "xray-client-js": "^0.0.1"
+  "xray-client-js": "^1.0.0"
 }
 ```
 
