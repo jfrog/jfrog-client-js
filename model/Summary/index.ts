@@ -6,4 +6,3 @@ export { ILicense } from './License';
 export { ISummaryRequestModel } from './SummaryRequestModel';
 export { ISummaryResponse } from './SummaryResponse';
 export { IVulnerableComponent } from './VulnerableComponent';
-

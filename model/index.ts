@@ -4,4 +4,3 @@ export { IProxyConfig } from './ProxyConfig';
 export { Severity } from './Severity';
 export * from './Summary';
 export { IVersion } from './System/Version';
-
