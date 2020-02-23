@@ -80,6 +80,16 @@ describe('Xray summary tests', () => {
         } as ISummaryRequestModel;
         const response: ISummaryResponse = await xrayClient.summary().component(notFoundArtifactRequest);
         expect(response).toBeTruthy();
-        expect(response.artifacts.length).toBe(0);
+        expect(response.artifacts.length).toBe(1);
+        const artifact: IArtifact = response.artifacts[0];
+        expect(artifact.general.component_id).toBe('non-existing-component:1.2.3');
+        expect(artifact.issues.length).toBe(0);
+        expect(artifact.licenses.length).toBe(1);
+
+        const license = artifact.licenses[0];
+        expect(license.name).toBe('Unknown');
+        expect(license.full_name).toBe('Unknown license');
+        expect(license.components.length).toBe(1);
+        expect(license.components[0]).toBe('npm://non-existing-component:1.2.3');
     });
 });
