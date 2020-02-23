@@ -21,6 +21,6 @@ jobs:
             - name: Tests
               run: npm t
               env:
-                  CLIENTTESTS_XRAY_URL: ${{ secrets.XRAY_URL }}
-                  CLIENTTESTS_XRAY_USERNAME: ${{ secrets.XRAY_USERNAME }}
-                  CLIENTTESTS_XRAY_PASSWORD: ${{ secrets.XRAY_PASSWORD }}
+                  CLIENTTESTS_XRAY_URL: ${{ secrets.CLIENTTESTS_XRAY_URL }}
+                  CLIENTTESTS_XRAY_USERNAME: ${{ secrets.CLIENTTESTS_XRAY_USERNAME }}
+                  CLIENTTESTS_XRAY_PASSWORD: ${{ secrets.CLIENTTESTS_XRAY_PASSWORD }}
