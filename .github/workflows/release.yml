@@ -13,9 +13,10 @@ jobs:
               with:
                   node-version: '10.x'
                   registry-url: 'https://registry.npmjs.org'
+                  scope: '@jfrog'
             - name: Install
               run: npm i
-            - name: Set npm auth token
-              run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_AUTH_TOKEN }}" > ${{ secrets.NPM_CONFIG_USERCONFIG }}
             - name: Publish
               run: npm publish --access public
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
