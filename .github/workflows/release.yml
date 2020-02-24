@@ -16,6 +16,12 @@ jobs:
                   scope: '@jfrog'
             - name: Install
               run: npm i
+            - name: Update version
+              run: echo ${{ github.ref }} | cut -c 11- | xargs npm version --no-git-tag-version
+            - name: Push changes
+              uses: ad-m/github-push-action@master
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
             - name: Publish
               run: npm publish --access public
               env:
