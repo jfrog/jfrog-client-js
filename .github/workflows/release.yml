@@ -16,6 +16,6 @@ jobs:
             - name: Install
               run: npm i
             - name: Set npm auth token
-              run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_AUTH_TOKEN }}" > ~/.npmrc
+              run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_AUTH_TOKEN }}" > ${{ secrets.NPM_CONFIG_USERCONFIG }}
             - name: Publish
               run: npm publish --access public
