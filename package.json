@@ -1,6 +1,6 @@
 {
     "name": "xray-client-js",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Xray Javascript Client is a javascript library, which wraps some of the REST APIs exposed by JFrog Xray.",
     "license": "Apache-2.0",
     "repository": {
