@@ -15,8 +15,6 @@ jobs:
             - name: Install
               run: npm i
             - name: Publish
-              uses: actions/npm@1
-              with:
-                  args: publish --access public
+              run: npm publish --access public
               env:
                   NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
