@@ -1,7 +1,6 @@
-import { AxiosRequestConfig } from 'axios';
 import { ISummaryRequestModel } from '../model/Summary/SummaryRequestModel';
 import { ISummaryResponse } from '../model/Summary/SummaryResponse';
-import { HttpClient } from './HttpClient';
+import { HttpClient, IRequestParams } from './HttpClient';
 
 export class SummaryClient {
     private readonly summaryComponentsEndpoint = '/api/v1/summary/component';
@@ -9,11 +8,11 @@ export class SummaryClient {
     constructor(private readonly httpClient: HttpClient) {}
 
     public async component(model: ISummaryRequestModel): Promise<ISummaryResponse> {
-        const httpOptions: AxiosRequestConfig = {
+        const requestParams: IRequestParams = {
             url: this.summaryComponentsEndpoint,
-            method: 'post',
+            method: 'POST',
             data: model
         };
-        return await this.httpClient.doAuthRequest(httpOptions);
+        return await this.httpClient.doAuthRequest(requestParams);
     }
 }

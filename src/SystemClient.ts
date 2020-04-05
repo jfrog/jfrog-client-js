@@ -1,6 +1,5 @@
-import { AxiosRequestConfig } from 'axios';
 import { IVersion } from '../model/System/Version';
-import { HttpClient } from './HttpClient';
+import { HttpClient, IRequestParams } from './HttpClient';
 
 export class SystemClient {
     private readonly pingEndpoint = '/api/v1/system/ping';
@@ -9,23 +8,23 @@ export class SystemClient {
     constructor(private readonly httpClient: HttpClient) {}
 
     public async ping(): Promise<boolean> {
-        const httpOptions: AxiosRequestConfig = {
+        const requestParams: IRequestParams = {
             url: this.pingEndpoint,
-            method: 'get',
+            method: 'GET',
             timeout: 2000
         };
         try {
-            return await this.httpClient.doRequest(httpOptions);
+            return await this.httpClient.doRequest(requestParams);
         } catch (error) {
             return false;
         }
     }
 
     public async version(): Promise<IVersion> {
-        const httpOptions: AxiosRequestConfig = {
+        const requestParams: IRequestParams = {
             url: this.versionEndpoint,
-            method: 'get'
+            method: 'GET'
         };
-        return await this.httpClient.doAuthRequest(httpOptions);
+        return await this.httpClient.doAuthRequest(requestParams);
     }
 }
