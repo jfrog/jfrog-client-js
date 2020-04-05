@@ -1,9 +1,9 @@
-import axios, { AxiosBasicCredentials, AxiosInstance, AxiosProxyConfig, AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosProxyConfig, AxiosRequestConfig } from 'axios';
 import { IProxyConfig } from '../model/ProxyConfig';
 
 export class HttpClient {
     private USER_AGENT_HEADER: string = 'User-Agent';
-    private _basicCredentials: AxiosBasicCredentials | undefined;
+    private _basicAuth: BasicAuth;
     private _axiosInstance: AxiosInstance;
 
     constructor(config: IHttpConfig) {
@@ -14,20 +14,20 @@ export class HttpClient {
             headers: config.headers,
             proxy: this.getAxiosProxyConfig(config.proxy)
         } as AxiosRequestConfig);
-        this._basicCredentials = {
+        this._basicAuth = {
             username: config.username,
             password: config.password
-        } as AxiosBasicCredentials;
+        } as BasicAuth;
     }
 
-    public async doRequest(httpOptions: AxiosRequestConfig): Promise<any> {
-        const { data } = await this._axiosInstance(httpOptions);
+    public async doRequest(requestParams: IRequestParams): Promise<any> {
+        const { data } = await this._axiosInstance(requestParams);
         return data;
     }
 
-    public async doAuthRequest(httpOptions: AxiosRequestConfig): Promise<any> {
-        httpOptions.auth = this._basicCredentials;
-        return this.doRequest(httpOptions);
+    public async doAuthRequest(requestParams: IRequestParams): Promise<any> {
+        requestParams.auth = this._basicAuth;
+        return this.doRequest(requestParams);
     }
 
     private addUserAgentHeader(headers: { [key: string]: string }) {
@@ -63,10 +63,25 @@ export class HttpClient {
     }
 }
 
+interface BasicAuth {
+    username: string;
+    password: string;
+}
+
 export interface IHttpConfig {
     serverUrl?: string;
     username?: string;
     password?: string;
     proxy?: IProxyConfig | false;
     headers?: { [key: string]: string };
+}
+
+export type method = 'GET' | 'POST';
+
+export interface IRequestParams {
+    url: string;
+    method: method;
+    data?: any;
+    auth?: BasicAuth;
+    timeout?: number;
 }
