@@ -1,7 +1,6 @@
-import { AxiosRequestConfig } from 'axios';
 import * as faker from 'faker';
 import nock from 'nock';
-import { HttpClient } from '../src/HttpClient';
+import { HttpClient, IRequestParams } from '../src/HttpClient';
 
 const subPath = '/subpath';
 const serverUrl: string = faker.internet.url();
@@ -25,11 +24,11 @@ describe('Http client tests', () => {
                 .matchHeader('User-Agent', 'http-client-test')
                 .reply(200, 'RESPONSE');
             const client = new HttpClient({ serverUrl, headers: { 'User-Agent': 'http-client-test' } });
-            const httpOptions = {
+            const requestParams = {
                 method: 'POST',
                 url: subPath
-            } as AxiosRequestConfig;
-            const res = await client.doRequest(httpOptions);
+            } as IRequestParams;
+            const res = await client.doRequest(requestParams);
             expect(res).toBe('RESPONSE');
             done();
         } catch (e) {
@@ -44,11 +43,11 @@ describe('Http client tests', () => {
                 .matchHeader('User-Agent', 'jfrog-xray-client')
                 .reply(200, 'RESPONSE');
             const client = new HttpClient({ serverUrl, username, password });
-            const httpOptions = {
+            const requestParams = {
                 method: 'POST',
                 url: subPath
-            } as AxiosRequestConfig;
-            const res = await client.doAuthRequest(httpOptions);
+            } as IRequestParams;
+            const res = await client.doAuthRequest(requestParams);
             expect(res).toBe('RESPONSE');
             done();
         } catch (e) {
