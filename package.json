@@ -27,25 +27,21 @@
         "dist/**/*"
     ],
     "dependencies": {
-        "axios": "^0.19.2",
-        "https-proxy-agent": "^2.2.4"
+        "axios": "~0.19.2"
     },
     "devDependencies": {
         "@types/faker": "^4.1.11",
         "@types/http-proxy": "^1.17.4",
         "@types/jest": "^25.2.1",
-        "bufferutil": "^4.0.1",
-        "canvas": "^2.6.1",
         "faker": "^4.1.0",
         "http-proxy": "^1.18.0",
-        "jest": "^25.2.7",
+        "jest": "^25.5.0",
         "nock": "^12.0.3",
-        "prettier": "^1.19.1",
-        "ts-jest": "^25.3.1",
-        "tslint": "^6.1.1",
+        "prettier": "^2.0.5",
+        "ts-jest": "^25.4.0",
+        "tslint": "^6.1.2",
         "tslint-config-prettier": "^1.18.0",
-        "typescript": "^3.8.3",
-        "utf-8-validate": "^5.0.2"
+        "typescript": "^3.8.3"
     },
     "keywords": [
         "artifactory",
