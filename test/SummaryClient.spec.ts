@@ -94,10 +94,8 @@ describe('Xray summary tests', () => {
 
         const components: IVulnerableComponent[] | undefined = testIssue?.components;
         expect(components).toBeTruthy();
-        if (!components) {
-            return;
-        }
-        const expressComponent: IVulnerableComponent | undefined = components.find((component) => component.component_id === 'express');
+
+        const expressComponent: IVulnerableComponent | undefined = components?.find((component) => component.component_id === 'express');
         expect(expressComponent).toBeTruthy();
         const fixedVersions: string[] | undefined = expressComponent?.fixed_versions;
         expect(fixedVersions).toBeTruthy();
