@@ -1,5 +1,6 @@
 export { IArtifact } from './Artifact';
 export { ComponentDetails } from './ComponentDetails';
+export { ICve } from './Cve';
 export { IGeneral } from './General';
 export { IIssue } from './Issue';
 export { ILicense } from './License';

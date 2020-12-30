@@ -1,4 +1,5 @@
 import { Severity } from '../Severity';
+import { ICve } from './Cve';
 import { IVulnerableComponent } from './VulnerableComponent';
 
 export interface IIssue {
@@ -10,4 +11,5 @@ export interface IIssue {
     issue_type: string;
     impact_path: string;
     components: IVulnerableComponent[];
+    cves: ICve[];
 }
