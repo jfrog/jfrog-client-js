@@ -59,7 +59,7 @@ describe('Xray summary tests', () => {
         expect(firstIssue.description).toBeTruthy();
         expect(firstIssue.severity).toBe('Medium');
         expect(secondIssue.description).toBeTruthy();
-        expect(secondIssue.severity).toBe('High');
+        expect(secondIssue.severity).toBe('Critical');
     });
 
     test('Artifact Summary component CVE', async () => {
