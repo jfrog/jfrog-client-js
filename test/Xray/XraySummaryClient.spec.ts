@@ -1,14 +1,16 @@
-import { IArtifact } from '../model/Summary/Artifact';
-import { ComponentDetails } from '../model/Summary/ComponentDetails';
-import { IGeneral } from '../model/Summary/General';
-import { ICve } from '../model/Summary/Cve';
-import { IIssue } from '../model/Summary/Issue';
-import { IVulnerableComponent } from '../model/Summary/VulnerableComponent';
-import { ILicense } from '../model/Summary/License';
-import { ISummaryRequestModel } from '../model/Summary/SummaryRequestModel';
-import { ISummaryResponse } from '../model/Summary/SummaryResponse';
-import { XrayClient } from '../src/XrayClient';
-import { TestUtils } from './TestUtils';
+import {
+    IArtifact,
+    ComponentDetails,
+    IGeneral,
+    ICve,
+    IIssue,
+    IVulnerableComponent,
+    ILicense,
+    ISummaryRequestModel,
+    ISummaryResponse,
+} from '../../model';
+import { XrayClient } from '../../src';
+import { TestUtils } from '../TestUtils';
 
 const jsYaml: ISummaryRequestModel = { component_details: [new ComponentDetails('npm://js-yaml:3.10.0')] } as ISummaryRequestModel;
 const FIRST_ISSUE_SUMMARY = 'JS-YAML lib/js-yaml/loader.js storeMappingPair() Function Nested Array Handling Resource Consumption DoS Weakness';
@@ -21,7 +23,7 @@ const EXPRESS_ISSUE_SUMMARY =
 let xrayClient: XrayClient;
 
 beforeAll(() => {
-    xrayClient = new XrayClient(TestUtils.getClientConfig());
+    xrayClient = new XrayClient(TestUtils.getXrayClientConfig());
 });
 describe('Xray summary tests', () => {
     test('Artifact summary component', async () => {
@@ -121,7 +123,7 @@ describe('Xray summary tests', () => {
 
     test('Artifact not exist', async () => {
         const notFoundArtifactRequest: ISummaryRequestModel = {
-            component_details: [new ComponentDetails('npm://non-existing-component:1.2.3')]
+            component_details: [new ComponentDetails('npm://non-existing-component:1.2.3')],
         } as ISummaryRequestModel;
         const response: ISummaryResponse = await xrayClient.summary().component(notFoundArtifactRequest);
         expect(response).toBeTruthy();

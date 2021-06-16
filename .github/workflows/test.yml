@@ -22,6 +22,7 @@ jobs:
             - name: Tests
               run: npm t
               env:
+                  CLIENTTESTS_ARTIFACTORY_URL: ${{ secrets.CLIENTTESTS_ARTIFACTORY_URL }}
                   CLIENTTESTS_XRAY_URL: ${{ secrets.CLIENTTESTS_XRAY_URL }}
-                  CLIENTTESTS_XRAY_USERNAME: ${{ secrets.CLIENTTESTS_XRAY_USERNAME }}
-                  CLIENTTESTS_XRAY_PASSWORD: ${{ secrets.CLIENTTESTS_XRAY_PASSWORD }}
+                  CLIENTTESTS_PLATFORM_USERNAME: ${{ secrets.CLIENTTESTS_PLATFORM_USERNAME }}
+                  CLIENTTESTS_PLATFORM_PASSWORD: ${{ secrets.CLIENTTESTS_PLATFORM_PASSWORD }}

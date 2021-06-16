@@ -1,8 +1,8 @@
-import { HttpClient } from './HttpClient';
-import { SystemClient } from './SystemClient';
-import { IClientConfig, ILogger } from '../model';
+import { HttpClient } from '../HttpClient';
+import { XraySystemClient } from './XraySystemClient';
+import { IClientConfig, ILogger } from '../../model';
 import { XrayLogger } from './XrayLogger';
-import { SummaryClient } from './SummaryClient';
+import { XraySummaryClient } from './XraySummaryClient';
 
 export class XrayClient {
     private readonly httpClient: HttpClient;
@@ -17,11 +17,11 @@ export class XrayClient {
         this.logger = new XrayLogger(logger);
     }
 
-    public summary(): SummaryClient {
-        return new SummaryClient(this.httpClient);
+    public summary(): XraySummaryClient {
+        return new XraySummaryClient(this.httpClient);
     }
 
-    public system(): SystemClient {
-        return new SystemClient(this.httpClient);
+    public system(): XraySystemClient {
+        return new XraySystemClient(this.httpClient);
     }
 }

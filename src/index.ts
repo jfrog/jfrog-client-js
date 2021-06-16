@@ -1,4 +1,5 @@
 export { HttpClient } from './HttpClient';
-export { SummaryClient } from './SummaryClient';
-export { SystemClient } from './SystemClient';
-export { XrayClient } from './XrayClient';
+export { XraySummaryClient } from './Xray/XraySummaryClient';
+export { XraySystemClient } from './Xray/XraySystemClient';
+export { XrayClient } from './Xray/XrayClient';
+export { ArtifactoryClient } from './Artifactory/ArtifactoryClient';

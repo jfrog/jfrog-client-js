@@ -17,16 +17,13 @@ describe('Http client tests', () => {
         const client = new HttpClient({ serverUrl });
         expect(client).toBeInstanceOf(HttpClient);
     });
-    test('Do request', async done => {
+    test('Do request', async (done) => {
         try {
-            nock(serverUrl)
-                .post(subPath)
-                .matchHeader('User-Agent', 'http-client-test')
-                .reply(200, 'RESPONSE');
+            nock(serverUrl).post(subPath).matchHeader('User-Agent', 'http-client-test').reply(200, 'RESPONSE');
             const client = new HttpClient({ serverUrl, headers: { 'User-Agent': 'http-client-test' } });
             const requestParams = {
                 method: 'POST',
-                url: subPath
+                url: subPath,
             } as IRequestParams;
             const res = await client.doRequest(requestParams);
             expect(res).toBe('RESPONSE');
@@ -35,7 +32,7 @@ describe('Http client tests', () => {
             done.fail(`Should not fail : ${e.message}`);
         }
     });
-    test('Do auth request', async done => {
+    test('Do auth request', async (done) => {
         try {
             nock(serverUrl)
                 .post(subPath)
@@ -45,7 +42,7 @@ describe('Http client tests', () => {
             const client = new HttpClient({ serverUrl, username, password });
             const requestParams = {
                 method: 'POST',
-                url: subPath
+                url: subPath,
             } as IRequestParams;
             const res = await client.doAuthRequest(requestParams);
             expect(res).toBe('RESPONSE');

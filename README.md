@@ -83,7 +83,7 @@ npm i && npm pack
 If you'd like run the _xray-client-js_ integration tests, follow these steps:
 
 * Make sure your Xray instance is up and running.
-* Set the _CLIENTTESTS_XRAY_URL_, _CLIENTTESTS_XRAY_USERNAME_ and _CLIENTTESTS_XRAY_PASSWORD_ environment variables with your Xray URL, username and password.
+* Set the CLIENTTESTS_ARTIFACTORY_URL, _CLIENTTESTS_XRAY_URL_, _CLIENTTESTS_PLATFORM_USERNAME_ and _CLIENTTESTS_PLATFORM_PASSWORD_ environment variables with your Artifactory & Xray URLs, username and password.
 * Run the following command:
 
 ```bash
