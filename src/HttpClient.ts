@@ -3,8 +3,8 @@ import { IProxyConfig } from '../model';
 
 export class HttpClient {
     private USER_AGENT_HEADER: string = 'User-Agent';
-    private _basicAuth: BasicAuth;
-    private _axiosInstance: AxiosInstance;
+    private readonly _basicAuth: BasicAuth;
+    private readonly _axiosInstance: AxiosInstance;
 
     constructor(config: IHttpConfig) {
         config.headers = config.headers || {};
@@ -84,4 +84,5 @@ export interface IRequestParams {
     data?: any;
     auth?: BasicAuth;
     timeout?: number;
+    headers?: any;
 }

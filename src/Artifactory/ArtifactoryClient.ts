@@ -2,6 +2,8 @@ import { HttpClient } from '../HttpClient';
 import { IClientConfig, ILogger } from '../../model';
 import { ArtifactoryLogger } from './ArtifactoryLogger';
 import { ArtifactorySystemClient } from './ArtifactorySystemClient';
+import { ArtifactorySearchClient } from './ArtifactorySearchClient';
+import { ArtifactoryDownloadClient } from './ArtifactoryDownloadClient';
 
 export class ArtifactoryClient {
     private readonly httpClient: HttpClient;
@@ -18,5 +20,13 @@ export class ArtifactoryClient {
 
     public system(): ArtifactorySystemClient {
         return new ArtifactorySystemClient(this.httpClient);
+    }
+
+    public search(): ArtifactorySearchClient {
+        return new ArtifactorySearchClient(this.httpClient);
+    }
+
+    public download(): ArtifactoryDownloadClient {
+        return new ArtifactoryDownloadClient(this.httpClient);
     }
 }

@@ -3,6 +3,7 @@ import { XraySystemClient } from './XraySystemClient';
 import { IClientConfig, ILogger } from '../../model';
 import { XrayLogger } from './XrayLogger';
 import { XraySummaryClient } from './XraySummaryClient';
+import { XrayDetailsClient } from './XrayDetailsClient';
 
 export class XrayClient {
     private readonly httpClient: HttpClient;
@@ -23,5 +24,9 @@ export class XrayClient {
 
     public system(): XraySystemClient {
         return new XraySystemClient(this.httpClient);
+    }
+
+    public details(): XrayDetailsClient {
+        return new XrayDetailsClient(this.httpClient);
     }
 }
