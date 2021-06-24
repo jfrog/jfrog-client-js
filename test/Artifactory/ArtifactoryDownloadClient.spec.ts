@@ -10,10 +10,13 @@ describe('Artifactory Download tests', () => {
         artifactoryClient = new ArtifactoryClient(clientConfig);
     });
 
-    describe('Search tests', () => {
-        test('Build Info Artifact AQL Search', async () => {
-            const response: string = await artifactoryClient.download().download('/robi-t/demofile');
-            expect(response).toBeTruthy();
-        });
+    test('Artifact download test', async () => {
+        const response: string = await artifactoryClient.download().downloadArtifact('robi-t/demofile');
+        expect(response).toBeTruthy();
+    });
+
+    test('Build artifact download test', async () => {
+        const response: string = await artifactoryClient.download().downloadArtifact('artifactory-build-info/Maven/20201116.1-1605541010080.json');
+        expect(response).toBeTruthy();
     });
 });

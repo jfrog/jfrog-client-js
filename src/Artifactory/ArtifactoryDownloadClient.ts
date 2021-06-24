@@ -3,9 +3,10 @@ import { HttpClient, IRequestParams } from '../HttpClient';
 export class ArtifactoryDownloadClient {
     constructor(private readonly httpClient: HttpClient) {}
 
-    public async download(artifactPath: string): Promise<string> {
+    public async downloadArtifact(artifactPath: string): Promise<string> {
+        // todo encoding needed?
         const requestParams: IRequestParams = {
-            url: encodeURIComponent(artifactPath),
+            url: artifactPath,
             method: 'GET',
             headers: { Connection: 'Keep-Alive' },
         };

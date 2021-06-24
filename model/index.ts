@@ -7,3 +7,4 @@ export { IDetailsResponse } from './Xray/Details/DetailsResponse';
 export { IXrayVersion } from './Xray/System/Version';
 export { IArtifactoryVersion } from './Artifactory/System/Version';
 export { IAqlSearchResult } from './Artifactory/Search/AqlSearchResult';
+export { ISearchEntry } from './Artifactory/Search/SearchEntry';
