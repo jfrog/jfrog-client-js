@@ -1,4 +1,4 @@
-import {IAqlSearchResult, IClientConfig} from '../model';
+import { IAqlSearchResult, IClientConfig } from '../model';
 import { ArtifactoryClient } from '../src';
 
 export class TestUtils {
@@ -26,9 +26,9 @@ export class TestUtils {
             .search()
             .aqlSearch(
                 'items.find({' +
-                '"repo":"artifactory-build-info",' +
-                '"path":{"$match":"*"}}' +
-                ').include("name","repo","path","created").sort({"$desc":["created"]}).limit(1)'
+                    '"repo":"artifactory-build-info",' +
+                    '"path":{"$match":"*"}}' +
+                    ').include("name","repo","path","created").sort({"$desc":["created"]}).limit(1)'
             );
     }
 }

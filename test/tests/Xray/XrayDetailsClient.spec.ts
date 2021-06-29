@@ -1,13 +1,13 @@
 import { IDetailsResponse } from '../../../model';
 import { XrayClient } from '../../../src';
 import { TestUtils } from '../../TestUtils';
-import faker from "faker";
-import nock from "nock";
+import faker from 'faker';
+import nock from 'nock';
 import * as fs from 'fs';
 import * as path from 'path';
 
 let xrayClient: XrayClient;
-const DETAILS_RESOURCE: string = './test/resources/xrayDetails/details.json'
+const DETAILS_RESOURCE: string = './test/resources/xrayDetails/details.json';
 
 beforeAll(() => {
     xrayClient = new XrayClient(TestUtils.getXrayClientConfig());
