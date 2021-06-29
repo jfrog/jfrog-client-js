@@ -1,6 +1,6 @@
 import nock from 'nock';
-import { XraySummaryClient, XrayClient, XraySystemClient } from '../../../src';
-import { XrayDetailsClient } from '../../../src/Xray/XrayDetailsClient';
+import { XrayDetailsClient, XraySummaryClient, XraySystemClient } from '../../../src';
+import { XrayClient } from '../../../src/Xray/XrayClient';
 
 const SERVER_URL = 'http://localhost:8000';
 
@@ -36,7 +36,10 @@ describe('Xray clients tests', () => {
 test('Xray client header tests', async () => {
     const client = new XrayClient({ serverUrl: SERVER_URL, headers: { header1: 'value' } });
     const serviceId = 'jfrog@some.me';
-    const scope: nock.Scope = nock(SERVER_URL).matchHeader('header1', 'value').get('/api/v1/system/ping').reply(200, serviceId);
+    const scope: nock.Scope = nock(SERVER_URL)
+        .matchHeader('header1', 'value')
+        .get('/api/v1/system/ping')
+        .reply(200, serviceId);
     await client.system().ping();
     expect(scope.isDone()).toBeTruthy();
 });

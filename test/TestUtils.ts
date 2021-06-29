@@ -1,28 +1,22 @@
-import { IAqlSearchResult, IClientConfig } from '../model';
-import { ArtifactoryClient } from '../src';
+import { IAqlSearchResult } from '../model';
+import { IJfrogClientConfig } from '../model/JfrogClientConfig';
+import { JfrogClient } from '../src';
 
 export class TestUtils {
-    public static getClientConfig(serverUrlEnvVar: string): IClientConfig {
-        expect(process.env[serverUrlEnvVar]).toBeDefined();
+    public static getJfrogClientConfig(): IJfrogClientConfig {
+        expect(process.env.CLIENTTESTS_PLATFORM_URL).toBeDefined();
         expect(process.env.CLIENTTESTS_PLATFORM_USERNAME).toBeDefined();
         expect(process.env.CLIENTTESTS_PLATFORM_PASSWORD).toBeDefined();
         return {
-            serverUrl: process.env[serverUrlEnvVar],
+            platformUrl: process.env.CLIENTTESTS_PLATFORM_URL,
             username: process.env.CLIENTTESTS_PLATFORM_USERNAME,
             password: process.env.CLIENTTESTS_PLATFORM_PASSWORD,
-        } as IClientConfig;
+        } as IJfrogClientConfig;
     }
 
-    public static getXrayClientConfig(): IClientConfig {
-        return this.getClientConfig('CLIENTTESTS_XRAY_URL');
-    }
-
-    public static getArtifactoryClientConfig(): IClientConfig {
-        return this.getClientConfig('CLIENTTESTS_ARTIFACTORY_URL');
-    }
-
-    public static async searchArtifactoryBuildRepo(artifactoryClient: ArtifactoryClient): Promise<IAqlSearchResult> {
-        return await artifactoryClient
+    public static async searchArtifactoryBuildRepo(jfrogClient: JfrogClient): Promise<IAqlSearchResult> {
+        return await jfrogClient
+            .artifactory()
             .search()
             .aqlSearch(
                 'items.find({' +

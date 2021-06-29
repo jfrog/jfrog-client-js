@@ -1,15 +1,16 @@
 import { HttpClient } from '../HttpClient';
-import { IClientConfig, ILogger } from '../../model';
+import { ILogger } from '../../model';
 import { ArtifactoryLogger } from './ArtifactoryLogger';
 import { ArtifactorySystemClient } from './ArtifactorySystemClient';
 import { ArtifactorySearchClient } from './ArtifactorySearchClient';
 import { ArtifactoryDownloadClient } from './ArtifactoryDownloadClient';
+import { IClientSpecificConfig } from '../../model/ClientSpecificConfig';
 
 export class ArtifactoryClient {
     private readonly httpClient: HttpClient;
     private logger: ILogger;
 
-    public constructor(config: IClientConfig) {
+    public constructor(config: IClientSpecificConfig) {
         const { serverUrl, logger = console, username, password, proxy, headers } = config;
         if (!serverUrl) {
             throw new Error('Artifactory client : must provide serverUrl');

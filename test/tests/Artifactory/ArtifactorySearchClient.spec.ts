@@ -1,18 +1,18 @@
 import { IAqlSearchResult, IClientConfig } from '../../../model';
-import { ArtifactoryClient } from '../../../src';
+import { JfrogClient } from '../../../src';
 import { TestUtils } from '../../TestUtils';
 
-let artifactoryClient: ArtifactoryClient;
+let jfrogClient: JfrogClient;
 
 describe('Artifactory Search tests', () => {
-    const clientConfig: IClientConfig = TestUtils.getArtifactoryClientConfig();
+    const clientConfig: IClientConfig = TestUtils.getJfrogClientConfig();
     beforeAll(() => {
-        artifactoryClient = new ArtifactoryClient(clientConfig);
+        jfrogClient = new JfrogClient(clientConfig);
     });
 
     describe('Search tests', () => {
         test('Build Info Artifact AQL Search', async () => {
-            const response: IAqlSearchResult = await TestUtils.searchArtifactoryBuildRepo(artifactoryClient);
+            const response: IAqlSearchResult = await TestUtils.searchArtifactoryBuildRepo(jfrogClient);
             expect(response).toBeTruthy();
             expect(response.results).toHaveLength(1);
             expect(response.results[0].name).toBeTruthy();

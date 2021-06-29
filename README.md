@@ -15,23 +15,25 @@ Add jfrog-client-js as a dependency to your package.json file:
 ```
 
 ## APIs
-### Xray
-#### Setting up Xray client
+### Setting up JFrog client
 
 ```javascript
-let xrayClient = new XrayClient({
-  serverUrl: 'XrayUrl',
-  username: 'username',
-  password: 'password',
-  proxy: {host: '<organization>-xray.jfrog.io', port: 80, protocol: 'https'},
-  headers: { 'key1': 'value1', 'key2': 'value2' };
+let jfrogClient = new JfrogClient({
+    platformUrl: 'my-platform-url.jfrog.io/',
+    // artifactoryUrl - Set to use a custom Artifactory URL.
+    // xrayUrl - Set to use a custom Xray URL.
+    username: 'username',
+    password: 'password',
+    proxy: {host: '<organization>-xray.jfrog.io', port: 80, protocol: 'https'},
+    headers: {'key1': 'value1', 'key2': 'value2'};
 });
 ```
 
+### Xray
 #### Pinging Xray
 
 ```javascript
-xrayClient.system().ping()
+jfrogClient.xray().system().ping()
   .then(result => {
     console.log(result);
   })
@@ -43,7 +45,7 @@ xrayClient.system().ping()
 #### Getting Xray version
 
 ```javascript
-xrayClient.system().version()
+jfrogClient.xray().system().version()
   .then(result => {
     console.log(result);
   })
@@ -57,7 +59,7 @@ xrayClient.system().version()
 ```javascript
 let express = new ComponentDetails('npm://express:4.0.0');
 let request = new ComponentDetails('npm://request:2.0.0');
-xrayClient.summary().component({
+jfrogClient.xray().summary().component({
     component_details: [express, request]
   })
   .then(result => {
@@ -71,7 +73,7 @@ xrayClient.summary().component({
 #### Retrieving Xray Build Details
 
 ```javascript
-xrayClient.details().build('Build Name', '1')
+jfrogClient.xray().details().build('Build Name', '1')
   .then(result => {
     console.log(JSON.stringify(result));
   })
@@ -81,22 +83,11 @@ xrayClient.details().build('Build Name', '1')
 ```
 
 ### Artifactory
-#### Setting up Artifactory client
-
-```javascript
-let artifactoryClient = new ArtifactoryClient({
-  serverUrl: 'ArtifactoryUrl',
-  username: 'username',
-  password: 'password',
-  proxy: {host: '<organization>-artifactory.jfrog.io', port: 80, protocol: 'https'},
-  headers: { 'key1': 'value1', 'key2': 'value2' };
-});
-```
 
 #### Pinging Artifactory
 
 ```javascript
-artifactoryClient.system().ping()
+jfrogClient.artifactory().system().ping()
   .then(result => {
     console.log(result);
   })
@@ -108,7 +99,7 @@ artifactoryClient.system().ping()
 #### Getting Artifactory version
 
 ```javascript
-artifactoryClient.system().version()
+jfrogClient.artifactory().system().version()
   .then(result => {
     console.log(result);
   })
@@ -120,7 +111,7 @@ artifactoryClient.system().version()
 #### Downloading an artifact
 
 ```javascript
-artifactoryClient.download().downloadArtifact('path/to/artifact')
+jfrogClient.artifactory().download().downloadArtifact('path/to/artifact')
   .then(result => {
     console.log(JSON.stringify(result));
   })
@@ -132,7 +123,7 @@ artifactoryClient.download().downloadArtifact('path/to/artifact')
 #### Searching by AQL
 
 ```javascript
-artifactoryClient
+jfrogClient.artifactory()
     .search()
     .aqlSearch(
         'items.find({' +

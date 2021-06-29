@@ -1,5 +1,6 @@
 import nock from 'nock';
-import { ArtifactoryClient, ArtifactorySystemClient, ArtifactoryDownloadClient, ArtifactorySearchClient } from '../../../src';
+import { ArtifactorySystemClient, ArtifactoryDownloadClient, ArtifactorySearchClient } from '../../../src';
+import { ArtifactoryClient } from '../../../src/Artifactory/ArtifactoryClient';
 
 const SERVER_URL = 'http://localhost:8000';
 
@@ -35,7 +36,10 @@ describe('Artifactory clients tests', () => {
 test('Artifactory client header tests', async () => {
     const client = new ArtifactoryClient({ serverUrl: SERVER_URL, headers: { header1: 'value' } });
     const serviceId = 'jfrog@some.me';
-    const scope: nock.Scope = nock(SERVER_URL).matchHeader('header1', 'value').get('/api/v1/system/ping').reply(200, serviceId);
+    const scope: nock.Scope = nock(SERVER_URL)
+        .matchHeader('header1', 'value')
+        .get('/api/v1/system/ping')
+        .reply(200, serviceId);
     await client.system().ping();
     expect(scope.isDone()).toBeTruthy();
 });

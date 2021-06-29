@@ -1,21 +1,21 @@
 import { IAqlSearchResult, IClientConfig } from '../../../model';
-import { ArtifactoryClient } from '../../../src';
+import { JfrogClient } from '../../../src';
 import { TestUtils } from '../../TestUtils';
 
-let artifactoryClient: ArtifactoryClient;
+let jfrogClient: JfrogClient;
 const BUILD_INFO_REPO: string = '/artifactory-build-info/';
 
 describe('Artifactory Download tests', () => {
-    const clientConfig: IClientConfig = TestUtils.getArtifactoryClientConfig();
+    const clientConfig: IClientConfig = TestUtils.getJfrogClientConfig();
     beforeAll(() => {
-        artifactoryClient = new ArtifactoryClient(clientConfig);
+        jfrogClient = new JfrogClient(clientConfig);
     });
 
     test('Build artifact download test', async () => {
-        const result: IAqlSearchResult = await TestUtils.searchArtifactoryBuildRepo(artifactoryClient);
+        const result: IAqlSearchResult = await TestUtils.searchArtifactoryBuildRepo(jfrogClient);
         expect(result.results.length).toBeGreaterThan(0);
         const artifactPath: string = BUILD_INFO_REPO + result.results[0].path + '/' + result.results[0].name;
-        const build: any = await artifactoryClient.download().downloadArtifact(artifactPath);
+        const build: any = await jfrogClient.artifactory().download().downloadArtifact(artifactPath);
         expect(build).toBeTruthy();
         expect(build.name).toBe(result.results[0].path);
     });

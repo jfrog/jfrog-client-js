@@ -1,15 +1,16 @@
 import { HttpClient } from '../HttpClient';
 import { XraySystemClient } from './XraySystemClient';
-import { IClientConfig, ILogger } from '../../model';
+import { ILogger } from '../../model';
 import { XrayLogger } from './XrayLogger';
 import { XraySummaryClient } from './XraySummaryClient';
 import { XrayDetailsClient } from './XrayDetailsClient';
+import { IClientSpecificConfig } from '../../model/ClientSpecificConfig';
 
 export class XrayClient {
     private readonly httpClient: HttpClient;
     private logger: ILogger;
 
-    public constructor(config: IClientConfig) {
+    public constructor(config: IClientSpecificConfig) {
         const { serverUrl, logger = console, username, password, proxy, headers } = config;
         if (!serverUrl) {
             throw new Error('Xray client : must provide serverUrl');
