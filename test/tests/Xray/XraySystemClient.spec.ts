@@ -2,9 +2,9 @@ import * as faker from 'faker';
 import * as http from 'http';
 import { createProxyServer, ServerOptions } from 'http-proxy';
 import nock from 'nock';
-import { IClientConfig, IProxyConfig, IXrayVersion } from '../../model';
-import { XrayClient } from '../../src';
-import { TestUtils } from '../TestUtils';
+import { IClientConfig, IProxyConfig, IXrayVersion } from '../../../model';
+import { XrayClient } from '../../../src';
+import { TestUtils } from '../../TestUtils';
 
 let isPassedThroughProxy: boolean;
 let xrayClient: XrayClient;

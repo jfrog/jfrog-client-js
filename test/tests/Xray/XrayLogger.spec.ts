@@ -1,5 +1,5 @@
 import * as faker from 'faker';
-import { XrayLogger } from '../../src/Xray/XrayLogger';
+import { XrayLogger } from '../../../src/Xray/XrayLogger';
 
 const loggerMock = {
     debug: jest.fn(),

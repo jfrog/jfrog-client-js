@@ -8,9 +8,9 @@ import {
     ILicense,
     ISummaryRequestModel,
     ISummaryResponse,
-} from '../../model';
-import { XrayClient } from '../../src';
-import { TestUtils } from '../TestUtils';
+} from '../../../model';
+import { XrayClient } from '../../../src';
+import { TestUtils } from '../../TestUtils';
 
 const jsYaml: ISummaryRequestModel = { component_details: [new ComponentDetails('npm://js-yaml:3.10.0')] } as ISummaryRequestModel;
 const FIRST_ISSUE_SUMMARY = 'JS-YAML lib/js-yaml/loader.js storeMappingPair() Function Nested Array Handling Resource Consumption DoS Weakness';

@@ -1,6 +1,6 @@
 import * as faker from 'faker';
 import nock from 'nock';
-import { HttpClient, IRequestParams } from '../src/HttpClient';
+import { HttpClient, IRequestParams } from '../../src/HttpClient';
 
 const subPath = '/subpath';
 const serverUrl: string = faker.internet.url();

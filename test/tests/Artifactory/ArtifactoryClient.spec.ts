@@ -1,5 +1,5 @@
 import nock from 'nock';
-import { ArtifactoryClient, ArtifactorySystemClient, ArtifactoryDownloadClient, ArtifactorySearchClient } from '../../src';
+import { ArtifactoryClient, ArtifactorySystemClient, ArtifactoryDownloadClient, ArtifactorySearchClient } from '../../../src';
 
 const SERVER_URL = 'http://localhost:8000';
 

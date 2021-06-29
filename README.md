@@ -1,26 +1,26 @@
 [![Build status](https://github.com/jfrog/xray-client-js/workflows/Build/badge.svg)](https://github.com/jfrog/xray-client-js/actions)
 
-# Xray Javascript Client
+# JFrog Javascript Client
 
-Xray Javascript Client is a Javascript library, which wraps some of the REST APIs exposed by JFrog Xray.
+JFrog Javascript Client is a Javascript library, which wraps some REST APIs exposed by JFrog's different services.
 
 ## Getting started
 
-Add xray-client-js as a dependency to your package.json file:
+Add jfrog-client-js as a dependency to your package.json file:
 
 ```json
 "dependencies": {
-  "xray-client-js": "^1.0.0"
+  "jfrog-client-js": "^1.0.0"
 }
 ```
 
 ## APIs
-
-### Setting up Xray client
+### Xray
+#### Setting up Xray client
 
 ```javascript
 let xrayClient = new XrayClient({
-  serverUrl: 'ArtifactoryUrl',
+  serverUrl: 'XrayUrl',
   username: 'username',
   password: 'password',
   proxy: {host: '<organization>-xray.jfrog.io', port: 80, protocol: 'https'},
@@ -28,7 +28,7 @@ let xrayClient = new XrayClient({
 });
 ```
 
-### Pinging Xray
+#### Pinging Xray
 
 ```javascript
 xrayClient.system().ping()
@@ -40,7 +40,7 @@ xrayClient.system().ping()
   });
 ```
 
-### Getting Xray version
+#### Getting Xray version
 
 ```javascript
 xrayClient.system().version()
@@ -52,7 +52,7 @@ xrayClient.system().version()
   });
 ```
 
-### Scanning bulk of dependencies
+#### Scanning bulk of dependencies
 
 ```javascript
 let express = new ComponentDetails('npm://express:4.0.0');
@@ -68,21 +68,101 @@ xrayClient.summary().component({
   });
 ```
 
+#### Retrieving Xray Build Details
+
+```javascript
+xrayClient.details().build('Build Name', '1')
+  .then(result => {
+    console.log(JSON.stringify(result));
+  })
+  .catch(error => {
+    console.error(error);
+  });
+```
+
+### Artifactory
+#### Setting up Artifactory client
+
+```javascript
+let artifactoryClient = new ArtifactoryClient({
+  serverUrl: 'ArtifactoryUrl',
+  username: 'username',
+  password: 'password',
+  proxy: {host: '<organization>-artifactory.jfrog.io', port: 80, protocol: 'https'},
+  headers: { 'key1': 'value1', 'key2': 'value2' };
+});
+```
+
+#### Pinging Artifactory
+
+```javascript
+artifactoryClient.system().ping()
+  .then(result => {
+    console.log(result);
+  })
+  .catch(error => {
+    console.error(error);
+  });
+```
+
+#### Getting Artifactory version
+
+```javascript
+artifactoryClient.system().version()
+  .then(result => {
+    console.log(result);
+  })
+  .catch(error => {
+    console.error(error);
+  });
+```
+
+#### Downloading an artifact
+
+```javascript
+artifactoryClient.download().downloadArtifact('path/to/artifact')
+  .then(result => {
+    console.log(JSON.stringify(result));
+  })
+  .catch(error => {
+    console.error(error);
+  });
+```
+
+#### Searching by AQL
+
+```javascript
+artifactoryClient
+    .search()
+    .aqlSearch(
+        'items.find({' +
+        '"repo":"my-repo-name",' +
+        '"path":{"$match":"*"}}' +
+        ').include("name","repo","path","created").sort({"$desc":["created"]}).limit(10)'
+    );
+  .then(result => {
+    console.log(JSON.stringify(result));
+  })
+  .catch(error => {
+    console.error(error);
+  });
+```
+
 ## Building and testing the sources
 
 To build the plugin sources, please follow these steps:
 
 * Clone the code from git.
 
-* Install and pack the _xray-client-js_ dependency locally, by running the following npm commands:
+* Install and pack the _jfrog-client-js_ dependency locally, by running the following npm commands:
 
 ```bash
 npm i && npm pack
 ```
 
-If you'd like run the _xray-client-js_ integration tests, follow these steps:
+If you'd like run the _jfrog-client-js_ integration tests, follow these steps:
 
-* Make sure your Xray instance is up and running.
+* Make sure your JFrog platform is up and running.
 * Set the CLIENTTESTS_ARTIFACTORY_URL, _CLIENTTESTS_XRAY_URL_, _CLIENTTESTS_PLATFORM_USERNAME_ and _CLIENTTESTS_PLATFORM_PASSWORD_ environment variables with your Artifactory & Xray URLs, username and password.
 * Run the following command:
 
@@ -98,7 +178,6 @@ We welcome pull requests from the community.
 
 ### Guidelines
 
-* Before creating your first pull request, please join our contributors community by signing [JFrog's CLA](https://secure.echosign.com/public/hostedForm?formid=5IYKLZ2RXB543N).
 * If the existing tests do not already cover your changes, please add tests.
-* Pull requests should be created on the _dev_ branch.
+* Pull requests should be created on the _master_ branch.
 * Please run `npm run format` for formatting the code before submitting the pull request.

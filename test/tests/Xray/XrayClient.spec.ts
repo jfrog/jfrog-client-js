@@ -1,6 +1,6 @@
 import nock from 'nock';
-import { XraySummaryClient, XrayClient, XraySystemClient } from '../../src';
-import { XrayDetailsClient } from '../../src/Xray/XrayDetailsClient';
+import { XraySummaryClient, XrayClient, XraySystemClient } from '../../../src';
+import { XrayDetailsClient } from '../../../src/Xray/XrayDetailsClient';
 
 const SERVER_URL = 'http://localhost:8000';
 

@@ -1,5 +1,5 @@
 import * as faker from 'faker';
-import { ArtifactoryLogger } from '../../src/Artifactory/ArtifactoryLogger';
+import { ArtifactoryLogger } from '../../../src/Artifactory/ArtifactoryLogger';
 
 const loggerMock = {
     debug: jest.fn(),

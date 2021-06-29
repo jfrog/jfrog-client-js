@@ -1,4 +1,5 @@
-import { IClientConfig } from '../model';
+import {IAqlSearchResult, IClientConfig} from '../model';
+import { ArtifactoryClient } from '../src';
 
 export class TestUtils {
     public static getClientConfig(serverUrlEnvVar: string): IClientConfig {
@@ -18,5 +19,16 @@ export class TestUtils {
 
     public static getArtifactoryClientConfig(): IClientConfig {
         return this.getClientConfig('CLIENTTESTS_ARTIFACTORY_URL');
+    }
+
+    public static async searchArtifactoryBuildRepo(artifactoryClient: ArtifactoryClient): Promise<IAqlSearchResult> {
+        return await artifactoryClient
+            .search()
+            .aqlSearch(
+                'items.find({' +
+                '"repo":"artifactory-build-info",' +
+                '"path":{"$match":"*"}}' +
+                ').include("name","repo","path","created").sort({"$desc":["created"]}).limit(1)'
+            );
     }
 }

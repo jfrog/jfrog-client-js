@@ -1,14 +1,14 @@
 {
-    "name": "xray-client-js",
+    "name": "jfrog-client-js",
     "version": "1.0.1",
-    "description": "Xray Javascript Client is a javascript library, which wraps some of the REST APIs exposed by JFrog Xray.",
+    "description": "JFrog Javascript Client is a javascript library, which wraps some of the REST APIs exposed by JFrog Services's different services.",
     "license": "Apache-2.0",
     "repository": {
         "type": "git",
-        "url": "https://github.com/jfrog/xray-client-js"
+        "url": "https://github.com/jfrog/jfrog-client-js"
     },
     "bugs": {
-        "url": "https://github.com/jfrog/xray-client-js/issues"
+        "url": "https://github.com/jfrog/jfrog-client-js/issues"
     },
     "main": "dist/index.js",
     "types": "dist/index.d.ts",

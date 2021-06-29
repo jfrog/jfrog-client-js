@@ -2,9 +2,9 @@ import * as faker from 'faker';
 import * as http from 'http';
 import { createProxyServer, ServerOptions } from 'http-proxy';
 import nock from 'nock';
-import { IArtifactoryVersion, IClientConfig, IProxyConfig } from '../../model';
-import { ArtifactoryClient } from '../../src';
-import { TestUtils } from '../TestUtils';
+import { IArtifactoryVersion, IClientConfig, IProxyConfig } from '../../../model';
+import { ArtifactoryClient } from '../../../src';
+import { TestUtils } from '../../TestUtils';
 
 let isPassedThroughProxy: boolean;
 let artifactoryClient: ArtifactoryClient;
