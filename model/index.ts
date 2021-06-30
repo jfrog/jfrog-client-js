@@ -1,4 +1,4 @@
-export { IClientConfig } from './ClientConfig';
+export { IJfrogClientConfig } from './JfrogClientConfig';
 export { ILogger } from './Logger';
 export { IProxyConfig } from './ProxyConfig';
 export { Severity } from './Xray/Severity';

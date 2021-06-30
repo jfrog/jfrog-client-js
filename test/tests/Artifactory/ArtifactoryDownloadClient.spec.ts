@@ -1,4 +1,4 @@
-import { IAqlSearchResult, IClientConfig } from '../../../model';
+import {IAqlSearchResult, IJfrogClientConfig} from '../../../model';
 import { JfrogClient } from '../../../src';
 import { TestUtils } from '../../TestUtils';
 
@@ -6,7 +6,7 @@ let jfrogClient: JfrogClient;
 const BUILD_INFO_REPO: string = '/artifactory-build-info/';
 
 describe('Artifactory Download tests', () => {
-    const clientConfig: IClientConfig = TestUtils.getJfrogClientConfig();
+    const clientConfig: IJfrogClientConfig = TestUtils.getJfrogClientConfig();
     beforeAll(() => {
         jfrogClient = new JfrogClient(clientConfig);
     });

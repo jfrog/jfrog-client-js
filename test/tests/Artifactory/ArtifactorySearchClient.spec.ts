@@ -1,11 +1,11 @@
-import { IAqlSearchResult, IClientConfig } from '../../../model';
+import {IAqlSearchResult, IJfrogClientConfig} from '../../../model';
 import { JfrogClient } from '../../../src';
 import { TestUtils } from '../../TestUtils';
 
 let jfrogClient: JfrogClient;
 
 describe('Artifactory Search tests', () => {
-    const clientConfig: IClientConfig = TestUtils.getJfrogClientConfig();
+    const clientConfig: IJfrogClientConfig = TestUtils.getJfrogClientConfig();
     beforeAll(() => {
         jfrogClient = new JfrogClient(clientConfig);
     });
