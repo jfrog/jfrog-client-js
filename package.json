@@ -21,7 +21,7 @@
         "watch": "tsc -watch -p ./",
         "compile": "tsc -p ./",
         "pretest": "npm run compile",
-        "test": "jest --verbose"
+        "test": "jest --verbose --runInBand"
     },
     "files": [
         "dist/**/*"

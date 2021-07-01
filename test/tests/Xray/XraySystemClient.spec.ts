@@ -15,6 +15,17 @@ describe('Xray System tests', () => {
     beforeAll(() => {
         jfrogClient = new JfrogClient(clientConfig);
     });
+    afterAll(() => {
+        nock.cleanAll()
+    })
+
+    test('Version', async () => {
+        const version: IXrayVersion = await jfrogClient.xray().system().version();
+        expect(version.xray_version).toBeTruthy();
+        expect(version.xray_revision).toBeTruthy();
+        expect(isPassedThroughProxy).toBeFalsy();
+    });
+    
     describe('Ping tests', () => {
         const PING_RES = { status: 'pong' };
 
@@ -110,20 +121,13 @@ describe('Xray System tests', () => {
         });
 
         test('Ping failure', async () => {
-            const PLATFORM_URL: string = faker.internet.url();
-            const scope = nock(PLATFORM_URL).get(`/api/v1/system/ping`).reply(402, { message: 'error' });
-            const client = new JfrogClient({ platformUrl: PLATFORM_URL });
+            const platformUrl: string = faker.internet.url();
+            const scope = nock(platformUrl).get(`/xray/api/v1/system/ping`).reply(402, { message: 'error' });
+            const client = new JfrogClient({ platformUrl });
             const res = await client.xray().system().ping();
             expect(res).toBeFalsy();
             expect(scope.isDone()).toBeTruthy();
             expect(isPassedThroughProxy).toBeFalsy();
         });
-    });
-
-    test('Version', async () => {
-        const version: IXrayVersion = await jfrogClient.xray().system().version();
-        expect(version.xray_version).toBeTruthy();
-        expect(version.xray_revision).toBeTruthy();
-        expect(isPassedThroughProxy).toBeFalsy();
     });
 });

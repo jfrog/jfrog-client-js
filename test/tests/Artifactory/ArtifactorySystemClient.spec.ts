@@ -15,6 +15,16 @@ describe('Artifactory System tests', () => {
     beforeAll(() => {
         jfrogClient = new JfrogClient(clientConfig);
     });
+    afterAll(() => {
+        nock.cleanAll();
+    });
+
+    test('Version', async () => {
+        const version: IArtifactoryVersion = await jfrogClient.artifactory().system().version();
+        expect(version.version).toBeTruthy();
+        expect(version.revision).toBeTruthy();
+        expect(isPassedThroughProxy).toBeFalsy();
+    });
 
     describe('Ping tests', () => {
         const PING_RES = 'OK';
@@ -111,20 +121,13 @@ describe('Artifactory System tests', () => {
         });
 
         test('Ping failure', async () => {
-            const PLATFORM_URL: string = faker.internet.url();
-            const scope = nock(PLATFORM_URL).get(`/api/system/ping`).reply(402, { message: 'error' });
-            const client = new JfrogClient({ platformUrl: PLATFORM_URL });
+            const platformUrl: string = faker.internet.url();
+            const scope = nock(platformUrl).get(`/artifactory/api/system/ping`).reply(402, { message: 'error' });
+            const client = new JfrogClient({ platformUrl });
             const res = await client.artifactory().system().ping();
             expect(res).toBeFalsy();
             expect(scope.isDone()).toBeTruthy();
             expect(isPassedThroughProxy).toBeFalsy();
         });
-    });
-
-    test('Version', async () => {
-        const version: IArtifactoryVersion = await jfrogClient.artifactory().system().version();
-        expect(version.version).toBeTruthy();
-        expect(version.revision).toBeTruthy();
-        expect(isPassedThroughProxy).toBeFalsy();
     });
 });
