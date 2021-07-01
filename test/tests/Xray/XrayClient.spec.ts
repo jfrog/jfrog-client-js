@@ -9,6 +9,11 @@ beforeAll(() => {
     nock.enableNetConnect(SERVER_URL);
 });
 
+afterAll(() => {
+    nock.cleanAll();
+    nock.enableNetConnect();
+});
+
 describe('Xray clients tests', () => {
     test('Client initialization', () => {
         const client = new XrayClient({ serverUrl: SERVER_URL });
@@ -17,7 +22,7 @@ describe('Xray clients tests', () => {
     test('Client w/o url', () => {
         expect(() => {
             const client = new XrayClient({ serverUrl: '' });
-        }).toThrow('Xray client : must provide serverUrl');
+        }).toThrow('Xray client : must provide platformUrl or xrayUrl');
     });
     test('System client', () => {
         const client = new XrayClient({ serverUrl: SERVER_URL });
