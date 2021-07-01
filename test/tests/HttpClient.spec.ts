@@ -37,7 +37,7 @@ describe('Http client tests', () => {
             nock(serverUrl)
                 .post(subPath)
                 .basicAuth({ user: username, pass: password })
-                .matchHeader('User-Agent', 'jfrog-xray-client')
+                .matchHeader('User-Agent', 'jfrog-client-js')
                 .reply(200, 'RESPONSE');
             const client = new HttpClient({ serverUrl, username, password });
             const requestParams = {

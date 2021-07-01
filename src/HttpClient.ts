@@ -32,7 +32,7 @@ export class HttpClient {
 
     private addUserAgentHeader(headers: { [key: string]: string }) {
         if (!headers[this.USER_AGENT_HEADER]) {
-            headers[this.USER_AGENT_HEADER] = 'jfrog-xray-client';
+            headers[this.USER_AGENT_HEADER] = 'jfrog-client-js';
         }
     }
 
