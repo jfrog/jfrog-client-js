@@ -10,7 +10,7 @@ Add jfrog-client-js as a dependency to your package.json file:
 
 ```json
 "dependencies": {
-  "jfrog-client-js": "^1.0.0"
+  "jfrog-client-js": "^2.0.0"
 }
 ```
 
