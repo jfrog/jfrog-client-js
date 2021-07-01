@@ -24,7 +24,7 @@ let jfrogClient = new JfrogClient({
     // xrayUrl - Set to use a custom Xray URL.
     username: 'username',
     password: 'password',
-    proxy: {host: '<organization>-xray.jfrog.io', port: 80, protocol: 'https'},
+    proxy: {host: '<organization>-xray.jfrog.io', port: 8081, protocol: 'https'},
     headers: {'key1': 'value1', 'key2': 'value2'}
 });
 ```
