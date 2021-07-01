@@ -1,4 +1,4 @@
-import {IAqlSearchResult, IJfrogClientConfig} from '../../../model';
+import { IAqlSearchResult, IJfrogClientConfig } from '../../../model';
 import { JfrogClient } from '../../../src';
 import { TestUtils } from '../../TestUtils';
 

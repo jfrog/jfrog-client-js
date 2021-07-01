@@ -13,7 +13,7 @@ export class XrayClient {
     public constructor(config: IClientSpecificConfig) {
         const { serverUrl, logger = console, username, password, proxy, headers } = config;
         if (!serverUrl) {
-            throw new Error('Xray client : must provide serverUrl');
+            throw new Error('Xray client : must provide platformUrl or xrayUrl');
         }
         this.httpClient = new HttpClient({ serverUrl, username, password, proxy, headers });
         this.logger = new XrayLogger(logger);

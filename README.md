@@ -1,4 +1,4 @@
-[![Build status](https://github.com/jfrog/xray-client-js/workflows/Build/badge.svg)](https://github.com/jfrog/xray-client-js/actions)
+[![Build status](https://github.com/jfrog/jfrog-client-js/workflows/Build/badge.svg)](https://github.com/jfrog/xray-client-js/actions)
 
 # JFrog Javascript Client
 
@@ -154,7 +154,7 @@ npm i && npm pack
 If you'd like run the _jfrog-client-js_ integration tests, follow these steps:
 
 * Make sure your JFrog platform is up and running.
-* Set the CLIENTTESTS_ARTIFACTORY_URL, _CLIENTTESTS_XRAY_URL_, _CLIENTTESTS_PLATFORM_USERNAME_ and _CLIENTTESTS_PLATFORM_PASSWORD_ environment variables with your Artifactory & Xray URLs, username and password.
+* Set the _CLIENTTESTS_PLATFORM_URL_, _CLIENTTESTS_PLATFORM_USERNAME_ and _CLIENTTESTS_PLATFORM_PASSWORD_ environment variables with your JFrog platform URL, username and password.
 * Run the following command:
 
 ```bash

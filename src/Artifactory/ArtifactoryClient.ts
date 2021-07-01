@@ -13,7 +13,7 @@ export class ArtifactoryClient {
     public constructor(config: IClientSpecificConfig) {
         const { serverUrl, logger = console, username, password, proxy, headers } = config;
         if (!serverUrl) {
-            throw new Error('Artifactory client : must provide serverUrl');
+            throw new Error('Artifactory client : must provide platformUrl or artifactoryUrl');
         }
         this.httpClient = new HttpClient({ serverUrl, username, password, proxy, headers });
         this.logger = new ArtifactoryLogger(logger);
