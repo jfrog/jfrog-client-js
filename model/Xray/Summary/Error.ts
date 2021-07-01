@@ -1,4 +1,4 @@
-export interface IError {
+export interface ISummaryError {
     error: string;
     identifier: string;
 }

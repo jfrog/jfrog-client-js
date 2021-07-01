@@ -1,9 +1,9 @@
-import { IVersion } from '../model/System/Version';
-import { HttpClient, IRequestParams } from './HttpClient';
+import { IArtifactoryVersion } from '../../model';
+import { HttpClient, IRequestParams } from '../HttpClient';
 
-export class SystemClient {
-    private readonly pingEndpoint = '/api/v1/system/ping';
-    private readonly versionEndpoint = '/api/v1/system/version';
+export class ArtifactorySystemClient {
+    private readonly pingEndpoint = '/api/system/ping';
+    private readonly versionEndpoint = '/api/system/version';
 
     constructor(private readonly httpClient: HttpClient) {}
 
@@ -11,7 +11,7 @@ export class SystemClient {
         const requestParams: IRequestParams = {
             url: this.pingEndpoint,
             method: 'GET',
-            timeout: 2000
+            timeout: 2000,
         };
         try {
             return await this.httpClient.doRequest(requestParams);
@@ -20,10 +20,10 @@ export class SystemClient {
         }
     }
 
-    public async version(): Promise<IVersion> {
+    public async version(): Promise<IArtifactoryVersion> {
         const requestParams: IRequestParams = {
             url: this.versionEndpoint,
-            method: 'GET'
+            method: 'GET',
         };
         return await this.httpClient.doAuthRequest(requestParams);
     }

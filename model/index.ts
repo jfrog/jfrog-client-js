@@ -1,6 +1,10 @@
-export { IClientConfig } from './ClientConfig';
+export { IJfrogClientConfig } from './JfrogClientConfig';
 export { ILogger } from './Logger';
 export { IProxyConfig } from './ProxyConfig';
-export { Severity } from './Severity';
-export * from './Summary';
-export { IVersion } from './System/Version';
+export { Severity } from './Xray/Severity';
+export * from './Xray/Summary';
+export { IDetailsResponse } from './Xray/Details/DetailsResponse';
+export { IXrayVersion } from './Xray/System/Version';
+export { IArtifactoryVersion } from './Artifactory/System/Version';
+export { IAqlSearchResult } from './Artifactory/Search/AqlSearchResult';
+export { ISearchEntry } from './Artifactory/Search/SearchEntry';

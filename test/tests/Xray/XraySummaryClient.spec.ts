@@ -1,38 +1,46 @@
-import { IArtifact } from '../model/Summary/Artifact';
-import { ComponentDetails } from '../model/Summary/ComponentDetails';
-import { IGeneral } from '../model/Summary/General';
-import { ICve } from '../model/Summary/Cve';
-import { IIssue } from '../model/Summary/Issue';
-import { IVulnerableComponent } from '../model/Summary/VulnerableComponent';
-import { ILicense } from '../model/Summary/License';
-import { ISummaryRequestModel } from '../model/Summary/SummaryRequestModel';
-import { ISummaryResponse } from '../model/Summary/SummaryResponse';
-import { XrayClient } from '../src/XrayClient';
-import { TestUtils } from './TestUtils';
+import {
+    IArtifact,
+    ComponentDetails,
+    IGeneral,
+    ICve,
+    IIssue,
+    IVulnerableComponent,
+    ILicense,
+    ISummaryRequestModel,
+    ISummaryResponse,
+} from '../../../model';
+import { TestUtils } from '../../TestUtils';
+import { JfrogClient } from '../../../src';
 
-const jsYaml: ISummaryRequestModel = { component_details: [new ComponentDetails('npm://js-yaml:3.10.0')] } as ISummaryRequestModel;
-const FIRST_ISSUE_SUMMARY = 'JS-YAML lib/js-yaml/loader.js storeMappingPair() Function Nested Array Handling Resource Consumption DoS Weakness';
-const SECOND_ISSUE_SUMMARY = 'JS-YAML lib/js-yaml/loader.js storeMappingPair() Function Object Property Handling Arbitrary Code Execution';
+const jsYaml: ISummaryRequestModel = {
+    component_details: [new ComponentDetails('npm://js-yaml:3.10.0')],
+} as ISummaryRequestModel;
+const FIRST_ISSUE_SUMMARY =
+    'JS-YAML lib/js-yaml/loader.js storeMappingPair() Function Nested Array Handling Resource Consumption DoS Weakness';
+const SECOND_ISSUE_SUMMARY =
+    'JS-YAML lib/js-yaml/loader.js storeMappingPair() Function Object Property Handling Arbitrary Code Execution';
 
-const express: ISummaryRequestModel = { component_details: [new ComponentDetails('npm://express:4.0.0')] } as ISummaryRequestModel;
+const express: ISummaryRequestModel = {
+    component_details: [new ComponentDetails('npm://express:4.0.0')],
+} as ISummaryRequestModel;
 const EXPRESS_ISSUE_SUMMARY =
     'The Express web framework before 3.11 and 4.x before 4.5 for Node.js does not provide a charset field in HTTP Content-Type headers in 400 level responses, which might allow remote attackers to conduct cross-site scripting (XSS) attacks via characters in a non-standard encoding.';
 
-let xrayClient: XrayClient;
+let jfrogClient: JfrogClient;
 
 beforeAll(() => {
-    xrayClient = new XrayClient(TestUtils.getClientConfig());
+    jfrogClient = new JfrogClient(TestUtils.getJfrogClientConfig());
 });
 describe('Xray summary tests', () => {
     test('Artifact summary component', async () => {
-        const response: ISummaryResponse = await xrayClient.summary().component(jsYaml);
+        const response: ISummaryResponse = await jfrogClient.xray().summary().component(jsYaml);
         expect(response).toBeTruthy();
         const artifacts: IArtifact[] = response.artifacts;
         expect(artifacts.length).toBe(1);
     });
 
     test('Artifact summary component general', async () => {
-        const response: ISummaryResponse = await xrayClient.summary().component(jsYaml);
+        const response: ISummaryResponse = await jfrogClient.xray().summary().component(jsYaml);
         expect(response).toBeTruthy();
 
         const general: IGeneral = response.artifacts[0].general;
@@ -43,7 +51,7 @@ describe('Xray summary tests', () => {
     });
 
     test('Artifact summary component issues', async () => {
-        const response: ISummaryResponse = await xrayClient.summary().component(jsYaml);
+        const response: ISummaryResponse = await jfrogClient.xray().summary().component(jsYaml);
         expect(response).toBeTruthy();
 
         const issues: IIssue[] = response.artifacts[0].issues;
@@ -63,7 +71,7 @@ describe('Xray summary tests', () => {
     });
 
     test('Artifact Summary component CVE', async () => {
-        const response: ISummaryResponse = await xrayClient.summary().component(express);
+        const response: ISummaryResponse = await jfrogClient.xray().summary().component(express);
         expect(response).toBeTruthy();
 
         const issues: IIssue[] = response.artifacts[0].issues;
@@ -83,7 +91,7 @@ describe('Xray summary tests', () => {
     });
 
     test('Artifact Summary component fixed versions', async () => {
-        const response: ISummaryResponse = await xrayClient.summary().component(express);
+        const response: ISummaryResponse = await jfrogClient.xray().summary().component(express);
         expect(response).toBeTruthy();
 
         const issues: IIssue[] = response.artifacts[0].issues;
@@ -95,7 +103,9 @@ describe('Xray summary tests', () => {
         const components: IVulnerableComponent[] | undefined = testIssue?.components;
         expect(components).toBeTruthy();
 
-        const expressComponent: IVulnerableComponent | undefined = components?.find((component) => component.component_id === 'express');
+        const expressComponent: IVulnerableComponent | undefined = components?.find(
+            (component) => component.component_id === 'express'
+        );
         expect(expressComponent).toBeTruthy();
         const fixedVersions: string[] | undefined = expressComponent?.fixed_versions;
         expect(fixedVersions).toBeTruthy();
@@ -105,7 +115,7 @@ describe('Xray summary tests', () => {
     });
 
     test('Artifact summary component licenses', async () => {
-        const response: ISummaryResponse = await xrayClient.summary().component(jsYaml);
+        const response: ISummaryResponse = await jfrogClient.xray().summary().component(jsYaml);
         expect(response).toBeTruthy();
 
         const licenses: ILicense[] = response.artifacts[0].licenses;
@@ -121,9 +131,9 @@ describe('Xray summary tests', () => {
 
     test('Artifact not exist', async () => {
         const notFoundArtifactRequest: ISummaryRequestModel = {
-            component_details: [new ComponentDetails('npm://non-existing-component:1.2.3')]
+            component_details: [new ComponentDetails('npm://non-existing-component:1.2.3')],
         } as ISummaryRequestModel;
-        const response: ISummaryResponse = await xrayClient.summary().component(notFoundArtifactRequest);
+        const response: ISummaryResponse = await jfrogClient.xray().summary().component(notFoundArtifactRequest);
         expect(response).toBeTruthy();
         expect(response.artifacts.length).toBe(1);
         const artifact: IArtifact = response.artifacts[0];

@@ -1,7 +1,6 @@
 import nock from 'nock';
-import { SummaryClient } from '../src/SummaryClient';
-import { XrayClient } from '../src/XrayClient';
-import { SystemClient } from '../src/SystemClient';
+import { XrayDetailsClient, XraySummaryClient, XraySystemClient } from '../../../src';
+import { XrayClient } from '../../../src/Xray/XrayClient';
 
 const SERVER_URL = 'http://localhost:8000';
 
@@ -22,11 +21,15 @@ describe('Xray clients tests', () => {
     });
     test('System client', () => {
         const client = new XrayClient({ serverUrl: SERVER_URL });
-        expect(client.system()).toBeInstanceOf(SystemClient);
+        expect(client.system()).toBeInstanceOf(XraySystemClient);
     });
     test('Summary client', () => {
         const client = new XrayClient({ serverUrl: SERVER_URL });
-        expect(client.summary()).toBeInstanceOf(SummaryClient);
+        expect(client.summary()).toBeInstanceOf(XraySummaryClient);
+    });
+    test('Details client', () => {
+        const client = new XrayClient({ serverUrl: SERVER_URL });
+        expect(client.details()).toBeInstanceOf(XrayDetailsClient);
     });
 });
 

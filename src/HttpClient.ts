@@ -1,10 +1,10 @@
 import axios, { AxiosInstance, AxiosProxyConfig, AxiosRequestConfig } from 'axios';
-import { IProxyConfig } from '../model/ProxyConfig';
+import { IProxyConfig } from '../model';
 
 export class HttpClient {
     private USER_AGENT_HEADER: string = 'User-Agent';
-    private _basicAuth: BasicAuth;
-    private _axiosInstance: AxiosInstance;
+    private readonly _basicAuth: BasicAuth;
+    private readonly _axiosInstance: AxiosInstance;
 
     constructor(config: IHttpConfig) {
         config.headers = config.headers || {};
@@ -12,11 +12,11 @@ export class HttpClient {
         this._axiosInstance = axios.create({
             baseURL: config.serverUrl,
             headers: config.headers,
-            proxy: this.getAxiosProxyConfig(config.proxy)
+            proxy: this.getAxiosProxyConfig(config.proxy),
         } as AxiosRequestConfig);
         this._basicAuth = {
             username: config.username,
-            password: config.password
+            password: config.password,
         } as BasicAuth;
     }
 
@@ -32,7 +32,7 @@ export class HttpClient {
 
     private addUserAgentHeader(headers: { [key: string]: string }) {
         if (!headers[this.USER_AGENT_HEADER]) {
-            headers[this.USER_AGENT_HEADER] = 'jfrog-xray-client';
+            headers[this.USER_AGENT_HEADER] = 'jfrog-client-js';
         }
     }
 
@@ -58,7 +58,7 @@ export class HttpClient {
         return {
             host: proxyConfig.host,
             port: proxyConfig.port,
-            protocol: proxyConfig.protocol
+            protocol: proxyConfig.protocol,
         } as AxiosProxyConfig;
     }
 }
@@ -84,4 +84,5 @@ export interface IRequestParams {
     data?: any;
     auth?: BasicAuth;
     timeout?: number;
+    headers?: any;
 }
