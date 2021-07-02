@@ -1,1 +1,1 @@
-export type Severity = 'High' | 'Medium' | 'Low' | 'Normal' | 'Pending' | 'Information' | 'Unknown';
+export type Severity = 'Critical' | 'High' | 'Medium' | 'Low' | 'Normal' | 'Pending' | 'Information' | 'Unknown';
