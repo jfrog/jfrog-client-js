@@ -17,6 +17,6 @@ describe('Artifactory Download tests', () => {
         const artifactPath: string = BUILD_INFO_REPO + result.results[0].path + '/' + result.results[0].name;
         const build: any = await jfrogClient.artifactory().download().downloadArtifact(artifactPath);
         expect(build).toBeTruthy();
-        expect(build.name).toBe(result.results[0].path);
+        expect(build.name).toBe(decodeURIComponent(result.results[0].path));
     });
 });
