@@ -15,8 +15,10 @@ import { JfrogClient } from '../../../src';
 const jsYaml: ISummaryRequestModel = {
     component_details: [new ComponentDetails('npm://js-yaml:3.10.0')],
 } as ISummaryRequestModel;
+const FIRST_ISSUE_ID: string = 'XRAY-79036';
 const FIRST_ISSUE_SUMMARY =
     'JS-YAML lib/js-yaml/loader.js storeMappingPair() Function Nested Array Handling Resource Consumption DoS Weakness';
+const SECOND_ISSUE_ID: string = 'XRAY-80240';
 const SECOND_ISSUE_SUMMARY =
     'JS-YAML lib/js-yaml/loader.js storeMappingPair() Function Object Property Handling Arbitrary Code Execution';
 
@@ -57,8 +59,8 @@ describe('Xray summary tests', () => {
         const issues: IIssue[] = response.artifacts[0].issues;
         expect(issues.length).toBeGreaterThanOrEqual(2);
 
-        const firstIssue: IIssue | undefined = issues.find((issue) => issue.summary === FIRST_ISSUE_SUMMARY);
-        const secondIssue: IIssue | undefined = issues.find((issue) => issue.summary === SECOND_ISSUE_SUMMARY);
+        const firstIssue: IIssue | undefined = issues.find((issue) => issue.issue_id === FIRST_ISSUE_ID);
+        const secondIssue: IIssue | undefined = issues.find((issue) => issue.issue_id === SECOND_ISSUE_ID);
         expect(firstIssue).toBeTruthy();
         expect(secondIssue).toBeTruthy();
         if (!firstIssue || !secondIssue) {
@@ -66,8 +68,10 @@ describe('Xray summary tests', () => {
         }
         expect(firstIssue.description).toBeTruthy();
         expect(firstIssue.severity).toBe('Medium');
+        expect(firstIssue.summary).toBe(FIRST_ISSUE_SUMMARY);
         expect(secondIssue.description).toBeTruthy();
         expect(secondIssue.severity).toBe('Critical');
+        expect(secondIssue.summary).toBe(SECOND_ISSUE_SUMMARY);
     });
 
     test('Artifact Summary component CVE', async () => {
