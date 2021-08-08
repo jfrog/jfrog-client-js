@@ -16,8 +16,8 @@ describe('Xray System tests', () => {
         jfrogClient = new JfrogClient(clientConfig);
     });
     afterAll(() => {
-        nock.cleanAll()
-    })
+        nock.cleanAll();
+    });
 
     test('Version', async () => {
         const version: IXrayVersion = await jfrogClient.xray().system().version();
@@ -25,7 +25,7 @@ describe('Xray System tests', () => {
         expect(version.xray_revision).toBeTruthy();
         expect(isPassedThroughProxy).toBeFalsy();
     });
-    
+
     describe('Ping tests', () => {
         const PING_RES = { status: 'pong' };
 

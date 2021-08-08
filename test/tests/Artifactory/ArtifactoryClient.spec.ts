@@ -10,9 +10,9 @@ beforeAll(() => {
 });
 
 afterAll(() => {
-    nock.cleanAll()
-    nock.enableNetConnect()
-})
+    nock.cleanAll();
+    nock.enableNetConnect();
+});
 
 describe('Artifactory clients tests', () => {
     test('Client initialization', () => {

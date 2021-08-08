@@ -3,6 +3,7 @@ import { ICve } from './Cve';
 import { IVulnerableComponent } from './VulnerableComponent';
 
 export interface IIssue {
+    issue_id: string;
     summary: string;
     description: string;
     severity: Severity;
