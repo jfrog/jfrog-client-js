@@ -27,15 +27,15 @@
         "dist/**/*"
     ],
     "dependencies": {
-        "axios": "~0.21.1"
+        "axios": "~0.23.0"
     },
     "devDependencies": {
         "@types/faker": "^4.1.11",
         "@types/http-proxy": "^1.17.4",
-        "@types/jest": "^26.0.23",
+        "@types/jest": "^27.0.2",
         "faker": "^4.1.0",
         "http-proxy": "^1.18.1",
-        "jest": "^27.0.6",
+        "jest": "^27.3.1",
         "nock": "^13.0.5",
         "prettier": "^2.0.5",
         "ts-jest": "^27.0.3",
