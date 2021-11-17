@@ -11,11 +11,11 @@ export class ArtifactoryClient {
     private logger: ILogger;
 
     public constructor(config: IClientSpecificConfig) {
-        const { serverUrl, logger = console, username, password, proxy, headers } = config;
+        const { serverUrl, logger = console, username, password, accessToken, proxy, headers } = config;
         if (!serverUrl) {
             throw new Error('Artifactory client : must provide platformUrl or artifactoryUrl');
         }
-        this.httpClient = new HttpClient({ serverUrl, username, password, proxy, headers });
+        this.httpClient = new HttpClient({ serverUrl, username, password, accessToken, proxy, headers });
         this.logger = new ArtifactoryLogger(logger);
     }
 
