@@ -80,6 +80,7 @@ describe('Artifactory System tests', () => {
                     platformUrl: clientConfig.platformUrl,
                     username: clientConfig.username,
                     password: clientConfig.password,
+                    accessToken: clientConfig.accessToken,
                     proxy: {} as IProxyConfig,
                 });
                 const response = await jfrogClientEmptyProxy.artifactory().system().ping();

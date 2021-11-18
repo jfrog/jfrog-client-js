@@ -30,7 +30,7 @@ export class HttpClient {
 
     public async doAuthRequest(requestParams: IRequestParams): Promise<any> {
         if (this._accessToken !== "") {
-            this.addAuthHeader(requestParams.headers);
+            this.addAuthHeader(requestParams);
         } else {
             requestParams.auth = this._basicAuth;
         }
@@ -43,9 +43,12 @@ export class HttpClient {
         }
     }
 
-    private addAuthHeader(headers: { [key: string]: string }) {
-        if (!headers[this.AUTHORIZATION_HEADER]) {
-            headers[this.AUTHORIZATION_HEADER] = 'Bearer ' + this._accessToken;
+    private addAuthHeader(requestParams: IRequestParams) {
+        if (!requestParams.headers) {
+            requestParams.headers = {};
+        }
+        if (!requestParams.headers[this.AUTHORIZATION_HEADER]) {
+            requestParams.headers[this.AUTHORIZATION_HEADER] = 'Bearer ' + this._accessToken;
         }
     }
 
@@ -79,10 +82,6 @@ export class HttpClient {
 interface BasicAuth {
     username: string;
     password: string;
-}
-
-interface TokenAuth {
-    accessToken: string;
 }
 
 export interface IHttpConfig {

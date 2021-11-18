@@ -24,6 +24,8 @@ let jfrogClient = new JfrogClient({
     // xrayUrl - Set to use a custom Xray URL.
     username: 'username',
     password: 'password',
+    // OR
+    accessToken: 'accessToken',
     proxy: {host: '<organization>-xray.jfrog.io', port: 8081, protocol: 'https'},
     headers: {'key1': 'value1', 'key2': 'value2'}
 });
@@ -154,7 +156,8 @@ npm i && npm pack
 If you'd like run the _jfrog-client-js_ integration tests, follow these steps:
 
 * Make sure your JFrog platform is up and running.
-* Set the _CLIENTTESTS_PLATFORM_URL_, _CLIENTTESTS_PLATFORM_USERNAME_ and _CLIENTTESTS_PLATFORM_PASSWORD_ environment variables with your JFrog platform URL, username and password.
+* Set the _CLIENTTESTS_PLATFORM_URL_ environment variable with your JFrog platform URL.
+* Set the _CLIENTTESTS_PLATFORM_ACCESS_TOKEN_ OR _CLIENTTESTS_PLATFORM_USERNAME_ and _CLIENTTESTS_PLATFORM_PASSWORD_ environment variables with your JFrog platform credentials.
 * Run the following command:
 
 ```bash

@@ -19,9 +19,14 @@ jobs:
               run: npm i
             - name: Lint
               run: npm run lint
-            - name: Tests
+            - name: Basic Auth Tests
               run: npm t
               env:
                   CLIENTTESTS_PLATFORM_URL: ${{ secrets.CLIENTTESTS_PLATFORM_URL }}
                   CLIENTTESTS_PLATFORM_USERNAME: ${{ secrets.CLIENTTESTS_PLATFORM_USERNAME }}
                   CLIENTTESTS_PLATFORM_PASSWORD: ${{ secrets.CLIENTTESTS_PLATFORM_PASSWORD }}
+            - name: Access Token Tests
+              run: npm t
+              env:
+                  CLIENTTESTS_PLATFORM_URL: ${{ secrets.CLIENTTESTS_PLATFORM_URL }}
+                  CLIENTTESTS_PLATFORM_ACCESS_TOKEN: ${{ secrets.CLIENTTESTS_PLATFORM_ACCESS_TOKEN }}
