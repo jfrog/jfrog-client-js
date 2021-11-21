@@ -20,7 +20,7 @@ export class HttpClient {
             username: config.username,
             password: config.password,
         } as BasicAuth;
-        this._accessToken = config.accessToken || "";
+        this._accessToken = config.accessToken || '';
     }
 
     public async doRequest(requestParams: IRequestParams): Promise<any> {
@@ -29,7 +29,7 @@ export class HttpClient {
     }
 
     public async doAuthRequest(requestParams: IRequestParams): Promise<any> {
-        if (this._accessToken !== "") {
+        if (this._accessToken !== '') {
             this.addAuthHeader(requestParams);
         } else {
             requestParams.auth = this._basicAuth;

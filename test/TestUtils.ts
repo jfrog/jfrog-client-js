@@ -5,8 +5,13 @@ import { JfrogClient } from '../src';
 export class TestUtils {
     public static getJfrogClientConfig(): IJfrogClientConfig {
         expect(process.env.CLIENTTESTS_PLATFORM_URL).toBeDefined();
-        if ((process.env.CLIENTTESTS_PLATFORM_USERNAME === "" || process.env.CLIENTTESTS_PLATFORM_PASSWORD === "") && process.env.CLIENTTESTS_PLATFORM_ACCESS_TOKEN === "") {
-            throw new Error('no valid authentication method was set. Config the Basic Auth or the Access Token env vars to run the tests')
+        if (
+            (process.env.CLIENTTESTS_PLATFORM_USERNAME === '' || process.env.CLIENTTESTS_PLATFORM_PASSWORD === '') &&
+            process.env.CLIENTTESTS_PLATFORM_ACCESS_TOKEN === ''
+        ) {
+            throw new Error(
+                'no valid authentication method was set. Config the Basic Auth or the Access Token env vars to run the tests'
+            );
         }
         return {
             platformUrl: process.env.CLIENTTESTS_PLATFORM_URL,
