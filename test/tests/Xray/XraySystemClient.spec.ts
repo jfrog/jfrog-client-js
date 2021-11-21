@@ -80,6 +80,7 @@ describe('Xray System tests', () => {
                     platformUrl: clientConfig.platformUrl,
                     username: clientConfig.username,
                     password: clientConfig.password,
+                    accessToken: clientConfig.accessToken,
                     proxy: {} as IProxyConfig,
                 });
                 const response = await jfrogClientEmptyProxy.xray().system().ping();

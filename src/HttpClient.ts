@@ -3,7 +3,9 @@ import { IProxyConfig } from '../model';
 
 export class HttpClient {
     private USER_AGENT_HEADER: string = 'User-Agent';
+    private AUTHORIZATION_HEADER: string = 'Authorization';
     private readonly _basicAuth: BasicAuth;
+    private readonly _accessToken: string;
     private readonly _axiosInstance: AxiosInstance;
 
     constructor(config: IHttpConfig) {
@@ -18,6 +20,7 @@ export class HttpClient {
             username: config.username,
             password: config.password,
         } as BasicAuth;
+        this._accessToken = config.accessToken || '';
     }
 
     public async doRequest(requestParams: IRequestParams): Promise<any> {
@@ -26,13 +29,26 @@ export class HttpClient {
     }
 
     public async doAuthRequest(requestParams: IRequestParams): Promise<any> {
-        requestParams.auth = this._basicAuth;
+        if (this._accessToken !== '') {
+            this.addAuthHeader(requestParams);
+        } else {
+            requestParams.auth = this._basicAuth;
+        }
         return this.doRequest(requestParams);
     }
 
     private addUserAgentHeader(headers: { [key: string]: string }) {
         if (!headers[this.USER_AGENT_HEADER]) {
             headers[this.USER_AGENT_HEADER] = 'jfrog-client-js';
+        }
+    }
+
+    private addAuthHeader(requestParams: IRequestParams) {
+        if (!requestParams.headers) {
+            requestParams.headers = {};
+        }
+        if (!requestParams.headers[this.AUTHORIZATION_HEADER]) {
+            requestParams.headers[this.AUTHORIZATION_HEADER] = 'Bearer ' + this._accessToken;
         }
     }
 
@@ -72,6 +88,7 @@ export interface IHttpConfig {
     serverUrl?: string;
     username?: string;
     password?: string;
+    accessToken?: string;
     proxy?: IProxyConfig | false;
     headers?: { [key: string]: string };
 }
