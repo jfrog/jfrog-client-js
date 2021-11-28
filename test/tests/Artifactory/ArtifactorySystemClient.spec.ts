@@ -19,6 +19,12 @@ describe('Artifactory System tests', () => {
         nock.cleanAll();
     });
 
+    test('Usage', async () => {
+        const res: string = await jfrogClient.artifactory().system().reportUsage('client-js-test', '1.2.3', 'rt_test');
+        // Empty string returned on successful requests.
+        expect(res).toBeFalsy();
+    });
+
     test('Version', async () => {
         const version: IArtifactoryVersion = await jfrogClient.artifactory().system().version();
         expect(version.version).toBeTruthy();
@@ -52,6 +58,8 @@ describe('Artifactory System tests', () => {
             });
             afterAll(() => {
                 proxy.close();
+                process.env.HTTPS_PROXY = '';
+                process.env.NO_PROXY = '';
             });
 
             test('Ping through proxy', async () => {
