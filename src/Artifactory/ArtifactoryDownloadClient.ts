@@ -1,9 +1,11 @@
 import { HttpClient, IRequestParams } from '../HttpClient';
+import { ArtifactoryLogger } from './ArtifactoryLogger';
 
 export class ArtifactoryDownloadClient {
-    constructor(private readonly httpClient: HttpClient) {}
+    constructor(private readonly httpClient: HttpClient, private readonly logger: ArtifactoryLogger) {}
 
     public async downloadArtifact(artifactPath: string): Promise<string> {
+        this.logger.debug('Sending download artifact request...');
         const requestParams: IRequestParams = {
             url: encodeURI(artifactPath),
             method: 'GET',

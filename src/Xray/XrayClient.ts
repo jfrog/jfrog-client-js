@@ -1,6 +1,5 @@
 import { HttpClient } from '../HttpClient';
 import { XraySystemClient } from './XraySystemClient';
-import { ILogger } from '../../model';
 import { XrayLogger } from './XrayLogger';
 import { XraySummaryClient } from './XraySummaryClient';
 import { XrayDetailsClient } from './XrayDetailsClient';
@@ -8,7 +7,7 @@ import { IClientSpecificConfig } from '../../model/ClientSpecificConfig';
 
 export class XrayClient {
     private readonly httpClient: HttpClient;
-    private logger: ILogger;
+    private logger: XrayLogger;
 
     public constructor(config: IClientSpecificConfig) {
         const { serverUrl, logger = console, username, password, accessToken, proxy, headers } = config;
@@ -20,14 +19,14 @@ export class XrayClient {
     }
 
     public summary(): XraySummaryClient {
-        return new XraySummaryClient(this.httpClient);
+        return new XraySummaryClient(this.httpClient, this.logger);
     }
 
     public system(): XraySystemClient {
-        return new XraySystemClient(this.httpClient);
+        return new XraySystemClient(this.httpClient, this.logger);
     }
 
     public details(): XrayDetailsClient {
-        return new XrayDetailsClient(this.httpClient);
+        return new XrayDetailsClient(this.httpClient, this.logger);
     }
 }

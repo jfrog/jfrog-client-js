@@ -1,5 +1,4 @@
 import { HttpClient } from '../HttpClient';
-import { ILogger } from '../../model';
 import { ArtifactoryLogger } from './ArtifactoryLogger';
 import { ArtifactorySystemClient } from './ArtifactorySystemClient';
 import { ArtifactorySearchClient } from './ArtifactorySearchClient';
@@ -8,7 +7,7 @@ import { IClientSpecificConfig } from '../../model/ClientSpecificConfig';
 
 export class ArtifactoryClient {
     private readonly httpClient: HttpClient;
-    private logger: ILogger;
+    private logger: ArtifactoryLogger;
 
     public constructor(config: IClientSpecificConfig) {
         const { serverUrl, logger = console, username, password, accessToken, proxy, headers } = config;
@@ -20,14 +19,14 @@ export class ArtifactoryClient {
     }
 
     public system(): ArtifactorySystemClient {
-        return new ArtifactorySystemClient(this.httpClient);
+        return new ArtifactorySystemClient(this.httpClient, this.logger);
     }
 
     public search(): ArtifactorySearchClient {
-        return new ArtifactorySearchClient(this.httpClient);
+        return new ArtifactorySearchClient(this.httpClient, this.logger);
     }
 
     public download(): ArtifactoryDownloadClient {
-        return new ArtifactoryDownloadClient(this.httpClient);
+        return new ArtifactoryDownloadClient(this.httpClient, this.logger);
     }
 }
