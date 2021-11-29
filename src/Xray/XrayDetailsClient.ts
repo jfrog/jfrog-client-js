@@ -1,9 +1,9 @@
 import { IDetailsResponse } from '../../model';
 import { HttpClient, IRequestParams } from '../HttpClient';
-import { XrayLogger } from './XrayLogger';
+import { ILogger } from '../../model/';
 
 export class XrayDetailsClient {
-    constructor(private readonly httpClient: HttpClient, private readonly logger: XrayLogger) {}
+    constructor(private readonly httpClient: HttpClient, private readonly logger: ILogger) {}
 
     public async build(buildName: string, buildNumber: string): Promise<IDetailsResponse> {
         this.logger.debug('Sending build details request to Xray...');

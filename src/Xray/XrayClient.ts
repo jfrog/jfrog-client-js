@@ -4,10 +4,11 @@ import { XrayLogger } from './XrayLogger';
 import { XraySummaryClient } from './XraySummaryClient';
 import { XrayDetailsClient } from './XrayDetailsClient';
 import { IClientSpecificConfig } from '../../model/ClientSpecificConfig';
+import { ILogger } from '../../model/';
 
 export class XrayClient {
     private readonly httpClient: HttpClient;
-    private logger: XrayLogger;
+    private logger: ILogger;
 
     public constructor(config: IClientSpecificConfig) {
         const { serverUrl, logger = console, username, password, accessToken, proxy, headers } = config;

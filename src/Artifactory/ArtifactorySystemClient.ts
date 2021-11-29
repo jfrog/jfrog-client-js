@@ -1,12 +1,12 @@
 import { IArtifactoryVersion } from '../../model';
 import { HttpClient, IRequestParams } from '../HttpClient';
-import { ArtifactoryLogger } from './ArtifactoryLogger';
+import { ILogger } from '../../model/';
 
 export class ArtifactorySystemClient {
     private readonly pingEndpoint = '/api/system/ping';
     private readonly versionEndpoint = '/api/system/version';
 
-    constructor(private readonly httpClient: HttpClient, private readonly logger: ArtifactoryLogger) {}
+    constructor(private readonly httpClient: HttpClient, private readonly logger: ILogger) {}
 
     public async ping(): Promise<boolean> {
         this.logger.debug('Sending ping request...');

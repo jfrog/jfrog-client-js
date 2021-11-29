@@ -1,8 +1,8 @@
 import { HttpClient, IRequestParams } from '../HttpClient';
-import { ArtifactoryLogger } from './ArtifactoryLogger';
+import { ILogger } from '../../model/';
 
 export class ArtifactoryDownloadClient {
-    constructor(private readonly httpClient: HttpClient, private readonly logger: ArtifactoryLogger) {}
+    constructor(private readonly httpClient: HttpClient, private readonly logger: ILogger) {}
 
     public async downloadArtifact(artifactPath: string): Promise<string> {
         this.logger.debug('Sending download artifact request...');

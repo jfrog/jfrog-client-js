@@ -1,11 +1,11 @@
 import { ISummaryRequestModel, ISummaryResponse } from '../../model';
 import { HttpClient, IRequestParams } from '../HttpClient';
-import { XrayLogger } from './XrayLogger';
+import { ILogger } from '../../model/';
 
 export class XraySummaryClient {
     private readonly summaryComponentsEndpoint = '/api/v1/summary/component';
 
-    constructor(private readonly httpClient: HttpClient, private readonly logger: XrayLogger) {}
+    constructor(private readonly httpClient: HttpClient, private readonly logger: ILogger) {}
 
     public async component(model: ISummaryRequestModel): Promise<ISummaryResponse> {
         this.logger.debug('Sending summary/component request...');
