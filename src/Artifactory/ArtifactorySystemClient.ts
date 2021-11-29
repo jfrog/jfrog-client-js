@@ -1,14 +1,16 @@
 import { IArtifactoryVersion, IUsageData, IUsageFeature } from '../../model';
 import { HttpClient, IRequestParams } from '../HttpClient';
+import { ILogger } from '../../model/';
 
 export class ArtifactorySystemClient {
     private readonly pingEndpoint = '/api/system/ping';
     private readonly versionEndpoint = '/api/system/version';
     private readonly usageEndpoint = '/api/system/usage';
 
-    constructor(private readonly httpClient: HttpClient) {}
+    constructor(private readonly httpClient: HttpClient, private readonly logger: ILogger) {}
 
     public async ping(): Promise<boolean> {
+        this.logger.debug('Sending ping request...');
         const requestParams: IRequestParams = {
             url: this.pingEndpoint,
             method: 'GET',
@@ -22,6 +24,7 @@ export class ArtifactorySystemClient {
     }
 
     public async version(): Promise<IArtifactoryVersion> {
+        this.logger.debug('Sending version request...');
         const requestParams: IRequestParams = {
             url: this.versionEndpoint,
             method: 'GET',
