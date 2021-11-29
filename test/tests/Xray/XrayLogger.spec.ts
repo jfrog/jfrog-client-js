@@ -11,17 +11,17 @@ const logger = new XrayLogger(loggerMock);
 test('warn log', () => {
     const message = faker.random.words(5);
     logger.warn(message);
-    expect(loggerMock.warn).toHaveBeenCalledWith('XrayClient::' + message);
+    expect(loggerMock.warn).toHaveBeenCalledWith('XrayClient: ' + message);
 });
 
 test('error log', () => {
     const message = faker.random.words(5);
     logger.error(message);
-    expect(loggerMock.error).toHaveBeenCalledWith('XrayClient::' + message);
+    expect(loggerMock.error).toHaveBeenCalledWith('XrayClient: ' + message);
 });
 
 test('debug log', () => {
     const message = faker.random.words(5);
     logger.debug(message);
-    expect(loggerMock.debug).toHaveBeenCalledWith('XrayClient::' + message);
+    expect(loggerMock.debug).toHaveBeenCalledWith('XrayClient: ' + message);
 });
