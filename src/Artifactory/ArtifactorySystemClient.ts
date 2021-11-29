@@ -29,10 +29,10 @@ export class ArtifactorySystemClient {
         return await this.httpClient.doAuthRequest(requestParams);
     }
 
-    public async reportUsage(userAgentName: string, userAgentVersion: string, featureName: string): Promise<string> {
+    public async reportUsage(userAgent: string, featureName: string): Promise<string> {
         const feature: IUsageFeature[] = [{ featureId: featureName }];
         const usageData: IUsageData = {
-            productId: userAgentName + '/' + userAgentVersion,
+            productId: userAgent,
             features: feature,
         };
         const requestParams: IRequestParams = {
