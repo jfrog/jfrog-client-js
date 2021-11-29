@@ -20,7 +20,7 @@ describe('Artifactory System tests', () => {
     });
 
     test('Usage', async () => {
-        const res: string = await jfrogClient.artifactory().system().reportUsage('client-js-test', '1.2.3', 'rt_test');
+        const res: string = await jfrogClient.artifactory().system().reportUsage('client-js-test/1.2.3', 'rt_test');
         // Empty string returned on successful requests.
         expect(res).toBeFalsy();
     });

@@ -33,6 +33,7 @@ export class ArtifactorySystemClient {
     }
 
     public async reportUsage(userAgent: string, featureName: string): Promise<string> {
+        this.logger.debug('Sending usage report...');
         const feature: IUsageFeature[] = [{ featureId: featureName }];
         const usageData: IUsageData = {
             productId: userAgent,
