@@ -32,12 +32,11 @@ export class ArtifactorySystemClient {
         return await this.httpClient.doAuthRequest(requestParams);
     }
 
-    public async reportUsage(userAgent: string, featureName: string): Promise<string> {
+    public async reportUsage(userAgent: string, featureArray: IUsageFeature[]): Promise<string> {
         this.logger.debug('Sending usage report...');
-        const feature: IUsageFeature[] = [{ featureId: featureName }];
         const usageData: IUsageData = {
             productId: userAgent,
-            features: feature,
+            features: featureArray,
         };
         const requestParams: IRequestParams = {
             url: this.usageEndpoint,

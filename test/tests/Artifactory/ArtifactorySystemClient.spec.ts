@@ -2,7 +2,7 @@ import * as faker from 'faker';
 import * as http from 'http';
 import { createProxyServer, ServerOptions } from 'http-proxy';
 import nock from 'nock';
-import { IArtifactoryVersion, IProxyConfig } from '../../../model';
+import { IArtifactoryVersion, IProxyConfig, IUsageFeature } from '../../../model';
 import { TestUtils } from '../../TestUtils';
 import { IJfrogClientConfig } from '../../../model/JfrogClientConfig';
 import { JfrogClient } from '../../../src';
@@ -20,7 +20,8 @@ describe('Artifactory System tests', () => {
     });
 
     test('Usage', async () => {
-        const res: string = await jfrogClient.artifactory().system().reportUsage('client-js-test/1.2.3', 'rt_test');
+        const featureArray: IUsageFeature[] = [{ featureId: 'rt_test' }, { featureId: 'usage_test' }];
+        const res: string = await jfrogClient.artifactory().system().reportUsage('client-js-test/1.2.3', featureArray);
         // Empty string returned on successful requests.
         expect(res).toBeFalsy();
     });
