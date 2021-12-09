@@ -2,6 +2,7 @@ import { JfrogClient } from '../../src';
 import { ArtifactoryClient } from '../../src/Artifactory/ArtifactoryClient';
 import { XrayClient } from '../../src/Xray/XrayClient';
 import { IJfrogClientConfig } from '../../model/JfrogClientConfig';
+import { TestUtils } from '../TestUtils';
 
 const PLATFORM_URL = 'http://localhost:8000';
 const ARTIFACTORY_URL = 'http://localhost:8765/artifactory';
@@ -19,7 +20,7 @@ describe('Jfrog client tests', () => {
     });
 
     test('Client initialization with custom Artifactory URL', () => {
-        const config: IJfrogClientConfig = { artifactoryUrl: ARTIFACTORY_URL };
+        const config: IJfrogClientConfig = { artifactoryUrl: ARTIFACTORY_URL, logger: TestUtils.createTestLogger() };
         const jfrogClient = new JfrogClient(config);
         expect(jfrogClient).toBeInstanceOf(JfrogClient);
         expect(jfrogClient.artifactory()).toBeInstanceOf(ArtifactoryClient);
@@ -30,7 +31,7 @@ describe('Jfrog client tests', () => {
     });
 
     test('Client initialization with custom Xray URL', () => {
-        const config: IJfrogClientConfig = { xrayUrl: XRAY_URL };
+        const config: IJfrogClientConfig = { xrayUrl: XRAY_URL, logger: TestUtils.createTestLogger() };
         const jfrogClient = new JfrogClient(config);
         expect(jfrogClient).toBeInstanceOf(JfrogClient);
         expect(jfrogClient.xray()).toBeInstanceOf(XrayClient);
@@ -42,7 +43,7 @@ describe('Jfrog client tests', () => {
 
     test('Client initialization with w/o URLs', () => {
         expect(() => {
-            const jfrogClient = new JfrogClient({});
+            const jfrogClient = new JfrogClient({ logger: TestUtils.createTestLogger() });
         }).toThrow('JFrog client: must provide platform or specific URLs');
     });
 });

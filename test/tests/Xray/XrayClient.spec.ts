@@ -1,6 +1,7 @@
 import nock from 'nock';
 import { XrayDetailsClient, XraySummaryClient, XraySystemClient } from '../../../src';
 import { XrayClient } from '../../../src/Xray/XrayClient';
+import { TestUtils } from '../../TestUtils';
 
 const SERVER_URL = 'http://localhost:8000';
 
@@ -39,7 +40,11 @@ describe('Xray clients tests', () => {
 });
 
 test('Xray client header tests', async () => {
-    const client = new XrayClient({ serverUrl: SERVER_URL, headers: { header1: 'value' } });
+    const client = new XrayClient({
+        serverUrl: SERVER_URL,
+        headers: { header1: 'value' },
+        logger: TestUtils.createTestLogger(),
+    });
     const serviceId = 'jfrog@some.me';
     const scope: nock.Scope = nock(SERVER_URL)
         .matchHeader('header1', 'value')

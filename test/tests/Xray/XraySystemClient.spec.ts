@@ -82,6 +82,7 @@ describe('Xray System tests', () => {
                     password: clientConfig.password,
                     accessToken: clientConfig.accessToken,
                     proxy: {} as IProxyConfig,
+                    logger: TestUtils.createTestLogger(),
                 });
                 const response = await jfrogClientEmptyProxy.xray().system().ping();
                 expect(response).toStrictEqual(PING_RES);
@@ -124,7 +125,7 @@ describe('Xray System tests', () => {
         test('Ping failure', async () => {
             const platformUrl: string = faker.internet.url();
             const scope = nock(platformUrl).get(`/xray/api/v1/system/ping`).reply(402, { message: 'error' });
-            const client = new JfrogClient({ platformUrl });
+            const client = new JfrogClient({ platformUrl, logger: TestUtils.createTestLogger() });
             const res = await client.xray().system().ping();
             expect(res).toBeFalsy();
             expect(scope.isDone()).toBeTruthy();
