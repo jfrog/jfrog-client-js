@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosProxyConfig, AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosProxyConfig, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { IProxyConfig } from '../model';
 
 export class HttpClient {
@@ -24,7 +24,7 @@ export class HttpClient {
     }
 
     public async doRequest(requestParams: IRequestParams): Promise<any> {
-        const { data } = await this._axiosInstance(requestParams);
+        const { data }: AxiosResponse = await this._axiosInstance(requestParams);
         return data;
     }
 

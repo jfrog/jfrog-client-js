@@ -27,7 +27,7 @@ describe('Xray System tests', () => {
     });
 
     describe('Ping tests', () => {
-        const PING_RES = { status: 'pong' };
+        const PING_RES: any = { status: 'pong' };
 
         beforeEach(() => {
             process.env.HTTPS_PROXY = '';
@@ -36,7 +36,7 @@ describe('Xray System tests', () => {
         });
 
         test('Ping success', async () => {
-            const response = await jfrogClient.xray().system().ping();
+            const response: any = await jfrogClient.xray().system().ping();
             expect(response).toStrictEqual(PING_RES);
             expect(isPassedThroughProxy).toBeFalsy();
         });
@@ -55,14 +55,14 @@ describe('Xray System tests', () => {
             });
 
             test('Ping through proxy', async () => {
-                const response = await proxyJfrogClient.xray().system().ping();
+                const response: any = await proxyJfrogClient.xray().system().ping();
                 expect(response).toStrictEqual(PING_RES);
                 expect(isPassedThroughProxy).toBeTruthy();
             });
 
             test('Ping through proxy env', async () => {
                 process.env.HTTPS_PROXY = 'http://127.0.0.1:9090';
-                const response = await jfrogClient.xray().system().ping();
+                const response: any = await jfrogClient.xray().system().ping();
                 expect(response).toStrictEqual(PING_RES);
                 expect(isPassedThroughProxy).toBeTruthy();
             });
@@ -70,20 +70,20 @@ describe('Xray System tests', () => {
             test('Ping skip proxy', async () => {
                 process.env.HTTPS_PROXY = 'http://127.0.0.1:9090';
                 process.env.NO_PROXY = clientConfig.platformUrl;
-                const response = await jfrogClient.xray().system().ping();
+                const response: any = await jfrogClient.xray().system().ping();
                 expect(response).toStrictEqual(PING_RES);
                 expect(isPassedThroughProxy).toBeTruthy();
             });
 
             test('Ping empty proxy', async () => {
-                const jfrogClientEmptyProxy = new JfrogClient({
+                const jfrogClientEmptyProxy: JfrogClient = new JfrogClient({
                     platformUrl: clientConfig.platformUrl,
                     username: clientConfig.username,
                     password: clientConfig.password,
                     accessToken: clientConfig.accessToken,
                     proxy: {} as IProxyConfig,
                 });
-                const response = await jfrogClientEmptyProxy.xray().system().ping();
+                const response: any = await jfrogClientEmptyProxy.xray().system().ping();
                 expect(response).toStrictEqual(PING_RES);
                 expect(isPassedThroughProxy).toBeFalsy();
             });
@@ -103,8 +103,9 @@ describe('Xray System tests', () => {
                     authProxy.on('proxyReq', (proxyReq: http.ClientRequest) => {
                         isPassedThroughProxy = true;
                         // Check proxy header
-                        const actualAuthHeader = proxyReq.getHeader('proxy-authorization');
-                        const expectAuthHeader =
+                        const actualAuthHeader: string | number | string[] | undefined =
+                            proxyReq.getHeader('proxy-authorization');
+                        const expectAuthHeader: string =
                             'Basic ' + Buffer.from(PROXY_USER + ':' + PROXY_PASS).toString('base64');
                         expect(actualAuthHeader).toBe(expectAuthHeader);
                     });
@@ -114,7 +115,7 @@ describe('Xray System tests', () => {
                 });
 
                 test('Ping though auth proxy', async () => {
-                    const response = await proxyAuthJfrogClient.xray().system().ping();
+                    const response: any = await proxyAuthJfrogClient.xray().system().ping();
                     expect(response).toStrictEqual(PING_RES);
                     expect(isPassedThroughProxy).toBeTruthy();
                 });
@@ -123,9 +124,11 @@ describe('Xray System tests', () => {
 
         test('Ping failure', async () => {
             const platformUrl: string = faker.internet.url();
-            const scope = nock(platformUrl).get(`/xray/api/v1/system/ping`).reply(402, { message: 'error' });
-            const client = new JfrogClient({ platformUrl });
-            const res = await client.xray().system().ping();
+            const scope: nock.Scope = nock(platformUrl)
+                .get(`/xray/api/v1/system/ping`)
+                .reply(402, { message: 'error' });
+            const client: JfrogClient = new JfrogClient({ platformUrl });
+            const res: any = await client.xray().system().ping();
             expect(res).toBeFalsy();
             expect(scope.isDone()).toBeTruthy();
             expect(isPassedThroughProxy).toBeFalsy();

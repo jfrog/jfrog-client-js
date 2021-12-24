@@ -11,7 +11,15 @@ export class XrayClient {
     private logger: ILogger;
 
     public constructor(config: IClientSpecificConfig) {
-        const { serverUrl, logger = console, username, password, accessToken, proxy, headers } = config;
+        const {
+            serverUrl,
+            logger = console,
+            username,
+            password,
+            accessToken,
+            proxy,
+            headers,
+        }: IClientSpecificConfig = config;
         if (!serverUrl) {
             throw new Error('Xray client : must provide platformUrl or xrayUrl');
         }

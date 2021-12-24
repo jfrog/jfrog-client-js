@@ -15,7 +15,7 @@
     "scripts": {
         "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"model/**/*.ts\"",
         "build": "tsc --declaration",
-        "lint": "tslint -p tsconfig.json",
+        "lint": "eslint -c .eslintrc.js --ext .ts src model test",
         "prepare": "npm run build",
         "preversion": "npm run lint",
         "watch": "tsc -watch -p ./",
@@ -33,14 +33,16 @@
         "@types/faker": "^4.1.11",
         "@types/http-proxy": "^1.17.4",
         "@types/jest": "^27.0.2",
+        "@typescript-eslint/eslint-plugin": "^5.0.0",
+        "@typescript-eslint/parser": "^5.0.0",
+        "eslint": "^8.5.0",
+        "eslint-config-prettier": "^8.3.0",
         "faker": "^4.1.0",
         "http-proxy": "^1.18.1",
         "jest": "^27.3.1",
         "nock": "^13.0.5",
         "prettier": "^2.0.5",
         "ts-jest": "^27.0.3",
-        "tslint": "^6.1.2",
-        "tslint-config-prettier": "^1.18.0",
         "typescript": "^3.8.3"
     },
     "keywords": [

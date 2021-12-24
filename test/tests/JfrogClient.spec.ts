@@ -3,14 +3,14 @@ import { ArtifactoryClient } from '../../src/Artifactory/ArtifactoryClient';
 import { XrayClient } from '../../src/Xray/XrayClient';
 import { IJfrogClientConfig } from '../../model/JfrogClientConfig';
 
-const PLATFORM_URL = 'http://localhost:8000';
-const ARTIFACTORY_URL = 'http://localhost:8765/artifactory';
-const XRAY_URL = 'http://localhost:8765/xray';
+const PLATFORM_URL: string = 'http://localhost:8000';
+const ARTIFACTORY_URL: string = 'http://localhost:8765/artifactory';
+const XRAY_URL: string = 'http://localhost:8765/xray';
 
 describe('Jfrog client tests', () => {
     test('Client initialization with platform URL', () => {
         const config: IJfrogClientConfig = { platformUrl: PLATFORM_URL };
-        const jfrogClient = new JfrogClient(config);
+        const jfrogClient: JfrogClient = new JfrogClient(config);
         expect(jfrogClient).toBeInstanceOf(JfrogClient);
         expect(jfrogClient.artifactory()).toBeInstanceOf(ArtifactoryClient);
         expect(jfrogClient.xray()).toBeInstanceOf(XrayClient);
@@ -20,7 +20,7 @@ describe('Jfrog client tests', () => {
 
     test('Client initialization with custom Artifactory URL', () => {
         const config: IJfrogClientConfig = { artifactoryUrl: ARTIFACTORY_URL };
-        const jfrogClient = new JfrogClient(config);
+        const jfrogClient: JfrogClient = new JfrogClient(config);
         expect(jfrogClient).toBeInstanceOf(JfrogClient);
         expect(jfrogClient.artifactory()).toBeInstanceOf(ArtifactoryClient);
         expect(() => {
@@ -31,7 +31,7 @@ describe('Jfrog client tests', () => {
 
     test('Client initialization with custom Xray URL', () => {
         const config: IJfrogClientConfig = { xrayUrl: XRAY_URL };
-        const jfrogClient = new JfrogClient(config);
+        const jfrogClient: JfrogClient = new JfrogClient(config);
         expect(jfrogClient).toBeInstanceOf(JfrogClient);
         expect(jfrogClient.xray()).toBeInstanceOf(XrayClient);
         expect(() => {
@@ -42,7 +42,7 @@ describe('Jfrog client tests', () => {
 
     test('Client initialization with w/o URLs', () => {
         expect(() => {
-            const jfrogClient = new JfrogClient({});
+            new JfrogClient({});
         }).toThrow('JFrog client: must provide platform or specific URLs');
     });
 });

@@ -4,8 +4,8 @@ import { ArtifactoryClient } from './Artifactory/ArtifactoryClient';
 import { IClientSpecificConfig } from '../model/ClientSpecificConfig';
 
 export class JfrogClient {
-    private static readonly ARTIFACTORY_SUFFIX = 'artifactory';
-    private static readonly XRAY_SUFFIX = 'xray';
+    private static readonly ARTIFACTORY_SUFFIX: string = 'artifactory';
+    private static readonly XRAY_SUFFIX: string = 'xray';
 
     public constructor(private _jfrogConfig: IJfrogClientConfig) {
         if (!_jfrogConfig.platformUrl && !_jfrogConfig.xrayUrl && !_jfrogConfig.artifactoryUrl) {

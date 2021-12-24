@@ -3,7 +3,7 @@ import { IAqlSearchResult } from '../../model';
 import { ILogger } from '../../model/';
 
 export class ArtifactorySearchClient {
-    private readonly aqlEndpoint = '/api/search/aql';
+    private readonly aqlEndpoint: string = '/api/search/aql';
 
     constructor(private readonly httpClient: HttpClient, private readonly logger: ILogger) {}
 

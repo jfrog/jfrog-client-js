@@ -22,9 +22,9 @@ describe('Xray details tests', () => {
         )}&build_number=${encodeURIComponent(buildNumber)}`;
 
         const expectedResource: string = fs.readFileSync(path.resolve(DETAILS_RESOURCE)).toString();
-        const scope = nock(PLATFORM_URL).get(uri).reply(202, expectedResource);
-        const client = new JfrogClient({ platformUrl: PLATFORM_URL });
-        const res = await client.xray().details().build(buildName, buildNumber);
+        const scope: nock.Scope = nock(PLATFORM_URL).get(uri).reply(202, expectedResource);
+        const client: JfrogClient = new JfrogClient({ platformUrl: PLATFORM_URL });
+        const res: IDetailsResponse = await client.xray().details().build(buildName, buildNumber);
         expect(res).toEqual(JSON.parse(expectedResource));
         expect(scope.isDone()).toBeTruthy();
     });
