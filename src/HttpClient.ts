@@ -102,4 +102,5 @@ export interface IRequestParams {
     auth?: BasicAuth;
     timeout?: number;
     headers?: any;
+    validateStatus?: ((status: number) => boolean) | null;
 }

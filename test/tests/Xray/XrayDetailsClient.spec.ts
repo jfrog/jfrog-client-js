@@ -1,10 +1,10 @@
-import { IDetailsResponse } from '../../../model';
-import { TestUtils } from '../../TestUtils';
 import faker from 'faker';
-import nock from 'nock';
 import * as fs from 'fs';
+import nock from 'nock';
 import * as path from 'path';
+import { IDetailsResponse } from '../../../model';
 import { JfrogClient } from '../../../src';
+import { TestUtils } from '../../TestUtils';
 
 let jfrogClient: JfrogClient;
 const DETAILS_RESOURCE: string = './test/resources/xrayDetails/details.json';
@@ -12,6 +12,7 @@ const DETAILS_RESOURCE: string = './test/resources/xrayDetails/details.json';
 beforeAll(() => {
     jfrogClient = new JfrogClient(TestUtils.getJfrogClientConfig());
 });
+
 describe('Xray details tests', () => {
     test('Build details', async () => {
         const PLATFORM_URL: string = faker.internet.url();
@@ -23,7 +24,7 @@ describe('Xray details tests', () => {
 
         const expectedResource: string = fs.readFileSync(path.resolve(DETAILS_RESOURCE)).toString();
         const scope = nock(PLATFORM_URL).get(uri).reply(202, expectedResource);
-        const client = new JfrogClient({ platformUrl: PLATFORM_URL });
+        const client = new JfrogClient({ platformUrl: PLATFORM_URL, logger: TestUtils.createTestLogger() });
         const res = await client.xray().details().build(buildName, buildNumber);
         expect(res).toEqual(JSON.parse(expectedResource));
         expect(scope.isDone()).toBeTruthy();

@@ -72,6 +72,20 @@ jfrogClient.xray().summary().component({
   });
 ```
 
+#### Scanning a dependency tree with consideration to the JFrog project 
+```javascript
+jfrogClient.xray().scan().graph({
+  component_id: 'root-node',
+  nodes: [{component_id: 'npm://express:4.0.0'}, {component_id: 'npm://request:2.0.0'}]
+  }, () => { /* if (something) throw Error('Aborted')*/ }, 'projectKey')
+  .then(result => {
+    console.log(JSON.stringify(result));
+  })
+  .catch(error => {
+    console.error(error);
+  });
+```
+
 #### Retrieving Xray Build Details
 
 ```javascript
