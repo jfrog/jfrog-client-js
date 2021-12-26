@@ -75,7 +75,7 @@ jfrogClient.xray().summary().component({
 #### Retrieving Xray Build Details
 
 ```javascript
-jfrogClient.xray().details().build('Build Name', '1')
+jfrogClient.xray().details().build('Build Name', '1', 'Project Key')
   .then(result => {
     console.log(JSON.stringify(result));
   })
