@@ -91,6 +91,7 @@ describe('Artifactory System tests', () => {
                     password: clientConfig.password,
                     accessToken: clientConfig.accessToken,
                     proxy: {} as IProxyConfig,
+                    logger: TestUtils.createTestLogger(),
                 });
                 const response: any = await jfrogClientEmptyProxy.artifactory().system().ping();
                 expect(response).toStrictEqual(PING_RES);
@@ -136,7 +137,7 @@ describe('Artifactory System tests', () => {
             const scope: nock.Scope = nock(platformUrl)
                 .get(`/artifactory/api/system/ping`)
                 .reply(402, { message: 'error' });
-            const client: JfrogClient = new JfrogClient({ platformUrl });
+            const client: JfrogClient = new JfrogClient({ platformUrl, logger: TestUtils.createTestLogger() });
             const res: any = await client.artifactory().system().ping();
             expect(res).toBeFalsy();
             expect(scope.isDone()).toBeTruthy();

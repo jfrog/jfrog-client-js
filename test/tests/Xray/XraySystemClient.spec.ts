@@ -3,9 +3,9 @@ import * as http from 'http';
 import { createProxyServer, ServerOptions } from 'http-proxy';
 import nock from 'nock';
 import { IProxyConfig, IXrayVersion } from '../../../model';
-import { TestUtils } from '../../TestUtils';
-import { JfrogClient } from '../../../src';
 import { IJfrogClientConfig } from '../../../model/JfrogClientConfig';
+import { JfrogClient } from '../../../src';
+import { TestUtils } from '../../TestUtils';
 
 let isPassedThroughProxy: boolean;
 let jfrogClient: JfrogClient;
@@ -82,6 +82,7 @@ describe('Xray System tests', () => {
                     password: clientConfig.password,
                     accessToken: clientConfig.accessToken,
                     proxy: {} as IProxyConfig,
+                    logger: TestUtils.createTestLogger(),
                 });
                 const response: any = await jfrogClientEmptyProxy.xray().system().ping();
                 expect(response).toStrictEqual(PING_RES);
@@ -127,7 +128,7 @@ describe('Xray System tests', () => {
             const scope: nock.Scope = nock(platformUrl)
                 .get(`/xray/api/v1/system/ping`)
                 .reply(402, { message: 'error' });
-            const client: JfrogClient = new JfrogClient({ platformUrl });
+            const client: JfrogClient = new JfrogClient({ platformUrl, logger: TestUtils.createTestLogger() });
             const res: any = await client.xray().system().ping();
             expect(res).toBeFalsy();
             expect(scope.isDone()).toBeTruthy();
