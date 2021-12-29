@@ -24,7 +24,10 @@ describe('Scan graph tests', () => {
         nock(PLATFORM_URL)
             .get(uri + '/123?include_licenses=true&include_vulnerabilities=true')
             .reply(404, 'not found');
-        const client = new JfrogClient({ platformUrl: PLATFORM_URL, logger: TestUtils.createTestLogger() });
+        const client: JfrogClient = new JfrogClient({
+            platformUrl: PLATFORM_URL,
+            logger: TestUtils.createTestLogger(),
+        });
         await expect(async () => {
             await client
                 .xray()
@@ -41,7 +44,10 @@ describe('Scan graph tests', () => {
         const scope: nock.Scope = nock(PLATFORM_URL)
             .get(uri + '/123?include_licenses=true&include_vulnerabilities=false')
             .reply(200);
-        const client = new JfrogClient({ platformUrl: PLATFORM_URL, logger: TestUtils.createTestLogger() });
+        const client: JfrogClient = new JfrogClient({
+            platformUrl: PLATFORM_URL,
+            logger: TestUtils.createTestLogger(),
+        });
         await client
             .xray()
             .scan()
@@ -50,7 +56,10 @@ describe('Scan graph tests', () => {
     });
 
     test('Undefined request', async () => {
-        const client = new JfrogClient({ platformUrl: PLATFORM_URL, logger: TestUtils.createTestLogger() });
+        const client: JfrogClient = new JfrogClient({
+            platformUrl: PLATFORM_URL,
+            logger: TestUtils.createTestLogger(),
+        });
         expect(
             await client
                 .xray()
@@ -70,7 +79,10 @@ describe('Scan graph tests', () => {
         const scope: nock.Scope = nock(PLATFORM_URL)
             .get(uri + '/123?include_licenses=true&include_vulnerabilities=true')
             .reply(200);
-        const client = new JfrogClient({ platformUrl: PLATFORM_URL, logger: TestUtils.createTestLogger() });
+        const client: JfrogClient = new JfrogClient({
+            platformUrl: PLATFORM_URL,
+            logger: TestUtils.createTestLogger(),
+        });
         await client
             .xray()
             .scan()
@@ -87,7 +99,10 @@ describe('Scan graph tests', () => {
             .get(uri + '/123?include_licenses=true&include_vulnerabilities=true')
             .reply(202)
             .persist();
-        const client = new JfrogClient({ platformUrl: PLATFORM_URL, logger: TestUtils.createTestLogger() });
+        const client: JfrogClient = new JfrogClient({
+            platformUrl: PLATFORM_URL,
+            logger: TestUtils.createTestLogger(),
+        });
         await expect(async () => {
             await client
                 .xray()
@@ -105,7 +120,10 @@ describe('Scan graph tests', () => {
             .get(uri + '/123?include_licenses=true&include_vulnerabilities=true')
             .reply(202)
             .persist();
-        const client = new JfrogClient({ platformUrl: PLATFORM_URL, logger: TestUtils.createTestLogger() });
+        const client: JfrogClient = new JfrogClient({
+            platformUrl: PLATFORM_URL,
+            logger: TestUtils.createTestLogger(),
+        });
         await expect(async () => {
             await client
                 .xray()

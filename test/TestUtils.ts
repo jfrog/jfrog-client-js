@@ -38,7 +38,9 @@ export class TestUtils {
         return {
             error: (...args) => console.error(args),
             warn: (...args) => console.warn(args),
-            debug: (...args) => {},
+            debug: () => {
+                // Empty body
+            },
         } as ILogger;
     }
 }

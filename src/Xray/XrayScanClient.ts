@@ -3,9 +3,9 @@ import { IGraphRequestModel, IGraphResponse, ILogger } from '../../model/';
 import { IRequestParams } from '../HttpClient';
 
 export class XrayScanClient {
-    private static readonly scanGraphEndpoint = 'api/v1/scan/graph';
-    private static readonly SLEEP_INTERVAL_MILLISECONDS = 5000;
-    private static readonly MAX_ATTEMPTS = 60;
+    private static readonly scanGraphEndpoint: string = 'api/v1/scan/graph';
+    private static readonly SLEEP_INTERVAL_MILLISECONDS: number = 5000;
+    private static readonly MAX_ATTEMPTS: number = 60;
 
     constructor(private readonly httpClient: HttpClient, private readonly logger: ILogger) {}
 
@@ -44,7 +44,7 @@ export class XrayScanClient {
             scanId +
             '?include_licenses=true' +
             `&include_vulnerabilities=${includeVulnerabilities}`;
-        for (let i = 0; i < XrayScanClient.MAX_ATTEMPTS; i++) {
+        for (let i: number = 0; i < XrayScanClient.MAX_ATTEMPTS; i++) {
             checkCanceled();
             this.logger.debug(`Sending GET ${scanGraphUrl} request...`);
             const requestParams: IRequestParams = {

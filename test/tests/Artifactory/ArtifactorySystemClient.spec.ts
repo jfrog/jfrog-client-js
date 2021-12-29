@@ -34,7 +34,7 @@ describe('Artifactory System tests', () => {
     });
 
     describe('Ping tests', () => {
-        const PING_RES = 'OK';
+        const PING_RES: string = 'OK';
 
         beforeEach(() => {
             process.env.HTTPS_PROXY = '';
@@ -43,7 +43,7 @@ describe('Artifactory System tests', () => {
         });
 
         test('Ping success', async () => {
-            const response = await jfrogClient.artifactory().system().ping();
+            const response: any = await jfrogClient.artifactory().system().ping();
             expect(response).toStrictEqual(PING_RES);
             expect(isPassedThroughProxy).toBeFalsy();
         });
@@ -64,14 +64,14 @@ describe('Artifactory System tests', () => {
             });
 
             test('Ping through proxy', async () => {
-                const response = await proxyJfrogClient.artifactory().system().ping();
+                const response: any = await proxyJfrogClient.artifactory().system().ping();
                 expect(response).toStrictEqual(PING_RES);
                 expect(isPassedThroughProxy).toBeTruthy();
             });
 
             test('Ping through proxy env', async () => {
                 process.env.HTTPS_PROXY = 'http://127.0.0.1:9090';
-                const response = await jfrogClient.artifactory().system().ping();
+                const response: any = await jfrogClient.artifactory().system().ping();
                 expect(response).toStrictEqual(PING_RES);
                 expect(isPassedThroughProxy).toBeTruthy();
             });
@@ -79,13 +79,13 @@ describe('Artifactory System tests', () => {
             test('Ping skip proxy', async () => {
                 process.env.HTTPS_PROXY = 'http://127.0.0.1:9090';
                 process.env.NO_PROXY = clientConfig.platformUrl;
-                const response = await jfrogClient.artifactory().system().ping();
+                const response: any = await jfrogClient.artifactory().system().ping();
                 expect(response).toStrictEqual(PING_RES);
                 expect(isPassedThroughProxy).toBeTruthy();
             });
 
             test('Ping empty proxy', async () => {
-                const jfrogClientEmptyProxy = new JfrogClient({
+                const jfrogClientEmptyProxy: JfrogClient = new JfrogClient({
                     platformUrl: clientConfig.platformUrl,
                     username: clientConfig.username,
                     password: clientConfig.password,
@@ -93,7 +93,7 @@ describe('Artifactory System tests', () => {
                     proxy: {} as IProxyConfig,
                     logger: TestUtils.createTestLogger(),
                 });
-                const response = await jfrogClientEmptyProxy.artifactory().system().ping();
+                const response: any = await jfrogClientEmptyProxy.artifactory().system().ping();
                 expect(response).toStrictEqual(PING_RES);
                 expect(isPassedThroughProxy).toBeFalsy();
             });
@@ -113,8 +113,9 @@ describe('Artifactory System tests', () => {
                     authProxy.on('proxyReq', (proxyReq: http.ClientRequest) => {
                         isPassedThroughProxy = true;
                         // Check proxy header
-                        const actualAuthHeader = proxyReq.getHeader('proxy-authorization');
-                        const expectAuthHeader =
+                        const actualAuthHeader: number | string | string[] | undefined =
+                            proxyReq.getHeader('proxy-authorization');
+                        const expectAuthHeader: string =
                             'Basic ' + Buffer.from(PROXY_USER + ':' + PROXY_PASS).toString('base64');
                         expect(actualAuthHeader).toBe(expectAuthHeader);
                     });
@@ -124,7 +125,7 @@ describe('Artifactory System tests', () => {
                 });
 
                 test('Ping though auth proxy', async () => {
-                    const response = await proxyAuthJfrogClient.artifactory().system().ping();
+                    const response: any = await proxyAuthJfrogClient.artifactory().system().ping();
                     expect(response).toStrictEqual(PING_RES);
                     expect(isPassedThroughProxy).toBeTruthy();
                 });
@@ -133,9 +134,11 @@ describe('Artifactory System tests', () => {
 
         test('Ping failure', async () => {
             const platformUrl: string = faker.internet.url();
-            const scope = nock(platformUrl).get(`/artifactory/api/system/ping`).reply(402, { message: 'error' });
-            const client = new JfrogClient({ platformUrl, logger: TestUtils.createTestLogger() });
-            const res = await client.artifactory().system().ping();
+            const scope: nock.Scope = nock(platformUrl)
+                .get(`/artifactory/api/system/ping`)
+                .reply(402, { message: 'error' });
+            const client: JfrogClient = new JfrogClient({ platformUrl, logger: TestUtils.createTestLogger() });
+            const res: any = await client.artifactory().system().ping();
             expect(res).toBeFalsy();
             expect(scope.isDone()).toBeTruthy();
             expect(isPassedThroughProxy).toBeFalsy();

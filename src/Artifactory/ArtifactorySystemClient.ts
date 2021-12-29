@@ -3,9 +3,9 @@ import { HttpClient, IRequestParams } from '../HttpClient';
 import { ILogger } from '../../model/';
 
 export class ArtifactorySystemClient {
-    private readonly pingEndpoint = '/api/system/ping';
-    private readonly versionEndpoint = '/api/system/version';
-    private readonly usageEndpoint = '/api/system/usage';
+    private readonly pingEndpoint: string = '/api/system/ping';
+    private readonly versionEndpoint: string = '/api/system/version';
+    private readonly usageEndpoint: string = '/api/system/usage';
 
     constructor(private readonly httpClient: HttpClient, private readonly logger: ILogger) {}
 

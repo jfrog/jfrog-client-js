@@ -3,8 +3,8 @@ import { HttpClient, IRequestParams } from '../HttpClient';
 import { ILogger } from '../../model/';
 
 export class XraySystemClient {
-    private readonly pingEndpoint = '/api/v1/system/ping';
-    private readonly versionEndpoint = '/api/v1/system/version';
+    private readonly pingEndpoint: string = '/api/v1/system/ping';
+    private readonly versionEndpoint: string = '/api/v1/system/version';
 
     constructor(private readonly httpClient: HttpClient, private readonly logger: ILogger) {}
 

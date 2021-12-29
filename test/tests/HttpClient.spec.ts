@@ -2,7 +2,7 @@ import * as faker from 'faker';
 import nock from 'nock';
 import { HttpClient, IRequestParams } from '../../src/HttpClient';
 
-const subPath = '/subpath';
+const subPath: string = '/subpath';
 const serverUrl: string = faker.internet.url();
 const username: string = faker.internet.userName();
 const password: string = faker.internet.password();
@@ -19,17 +19,17 @@ afterAll(() => {
 
 describe('Http client tests', () => {
     test('Constructing client', () => {
-        const client = new HttpClient({ serverUrl });
+        const client: HttpClient = new HttpClient({ serverUrl });
         expect(client).toBeInstanceOf(HttpClient);
     });
     test('Do request', async () => {
         nock(serverUrl).post(subPath).matchHeader('User-Agent', 'http-client-test').reply(200, 'RESPONSE');
-        const client = new HttpClient({ serverUrl, headers: { 'User-Agent': 'http-client-test' } });
-        const requestParams = {
+        const client: HttpClient = new HttpClient({ serverUrl, headers: { 'User-Agent': 'http-client-test' } });
+        const requestParams: IRequestParams = {
             method: 'POST',
             url: subPath,
         } as IRequestParams;
-        const res = await client.doRequest(requestParams);
+        const res: any = await client.doRequest(requestParams);
         expect(res).toBe('RESPONSE');
     });
     test('Do auth request', async () => {
@@ -38,12 +38,12 @@ describe('Http client tests', () => {
             .basicAuth({ user: username, pass: password })
             .matchHeader('User-Agent', 'jfrog-client-js')
             .reply(200, 'RESPONSE');
-        const client = new HttpClient({ serverUrl, username, password });
-        const requestParams = {
+        const client: HttpClient = new HttpClient({ serverUrl, username, password });
+        const requestParams: IRequestParams = {
             method: 'POST',
             url: subPath,
         } as IRequestParams;
-        const res = await client.doAuthRequest(requestParams);
+        const res: any = await client.doAuthRequest(requestParams);
         expect(res).toBe('RESPONSE');
     });
 });

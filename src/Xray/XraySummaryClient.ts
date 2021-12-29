@@ -3,7 +3,7 @@ import { HttpClient, IRequestParams } from '../HttpClient';
 import { ILogger } from '../../model/';
 
 export class XraySummaryClient {
-    private readonly summaryComponentsEndpoint = '/api/v1/summary/component';
+    private readonly summaryComponentsEndpoint: string = '/api/v1/summary/component';
 
     constructor(private readonly httpClient: HttpClient, private readonly logger: ILogger) {}
 

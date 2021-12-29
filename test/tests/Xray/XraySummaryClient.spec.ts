@@ -16,16 +16,16 @@ const jsYaml: ISummaryRequestModel = {
     component_details: [new ComponentDetails('npm://js-yaml:3.10.0')],
 } as ISummaryRequestModel;
 const FIRST_ISSUE_ID: string = 'XRAY-79036';
-const FIRST_ISSUE_SUMMARY =
+const FIRST_ISSUE_SUMMARY: string =
     'JS-YAML lib/js-yaml/loader.js storeMappingPair() Function Nested Array Handling Resource Consumption DoS Weakness';
 const SECOND_ISSUE_ID: string = 'XRAY-80240';
-const SECOND_ISSUE_SUMMARY =
+const SECOND_ISSUE_SUMMARY: string =
     'JS-YAML lib/js-yaml/loader.js storeMappingPair() Function Object Property Handling Arbitrary Code Execution';
 
 const express: ISummaryRequestModel = {
     component_details: [new ComponentDetails('npm://express:4.0.0')],
 } as ISummaryRequestModel;
-const EXPRESS_ISSUE_SUMMARY =
+const EXPRESS_ISSUE_SUMMARY: string =
     'The Express web framework before 3.11 and 4.x before 4.5 for Node.js does not provide a charset field in HTTP Content-Type headers in 400 level responses, which might allow remote attackers to conduct cross-site scripting (XSS) attacks via characters in a non-standard encoding.';
 
 let jfrogClient: JfrogClient;
@@ -125,7 +125,7 @@ describe('Xray summary tests', () => {
         const licenses: ILicense[] = response.artifacts[0].licenses;
         expect(licenses.length).toBe(1);
 
-        const license = licenses[0];
+        const license: ILicense = licenses[0];
         expect(license.name).toBe('MIT');
         expect(license.full_name).toBe('The MIT License');
         expect(license.more_info_url.length).toBeGreaterThanOrEqual(4);
@@ -145,7 +145,7 @@ describe('Xray summary tests', () => {
         expect(artifact.issues.length).toBe(0);
         expect(artifact.licenses.length).toBe(1);
 
-        const license = artifact.licenses[0];
+        const license: ILicense = artifact.licenses[0];
         expect(license.name).toBe('Unknown');
         expect(license.full_name).toBe('Unknown license');
         expect(license.components.length).toBe(1);
