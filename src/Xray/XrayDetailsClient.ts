@@ -5,11 +5,14 @@ import { ILogger } from '../../model/';
 export class XrayDetailsClient {
     constructor(private readonly httpClient: HttpClient, private readonly logger: ILogger) {}
 
-    public async build(buildName: string, buildNumber: string): Promise<IDetailsResponse> {
+    public async build(buildName: string, buildNumber: string, projectKey?: string): Promise<IDetailsResponse> {
         this.logger.debug('Sending build details request to Xray...');
-        const encodedUrl: string = `api/v1/details/build?build_name=${encodeURIComponent(
+        let encodedUrl: string = `api/v1/details/build?build_name=${encodeURIComponent(
             buildName
         )}&build_number=${encodeURIComponent(buildNumber)}`;
+        if (projectKey) {
+            encodedUrl += `&project_key=${encodeURIComponent(projectKey)}`;
+        }
         const requestParams: IRequestParams = {
             url: encodedUrl,
             method: 'GET',
