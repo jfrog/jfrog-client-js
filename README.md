@@ -19,7 +19,7 @@ Add jfrog-client-js as a dependency to your package.json file:
 
 ```javascript
 let jfrogClient = new JfrogClient({
-    platformUrl: 'my-platform-url.jfrog.io/',
+    platformUrl: 'https://my-platform-url.jfrog.io/',
     // artifactoryUrl - Set to use a custom Artifactory URL.
     // xrayUrl - Set to use a custom Xray URL.
     username: 'username',
