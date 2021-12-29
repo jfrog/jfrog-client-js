@@ -36,12 +36,14 @@ describe('Xray details tests', () => {
     test('Build details for non existing build', async () => {
         const buildName: string = 'buildDoesNotExist';
         const buildNumber: string = '123';
-        const response: IDetailsResponse = await jfrogClient.xray().details().build(buildName, buildNumber);
+        const projectKey: string = 'projectDoesNotExist';
+        const response: IDetailsResponse = await jfrogClient.xray().details().build(buildName, buildNumber, projectKey);
         expect(response).toBeTruthy();
 
         // Check general build details.
         expect(response.build_name).toBe(buildName);
         expect(response.build_number).toBe(buildNumber);
+        expect(response.project_key).toBe(projectKey);
         expect(response.is_scan_completed).toBe(false);
         expect(response.components).toBeFalsy();
 

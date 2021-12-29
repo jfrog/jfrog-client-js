@@ -19,7 +19,7 @@ Add jfrog-client-js as a dependency to your package.json file:
 
 ```javascript
 let jfrogClient = new JfrogClient({
-    platformUrl: 'my-platform-url.jfrog.io/',
+    platformUrl: 'https://my-platform-url.jfrog.io/',
     // artifactoryUrl - Set to use a custom Artifactory URL.
     // xrayUrl - Set to use a custom Xray URL.
     username: 'username',
@@ -89,7 +89,7 @@ jfrogClient.xray().scan().graph({
 #### Retrieving Xray Build Details
 
 ```javascript
-jfrogClient.xray().details().build('Build Name', '1')
+jfrogClient.xray().details().build('Build Name', '1', 'Optional Project Key')
   .then(result => {
     console.log(JSON.stringify(result));
   })
