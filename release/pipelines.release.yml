@@ -1,0 +1,64 @@
+pipelines:
+  - name: release_jfrog_client_js
+    configuration:
+      runtime:
+        type: image
+        image:
+          auto:
+            language: node
+            versions:
+              - "16"
+      environmentVariables:
+        readOnly:
+          NEXT_VERSION: 0.0.0
+
+    steps:
+      - name: Release
+        type: Bash
+        configuration:
+          inputResources:
+            - name: jfrogClientJsReleaseGit
+          integrations:
+            - name: il_automation
+            - name: entplus_deployer
+            - name: npm
+        execution:
+          onExecute:
+            - cd $res_jfrogClientJsReleaseGit_resourcePath
+
+            # Set env
+            - export CI=true
+            - export JFROG_BUILD_STATUS=PASS
+            - export JFROG_CLI_BUILD_NAME=ecosystem-jfrog-client-js-release
+            - export JFROG_CLI_BUILD_NUMBER=$run_number
+            - export JFROG_CLI_BUILD_PROJECT=ecosys
+
+            # Configure git
+            - git checkout master
+            - git remote set-url origin https://$int_il_automation_token@github.com/jfrog/jfrog-client-js.git
+
+            # Make sure version provided
+            - echo "Checking variables"
+            - test -n "$NEXT_VERSION" -a "$NEXT_VERSION" != "0.0.0"
+
+            # Configure JFrog CLI
+            - curl -fL https://install-cli.jfrog.io | sh
+            - jf c rm --quiet
+            - jf c add internal --url=$int_entplus_deployer_url --user=$int_entplus_deployer_user --password=$int_entplus_deployer_apikey
+            - jf npmc --repo-resolve ecosys-npm-remote --repo-deploy ecosys-npm-local
+
+            # Run audit
+            - jf an
+
+            # Run build and publish
+            - jf npm install && jf npm p
+            - jf rt bag && jf rt bce
+            - jf rt bp
+
+            # Update version
+            - npm version $NEXT_VERSION
+            - git push
+            - git push --tags
+
+            # Publish to npmjs
+            - env -i PATH=$PATH HOME=$HOME NPM_AUTH_TOKEN=$int_npm_token npm publish --access public
