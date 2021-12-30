@@ -47,11 +47,12 @@ pipelines:
             - jf c add internal --url=$int_entplus_deployer_url --user=$int_entplus_deployer_user --password=$int_entplus_deployer_apikey
             - jf npmc --repo-resolve ecosys-npm-remote --repo-deploy ecosys-npm-local
 
-            # Run audit
+            # Install and audit
+            - jf npm install
             - jf an
 
-            # Run build and publish
-            - jf npm install && jf npm p
+            # Publish
+            - jf npm p
             - jf rt bag && jf rt bce
             - jf rt bp
 
