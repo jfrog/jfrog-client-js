@@ -7,7 +7,7 @@ pipelines:
           auto:
             language: node
             versions:
-              - "14"
+              - "12"
       environmentVariables:
         readOnly:
           NEXT_VERSION: 0.0.0
