@@ -1,0 +1,8 @@
+resources:
+  - name: jfrogClientJsReleaseGit
+    type: GitRepo
+    configuration:
+      path: jfrog/jfrog-client-js
+      gitProvider: il_automation
+      buildOn:
+        commit: false
