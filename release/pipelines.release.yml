@@ -62,4 +62,10 @@ pipelines:
             - git push --tags
 
             # Publish to npmjs
-            - env -i PATH=$PATH HOME=$HOME NPM_AUTH_TOKEN=$int_npm_token npm publish --access public
+            - echo "//registry.npmjs.org/:_authToken=$int_npm_token" > .npmrc
+            - npm publish --access public
+
+          onComplete:
+            # Clean up
+            - rm -f .npmrc
+            - jf c rm --quiet
