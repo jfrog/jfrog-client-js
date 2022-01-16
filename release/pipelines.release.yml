@@ -52,12 +52,12 @@ pipelines:
             - jf an
 
             # Publish
+            - npm version $NEXT_VERSION
             - jf npm p
             - jf rt bag && jf rt bce
             - jf rt bp
 
             # Update version
-            - npm version $NEXT_VERSION
             - git push
             - git push --tags
 
