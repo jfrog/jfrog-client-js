@@ -13,5 +13,4 @@ export interface IIssue {
     impact_path: string;
     components: IVulnerableComponent[];
     cves: ICve[];
-    references: string[];
 }
