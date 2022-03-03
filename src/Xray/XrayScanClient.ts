@@ -11,14 +11,14 @@ export class XrayScanClient {
     constructor(private readonly httpClient: HttpClient, private readonly logger: ILogger) {}
 
     public async graph(
-        model: IGraphRequestModel,
+        request: IGraphRequestModel,
         progress: XrayScanProgress,
         checkCanceled: () => void,
         projectKey: string | undefined,
         sleepIntervalMilliseconds: number = XrayScanClient.SLEEP_INTERVAL_MILLISECONDS
     ): Promise<IGraphResponse> {
         try {
-            if (!model) {
+            if (!request) {
                 return {} as IGraphResponse;
             }
 
@@ -27,9 +27,9 @@ export class XrayScanClient {
             const requestParams: IRequestParams = {
                 url: XrayScanClient.scanGraphEndpoint + (projectProvided ? `?project=${projectKey}` : ''),
                 method: 'POST',
-                data: model,
+                data: request,
             };
-            this.logger.debug('data: ' + JSON.stringify(model));
+            this.logger.debug('data: ' + JSON.stringify(request));
             checkCanceled();
             const response: IGraphResponse = await this.httpClient.doAuthRequest(requestParams);
             return await this.getScanGraphResults(
@@ -44,6 +44,20 @@ export class XrayScanClient {
         }
     }
 
+    /**
+     *
+     * Sends 'GET /scan/graph?...' requests to Xray and waits for 200 response.
+     * If 202 response is received, it updates the progress and waits sleepIntervalMilliseconds.
+     * If any other response received, it throws an error.
+     *
+     * @param scanId - The scan ID received from Xray, after running a 'POST scan/graph' request
+     * @param progress - The progress that will be updated after every 202 response from Xray
+     * @param checkCanceled - Function that may stop the scan if it throws an exception
+     * @param includeVulnerabilities - True if no context (project or watches) is provided
+     * @param sleepIntervalMilliseconds - Sleep interval in milliseconds between attepts
+     * @returns the graph response
+     * @throws an exception if an unexpected response received from Xray or if checkCanceled threw an exception
+     */
     private async getScanGraphResults(
         scanId: string,
         progress: XrayScanProgress,
