@@ -74,10 +74,16 @@ jfrogClient.xray().summary().component({
 
 #### Scanning a dependency tree with consideration to the JFrog project 
 ```javascript
+const progress: XrayScanProgress = {
+    setPercentage(percentage: number): void {
+        // Add progress
+    },
+} as XrayScanProgress;
+
 jfrogClient.xray().scan().graph({
   component_id: 'root-node',
   nodes: [{component_id: 'npm://express:4.0.0'}, {component_id: 'npm://request:2.0.0'}]
-  }, () => { /* if (something) throw Error('Aborted')*/ }, 'projectKey')
+  }, progress, () => { /* if (something) throw Error('Aborted')*/ }, 'projectKey')
   .then(result => {
     console.log(JSON.stringify(result));
   })

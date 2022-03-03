@@ -3,6 +3,7 @@ import nock from 'nock';
 import { IGraphRequestModel } from '../../../model/Xray/Scan/GraphRequestModel';
 import { IGraphResponse } from '../../../model/Xray/Scan/GraphResponse';
 import { JfrogClient } from '../../../src';
+import { XrayScanProgress } from '../../../src/Xray/XrayScanProgress';
 import { TestUtils } from '../../TestUtils';
 
 const PLATFORM_URL: string = faker.internet.url();
@@ -28,12 +29,14 @@ describe('Scan graph tests', () => {
             platformUrl: PLATFORM_URL,
             logger: TestUtils.createTestLogger(),
         });
+        const progress: DummyProgress = new DummyProgress();
         await expect(async () => {
             await client
                 .xray()
                 .scan()
-                .graph({} as IGraphRequestModel, () => undefined, '');
+                .graph({} as IGraphRequestModel, progress, () => undefined, '');
         }).rejects.toThrow(`Received unexpected status '404' from Xray: Request failed with status code 404`);
+        expect(progress.lastPercentage).toBe(100);
     });
 
     test('Project test', async () => {
@@ -48,11 +51,13 @@ describe('Scan graph tests', () => {
             platformUrl: PLATFORM_URL,
             logger: TestUtils.createTestLogger(),
         });
+        const progress: DummyProgress = new DummyProgress();
         await client
             .xray()
             .scan()
-            .graph({ component_id: 'engine' } as IGraphRequestModel, () => undefined, 'ecosys');
+            .graph({ component_id: 'engine' } as IGraphRequestModel, progress, () => undefined, 'ecosys');
         expect(scope.isDone()).toBeTruthy();
+        expect(progress.lastPercentage).toBe(100);
     });
 
     test('Undefined request', async () => {
@@ -60,12 +65,14 @@ describe('Scan graph tests', () => {
             platformUrl: PLATFORM_URL,
             logger: TestUtils.createTestLogger(),
         });
+        const progress: DummyProgress = new DummyProgress();
         expect(
             await client
                 .xray()
                 .scan()
-                .graph(undefined as unknown as IGraphRequestModel, () => undefined, '')
+                .graph(undefined as unknown as IGraphRequestModel, progress, () => undefined, '')
         ).toBeDefined();
+        expect(progress.lastPercentage).toBe(100);
     });
 
     test('202 test', async () => {
@@ -83,11 +90,13 @@ describe('Scan graph tests', () => {
             platformUrl: PLATFORM_URL,
             logger: TestUtils.createTestLogger(),
         });
+        const progress: DummyProgress = new DummyProgress();
         await client
             .xray()
             .scan()
-            .graph({ component_id: 'engine' } as IGraphRequestModel, () => undefined, '', 10);
+            .graph({ component_id: 'engine' } as IGraphRequestModel, progress, () => undefined, '', 10);
         expect(scope.isDone()).toBeTruthy();
+        expect(progress.lastPercentage).toBe(100);
     });
 
     test('Timeout', async () => {
@@ -103,12 +112,14 @@ describe('Scan graph tests', () => {
             platformUrl: PLATFORM_URL,
             logger: TestUtils.createTestLogger(),
         });
+        const progress: DummyProgress = new DummyProgress();
         await expect(async () => {
             await client
                 .xray()
                 .scan()
-                .graph({ component_id: 'engine' } as IGraphRequestModel, () => undefined, '', 10);
+                .graph({ component_id: 'engine' } as IGraphRequestModel, progress, () => undefined, '', 10);
         }).rejects.toThrow(`Xray get scan graph exceeded the timeout.`);
+        expect(progress.lastPercentage).toBe(100);
     });
 
     test('Check cancelled', async () => {
@@ -124,12 +135,14 @@ describe('Scan graph tests', () => {
             platformUrl: PLATFORM_URL,
             logger: TestUtils.createTestLogger(),
         });
+        const progress: DummyProgress = new DummyProgress();
         await expect(async () => {
             await client
                 .xray()
                 .scan()
                 .graph(
                     { component_id: 'engine' } as IGraphRequestModel,
+                    progress,
                     () => {
                         throw Error('Scan aborted.');
                     },
@@ -138,3 +151,14 @@ describe('Scan graph tests', () => {
         }).rejects.toThrow(`Scan aborted.`);
     });
 });
+
+class DummyProgress implements XrayScanProgress {
+    private _lastPercentage: number = 0;
+    setPercentage(percentage: number): void {
+        this._lastPercentage = percentage;
+    }
+
+    public get lastPercentage(): number {
+        return this._lastPercentage;
+    }
+}
