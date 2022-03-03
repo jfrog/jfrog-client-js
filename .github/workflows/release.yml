@@ -1,0 +1,22 @@
+name: Release
+
+on:
+    release:
+        types: published
+jobs:
+    release:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - name: Setup NodeJS
+              uses: actions/setup-node@v1
+              with:
+                  node-version: '10.x'
+                  registry-url: 'https://registry.npmjs.org'
+                  scope: '@jfrog'
+            - name: Install
+              run: npm i
+            - name: Publish
+              run: npm publish --access public
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
