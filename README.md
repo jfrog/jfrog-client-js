@@ -1,8 +1,15 @@
-[![Build status](https://github.com/jfrog/jfrog-client-js/workflows/Build/badge.svg)](https://github.com/jfrog/xray-client-js/actions)
-
 # JFrog Javascript Client
 
 JFrog Javascript Client is a Javascript library, which wraps some REST APIs exposed by JFrog's different services.
+
+## Project Status
+
+[![Build status](https://github.com/jfrog/jfrog-client-js/workflows/Build/badge.svg)](https://github.com/jfrog/xray-client-js/actions)
+[![Code coverage](https://codecov.io/github/jfrog/jfrog-client-js/coverage.svg?branch=master)](https://codecov.io/github/jfrog/jfrog-client-js?branch=master)
+
+## Contributions
+
+We welcome pull requests from the community. To help us improving this project, please read our [contribution](./CONTRIBUTING.md#guidelines) Guide.
 
 ## Getting started
 
@@ -15,64 +22,93 @@ Add jfrog-client-js as a dependency to your package.json file:
 ```
 
 ## APIs
+
+- [Setting up JFrog client](#setting-up-jfrog-client)
+- [Xray](#xray)
+  - [Pinging Xray](#pinging-xray)
+  - [Getting Xray Version](#getting-xray-version)
+  - [Scanning Bulk of Dependencies](#scanning-bulk-of-dependencies)
+  - [Scanning a Dependency Tree with Consideration to the JFrog Project](#scanning-a-dependency-tree-with-consideration-to-the-jfrog-project)
+  - [Retrieving Xray Build Details](#retrieving-xray-build-details)
+- [Artifactory](#artifactory)
+  - [Pinging Artifactory](#pinging-artifactory)
+  - [Getting Artifactory Version](#getting-artifactory-version)
+  - [Downloading an Artifact](#downloading-an-artifact)
+  - [Searching by AQL](#searching-by-aql)
+
 ### Setting up JFrog client
 
 ```javascript
 let jfrogClient = new JfrogClient({
-    platformUrl: 'https://my-platform-url.jfrog.io/',
-    // artifactoryUrl - Set to use a custom Artifactory URL.
-    // xrayUrl - Set to use a custom Xray URL.
-    username: 'username',
-    password: 'password',
-    // OR
-    accessToken: 'accessToken',
-    proxy: {host: '<organization>-xray.jfrog.io', port: 8081, protocol: 'https'},
-    headers: {'key1': 'value1', 'key2': 'value2'}
+  platformUrl: 'https://my-platform-url.jfrog.io/',
+  // artifactoryUrl - Set to use a custom Artifactory URL.
+  // xrayUrl - Set to use a custom Xray URL.
+  username: 'username',
+  password: 'password',
+  // OR
+  accessToken: 'accessToken',
+  proxy: {
+    host: '<organization>-xray.jfrog.io',
+    port: 8081,
+    protocol: 'https',
+  },
+  headers: { key1: 'value1', key2: 'value2' },
 });
 ```
 
 ### Xray
+
 #### Pinging Xray
 
 ```javascript
-jfrogClient.xray().system().ping()
-  .then(result => {
+jfrogClient
+  .xray()
+  .system()
+  .ping()
+  .then((result) => {
     console.log(result);
   })
-  .catch(error => {
+  .catch((error) => {
     console.error(error);
   });
 ```
 
-#### Getting Xray version
+#### Getting Xray Version
 
 ```javascript
-jfrogClient.xray().system().version()
-  .then(result => {
+jfrogClient
+  .xray()
+  .system()
+  .version()
+  .then((result) => {
     console.log(result);
   })
-  .catch(error => {
+  .catch((error) => {
     console.error(error);
   });
 ```
 
-#### Scanning bulk of dependencies
+#### Scanning Bulk of Dependencies
 
 ```javascript
 let express = new ComponentDetails('npm://express:4.0.0');
 let request = new ComponentDetails('npm://request:2.0.0');
-jfrogClient.xray().summary().component({
-    component_details: [express, request]
+jfrogClient
+  .xray()
+  .summary()
+  .component({
+    component_details: [express, request],
   })
-  .then(result => {
+  .then((result) => {
     console.log(JSON.stringify(result));
   })
-  .catch(error => {
+  .catch((error) => {
     console.error(error);
   });
 ```
 
-#### Scanning a dependency tree with consideration to the JFrog project 
+#### Scanning a Dependency Tree with Consideration to the JFrog Project
+
 ```javascript
 const progress: XrayScanProgress = {
     setPercentage(percentage: number): void {
@@ -95,11 +131,14 @@ jfrogClient.xray().scan().graph({
 #### Retrieving Xray Build Details
 
 ```javascript
-jfrogClient.xray().details().build('Build Name', '1', 'Optional Project Key')
-  .then(result => {
+jfrogClient
+  .xray()
+  .details()
+  .build('Build Name', '1', 'Optional Project Key')
+  .then((result) => {
     console.log(JSON.stringify(result));
   })
-  .catch(error => {
+  .catch((error) => {
     console.error(error);
   });
 ```
@@ -109,35 +148,44 @@ jfrogClient.xray().details().build('Build Name', '1', 'Optional Project Key')
 #### Pinging Artifactory
 
 ```javascript
-jfrogClient.artifactory().system().ping()
-  .then(result => {
+jfrogClient
+  .artifactory()
+  .system()
+  .ping()
+  .then((result) => {
     console.log(result);
   })
-  .catch(error => {
+  .catch((error) => {
     console.error(error);
   });
 ```
 
-#### Getting Artifactory version
+#### Getting Artifactory Version
 
 ```javascript
-jfrogClient.artifactory().system().version()
-  .then(result => {
+jfrogClient
+  .artifactory()
+  .system()
+  .version()
+  .then((result) => {
     console.log(result);
   })
-  .catch(error => {
+  .catch((error) => {
     console.error(error);
   });
 ```
 
-#### Downloading an artifact
+#### Downloading an Artifact
 
 ```javascript
-jfrogClient.artifactory().download().downloadArtifact('path/to/artifact')
-  .then(result => {
+jfrogClient
+  .artifactory()
+  .download()
+  .downloadArtifact('path/to/artifact')
+  .then((result) => {
     console.log(JSON.stringify(result));
   })
-  .catch(error => {
+  .catch((error) => {
     console.error(error);
   });
 ```
@@ -160,38 +208,3 @@ jfrogClient.artifactory()
     console.error(error);
   });
 ```
-
-## Building and testing the sources
-
-To build the plugin sources, please follow these steps:
-
-* Clone the code from git.
-
-* Install and pack the _jfrog-client-js_ dependency locally, by running the following npm commands:
-
-```bash
-npm i && npm pack
-```
-
-If you'd like run the _jfrog-client-js_ integration tests, follow these steps:
-
-* Make sure your JFrog platform is up and running.
-* Set the _CLIENTTESTS_PLATFORM_URL_ environment variable with your JFrog platform URL.
-* Set the _CLIENTTESTS_PLATFORM_ACCESS_TOKEN_ OR _CLIENTTESTS_PLATFORM_USERNAME_ and _CLIENTTESTS_PLATFORM_PASSWORD_ environment variables with your JFrog platform credentials.
-* Run the following command:
-
-```bash
-npm t
-```
-
-Important: The tests use port 9090 to set up an HTTP proxy server. If this port is already used on the machines which runs the tests, please replace it in the tests code with a different port.
-
-## Pull requests
-
-We welcome pull requests from the community.
-
-### Guidelines
-
-* If the existing tests do not already cover your changes, please add tests.
-* Pull requests should be created on the _master_ branch.
-* Please run `npm run format` for formatting the code before submitting the pull request.
