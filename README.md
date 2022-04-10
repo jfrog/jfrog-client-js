@@ -51,6 +51,7 @@ let jfrogClient = new JfrogClient({
   // Optional parameters
   proxy: { host: '<organization>-xray.jfrog.io', port: 8081, protocol: 'https' },
   headers: { key1: 'value1', key2: 'value2' },
+  // Connection retries. If not defined, the default value is 3.
   retries: 3,
 });
 ```
