@@ -1,9 +1,11 @@
 import axios, { AxiosInstance, AxiosProxyConfig, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { IProxyConfig } from '../model';
+import axiosRetry, { IAxiosRetryConfig } from 'axios-retry';
 
 export class HttpClient {
-    private USER_AGENT_HEADER: string = 'User-Agent';
-    private AUTHORIZATION_HEADER: string = 'Authorization';
+    private static readonly AUTHORIZATION_HEADER: string = 'Authorization';
+    private static readonly USER_AGENT_HEADER: string = 'User-Agent';
+    private static readonly DEFAULT_RETRIES: number = 3;
     private readonly _basicAuth: BasicAuth;
     private readonly _accessToken: string;
     private readonly _axiosInstance: AxiosInstance;
@@ -21,6 +23,9 @@ export class HttpClient {
             password: config.password,
         } as BasicAuth;
         this._accessToken = config.accessToken || '';
+        axiosRetry(this._axiosInstance, {
+            retries: config.retries ? config.retries : HttpClient.DEFAULT_RETRIES,
+        } as IAxiosRetryConfig);
     }
 
     public async doRequest(requestParams: IRequestParams): Promise<any> {
@@ -38,8 +43,8 @@ export class HttpClient {
     }
 
     private addUserAgentHeader(headers: { [key: string]: string }) {
-        if (!headers[this.USER_AGENT_HEADER]) {
-            headers[this.USER_AGENT_HEADER] = 'jfrog-client-js';
+        if (!headers[HttpClient.USER_AGENT_HEADER]) {
+            headers[HttpClient.USER_AGENT_HEADER] = 'jfrog-client-js';
         }
     }
 
@@ -47,8 +52,8 @@ export class HttpClient {
         if (!requestParams.headers) {
             requestParams.headers = {};
         }
-        if (!requestParams.headers[this.AUTHORIZATION_HEADER]) {
-            requestParams.headers[this.AUTHORIZATION_HEADER] = 'Bearer ' + this._accessToken;
+        if (!requestParams.headers[HttpClient.AUTHORIZATION_HEADER]) {
+            requestParams.headers[HttpClient.AUTHORIZATION_HEADER] = 'Bearer ' + this._accessToken;
         }
     }
 
@@ -91,6 +96,7 @@ export interface IHttpConfig {
     accessToken?: string;
     proxy?: IProxyConfig | false;
     headers?: { [key: string]: string };
+    retries?: number;
 }
 
 export type method = 'GET' | 'POST';

@@ -8,4 +8,5 @@ export interface IClientConfig {
     proxy?: IProxyConfig | false;
     logger?: ILogger;
     headers?: { [key: string]: string };
+    retries?: number;
 }

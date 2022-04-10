@@ -27,7 +27,8 @@
         "dist/**/*"
     ],
     "dependencies": {
-        "axios": "~0.23.0"
+        "axios": "~0.23.0",
+        "axios-retry": "~3.2.4"
     },
     "devDependencies": {
         "@types/faker": "^4.1.11",

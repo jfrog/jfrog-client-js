@@ -19,6 +19,7 @@ export class TestUtils {
             password: process.env.CLIENTTESTS_PLATFORM_PASSWORD,
             accessToken: process.env.CLIENTTESTS_PLATFORM_ACCESS_TOKEN,
             logger: TestUtils.createTestLogger(),
+            retries: 5
         } as IJfrogClientConfig;
     }
 
