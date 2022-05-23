@@ -1,7 +1,6 @@
 import axios, { AxiosInstance, AxiosProxyConfig, AxiosRequestConfig } from 'axios';
-import { IProxyConfig } from '../model';
+import { IClientResponse, IProxyConfig } from '../model';
 import axiosRetry, { IAxiosRetryConfig } from 'axios-retry';
-import { IClientResponse } from './ClientResponse';
 
 export class HttpClient {
     private static readonly AUTHORIZATION_HEADER: string = 'Authorization';

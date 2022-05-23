@@ -1,6 +1,5 @@
 import { HttpClient, IRequestParams } from '../HttpClient';
-import { ILogger } from '../../model/';
-import { IChecksumResult } from './Search/ChecksumResult';
+import { IChecksumResult, ILogger } from '../../model/';
 import { IClientResponse } from '../ClientResponse';
 import * as fs from 'fs';
 
