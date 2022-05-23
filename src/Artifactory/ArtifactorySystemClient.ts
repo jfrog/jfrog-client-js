@@ -17,7 +17,7 @@ export class ArtifactorySystemClient {
             timeout: 2000,
         };
         try {
-            return await this.httpClient.doRequest(requestParams);
+            return (await this.httpClient.doRequest(requestParams)).data;
         } catch (error) {
             return false;
         }
@@ -29,7 +29,7 @@ export class ArtifactorySystemClient {
             url: this.versionEndpoint,
             method: 'GET',
         };
-        return await this.httpClient.doAuthRequest(requestParams);
+        return (await this.httpClient.doAuthRequest(requestParams)).data;
     }
 
     public async reportUsage(userAgent: string, featureArray: IUsageFeature[]): Promise<string> {
@@ -43,6 +43,6 @@ export class ArtifactorySystemClient {
             method: 'POST',
             data: usageData,
         };
-        return await this.httpClient.doAuthRequest(requestParams);
+        return (await this.httpClient.doAuthRequest(requestParams)).data;
     }
 }

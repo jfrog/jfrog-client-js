@@ -35,7 +35,7 @@ describe('Scan graph tests', () => {
                 .xray()
                 .scan()
                 .graph({} as IGraphRequestModel, progress, () => undefined, '');
-        }).rejects.toThrow(`Received unexpected status '404' from Xray: Request failed with status code 404`);
+        }).rejects.toThrow(`Received unexpected response from Xray. Error: Request failed with status code 404`);
         expect(progress.lastPercentage).toBe(100);
     });
 

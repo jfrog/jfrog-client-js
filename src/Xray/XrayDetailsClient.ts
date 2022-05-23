@@ -18,6 +18,6 @@ export class XrayDetailsClient {
             method: 'GET',
         };
         this.logger.debug('encoded URL: ' + JSON.stringify(encodedUrl));
-        return await this.httpClient.doAuthRequest(requestParams);
+        return await (await this.httpClient.doAuthRequest(requestParams)).data;
     }
 }

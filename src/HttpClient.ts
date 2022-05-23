@@ -1,6 +1,7 @@
-import axios, { AxiosInstance, AxiosProxyConfig, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosProxyConfig, AxiosRequestConfig } from 'axios';
 import { IProxyConfig } from '../model';
 import axiosRetry, { IAxiosRetryConfig } from 'axios-retry';
+import { IClientResponse } from './ClientResponse';
 
 export class HttpClient {
     private static readonly AUTHORIZATION_HEADER: string = 'Authorization';
@@ -28,12 +29,11 @@ export class HttpClient {
         } as IAxiosRetryConfig);
     }
 
-    public async doRequest(requestParams: IRequestParams): Promise<any> {
-        const { data }: AxiosResponse = await this._axiosInstance(requestParams);
-        return data;
+    public async doRequest(requestParams: IRequestParams): Promise<IClientResponse> {
+        return await this._axiosInstance(requestParams);
     }
 
-    public async doAuthRequest(requestParams: IRequestParams): Promise<any> {
+    public async doAuthRequest(requestParams: IRequestParams): Promise<IClientResponse> {
         if (this._accessToken !== '') {
             this.addAuthHeader(requestParams);
         } else {
@@ -99,7 +99,8 @@ export interface IHttpConfig {
     retries?: number;
 }
 
-export type method = 'GET' | 'POST';
+export type method = 'GET' | 'POST' | 'HEAD';
+export type responseType = 'arraybuffer' | 'blob' | 'document' | 'json' | 'text' | 'stream';
 
 export interface IRequestParams {
     url: string;
@@ -108,5 +109,6 @@ export interface IRequestParams {
     auth?: BasicAuth;
     timeout?: number;
     headers?: any;
+    responseType?: responseType;
     validateStatus?: ((status: number) => boolean) | null;
 }

@@ -16,6 +16,6 @@ export class ArtifactorySearchClient {
             headers: { 'Content-Type': 'text/plain' },
         };
         this.logger.debug('AQL query: ' + JSON.stringify(aqlQuery));
-        return await this.httpClient.doAuthRequest(requestParams);
+        return (await this.httpClient.doAuthRequest(requestParams)).data;
     }
 }

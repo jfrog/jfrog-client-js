@@ -1,5 +1,6 @@
 import * as faker from 'faker';
 import nock from 'nock';
+import { IClientResponse } from '../../model';
 import { HttpClient, IRequestParams } from '../../src/HttpClient';
 
 const subPath: string = '/subpath';
@@ -29,8 +30,9 @@ describe('Http client tests', () => {
             method: 'POST',
             url: subPath,
         } as IRequestParams;
-        const res: any = await client.doRequest(requestParams);
-        expect(res).toBe('RESPONSE');
+        const res: IClientResponse = await client.doRequest(requestParams);
+        expect(res.data).toBe('RESPONSE');
+        expect(res.status).toBe(200);
     });
     test('Do auth request', async () => {
         nock(serverUrl)
@@ -43,7 +45,8 @@ describe('Http client tests', () => {
             method: 'POST',
             url: subPath,
         } as IRequestParams;
-        const res: any = await client.doAuthRequest(requestParams);
-        expect(res).toBe('RESPONSE');
+        const res: IClientResponse = await client.doAuthRequest(requestParams);
+        expect(res.data).toBe('RESPONSE');
+        expect(res.status).toBe(200);
     });
 });

@@ -4,6 +4,8 @@ export { IUsageData } from './Artifactory/System/UsageData';
 export { IUsageFeature } from './Artifactory/System/UsageFeature';
 export { IArtifactoryVersion } from './Artifactory/System/Version';
 export { IJfrogClientConfig } from './JfrogClientConfig';
+export { IClientResponse } from './ClientResponse';
+export { IChecksumResult } from './Artifactory/Search/ChecksumResult';
 export { ILogger } from './Logger';
 export { IProxyConfig } from './ProxyConfig';
 export { IDetailsResponse } from './Xray/Details/DetailsResponse';

@@ -16,7 +16,7 @@ export class XraySystemClient {
             timeout: 2000,
         };
         try {
-            return await this.httpClient.doRequest(requestParams);
+            return await (await this.httpClient.doRequest(requestParams)).data;
         } catch (error) {
             return false;
         }
@@ -28,6 +28,6 @@ export class XraySystemClient {
             url: this.versionEndpoint,
             method: 'GET',
         };
-        return await this.httpClient.doAuthRequest(requestParams);
+        return await (await this.httpClient.doAuthRequest(requestParams)).data;
     }
 }

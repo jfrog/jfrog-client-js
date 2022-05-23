@@ -1,6 +1,7 @@
 import { ISummaryRequestModel, ISummaryResponse } from '../../model';
 import { HttpClient, IRequestParams } from '../HttpClient';
 import { ILogger } from '../../model/';
+import { IClientResponse } from '../ClientResponse';
 
 export class XraySummaryClient {
     private readonly summaryComponentsEndpoint: string = '/api/v1/summary/component';
@@ -15,6 +16,7 @@ export class XraySummaryClient {
             data: model,
         };
         this.logger.debug('data: ' + JSON.stringify(model));
-        return await this.httpClient.doAuthRequest(requestParams);
+        const response: IClientResponse = await this.httpClient.doAuthRequest(requestParams);
+        return response.data;
     }
 }
