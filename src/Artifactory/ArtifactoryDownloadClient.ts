@@ -37,16 +37,12 @@ export class ArtifactoryDownloadClient {
                     reject(`Server responded with ${response.status}: ${response.data}`);
                 }
             });
-            writer.on('end', () => {
-                console.log('download from' + from + ' to ' + to + ' was successful');
-                resolve();
-            });
             writer.on('finish', () => {
-                console.log('download from' + from + ' to ' + to + ' was successful');
+                this.logger.debug('download from' + from + ' to ' + to + ' was successful');
                 resolve();
             });
             writer.on('error', (err) => {
-                console.log('download from' + from + ' to ' + to + ' was unsuccessful, Error:' + err);
+                this.logger.debug('download from' + from + ' to ' + to + ' was unsuccessful, Error:' + err);
                 writer.close();
                 reject(err);
             });

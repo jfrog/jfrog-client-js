@@ -23,18 +23,26 @@ Add jfrog-client-js as a dependency to your package.json file:
 
 ## APIs
 
-- [Setting up JFrog client](#setting-up-jfrog-client)
-- [Xray](#xray)
-  - [Pinging Xray](#pinging-xray)
-  - [Getting Xray Version](#getting-xray-version)
-  - [Scanning Bulk of Dependencies](#scanning-bulk-of-dependencies)
-  - [Scanning a Dependency Tree with Consideration to the JFrog Project](#scanning-a-dependency-tree-with-consideration-to-the-jfrog-project)
-  - [Retrieving Xray Build Details](#retrieving-xray-build-details)
-- [Artifactory](#artifactory)
-  - [Pinging Artifactory](#pinging-artifactory)
-  - [Getting Artifactory Version](#getting-artifactory-version)
-  - [Downloading an Artifact](#downloading-an-artifact)
-  - [Searching by AQL](#searching-by-aql)
+- [JFrog Javascript Client](#jfrog-javascript-client)
+  - [Project Status](#project-status)
+  - [Contributions](#contributions)
+  - [Getting started](#getting-started)
+  - [APIs](#apis)
+    - [Setting up JFrog client](#setting-up-jfrog-client)
+    - [Xray](#xray)
+      - [Pinging Xray](#pinging-xray)
+      - [Getting Xray Version](#getting-xray-version)
+      - [Scanning Bulk of Dependencies](#scanning-bulk-of-dependencies)
+      - [Scanning a Dependency Tree with Consideration to the JFrog Project](#scanning-a-dependency-tree-with-consideration-to-the-jfrog-project)
+      - [Retrieving Xray Build Details](#retrieving-xray-build-details)
+    - [Artifactory](#artifactory)
+      - [Pinging Artifactory](#pinging-artifactory)
+      - [Getting Artifactory Version](#getting-artifactory-version)
+      - [Downloading an Artifact](#downloading-an-artifact)
+      - [Downloading an Artifact content](#downloading-an-artifact-content)
+      - [Downloading an Artifact to file](#downloading-an-artifact-to-file)
+      - [Downloading an Artifact checksum](#downloading-an-artifact-checksum)
+      - [Searching by AQL](#searching-by-aql)
 
 ### Setting up JFrog client
 
@@ -184,6 +192,49 @@ jfrogClient
   .downloadArtifact('path/to/artifact')
   .then((result) => {
     console.log(JSON.stringify(result));
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+#### Downloading an Artifact content
+The content of the Artifact will be returned as a string.
+
+```javascript
+jfrogClient
+  .artifactory()
+  .download()
+  .downloadArtifact('path/to/artifact')
+  .then((result) => {
+    console.log(JSON.stringify(result));
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+#### Downloading an Artifact to file
+
+```javascript
+jfrogClient
+  .artifactory()
+  .download()
+  .downloadArtifactToFile('path/to/artifact','local/path/to/download')
+  .then((result) => {
+    console.log(JSON.stringify(result));
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+#### Downloading an Artifact checksum
+
+```javascript
+jfrogClient
+  .artifactory()
+  .download()
+  .getArtifactChecksum('path/to/artifact')
+  .then((result) => {
+    console.log('sha1:' + result.sha1 + 'sha256:' + result.sha256 + 'md5:' + result.md5);
   })
   .catch((error) => {
     console.error(error);
