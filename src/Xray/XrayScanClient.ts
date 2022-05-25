@@ -1,5 +1,6 @@
 import { HttpClient } from '..';
 import { IGraphRequestModel, IGraphResponse, ILogger } from '../../model/';
+import { IClientResponse } from '../ClientResponse';
 import { IRequestParams } from '../HttpClient';
 import { XrayScanProgress } from './XrayScanProgress';
 
@@ -31,9 +32,9 @@ export class XrayScanClient {
             };
             this.logger.debug('data: ' + JSON.stringify(request));
             checkCanceled();
-            const response: IGraphResponse = await this.httpClient.doAuthRequest(requestParams);
+            const response: IClientResponse = await this.httpClient.doAuthRequest(requestParams);
             return await this.getScanGraphResults(
-                response.scan_id,
+                response.data.scan_id,
                 progress,
                 checkCanceled,
                 !projectProvided,
@@ -84,20 +85,20 @@ export class XrayScanClient {
                 },
             };
             let message: string | undefined;
-            const response: IGraphResponse = await this.httpClient
-                .doAuthRequest(requestParams)
-                .catch(async (reason: any) => {
-                    receivedStatus = reason.response?.status;
-                    message = reason?.message;
-                });
+            let response: IClientResponse | undefined;
+            try {
+                response = await this.httpClient.doAuthRequest(requestParams);
+            } catch (error) {
+                throw new Error(`Received unexpected response from Xray. ${String(error)}`);
+            }
             this.logger.debug(`Received status '${receivedStatus}' from Xray.`);
             if (receivedStatus === 200) {
-                return response;
+                return response?.data;
             }
 
             if (receivedStatus === 202) {
-                if (response.progress_percentage) {
-                    progress.setPercentage(response.progress_percentage);
+                if (response?.data.progress_percentage) {
+                    progress.setPercentage(response.data.progress_percentage);
                 }
             } else {
                 if (receivedStatus) {
