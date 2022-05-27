@@ -34,7 +34,7 @@ describe('Scan graph tests', () => {
             await client
                 .xray()
                 .scan()
-                .graph({} as IGraphRequestModel, progress, () => undefined, '');
+                .graph({} as IGraphRequestModel, progress, () => undefined, '', []);
         }).rejects.toThrow(`Received unexpected response from Xray. Error: Request failed with status code 404`);
         expect(progress.lastPercentage).toBe(100);
     });
@@ -55,7 +55,52 @@ describe('Scan graph tests', () => {
         await client
             .xray()
             .scan()
-            .graph({ component_id: 'engine' } as IGraphRequestModel, progress, () => undefined, 'ecosys');
+            .graph({ component_id: 'engine' } as IGraphRequestModel, progress, () => undefined, 'ecosys', []);
+        expect(scope.isDone()).toBeTruthy();
+        expect(progress.lastPercentage).toBe(100);
+    });
+
+    test('Watch test', async () => {
+        const uri: string = `/xray/api/v1/scan/graph`;
+        nock(PLATFORM_URL)
+            .post(uri + '?watch=watch-1')
+            .reply(200, { scan_id: '123' } as IGraphResponse);
+        const scope: nock.Scope = nock(PLATFORM_URL)
+            .get(uri + '/123?include_licenses=true&include_vulnerabilities=false')
+            .reply(200);
+        const client: JfrogClient = new JfrogClient({
+            platformUrl: PLATFORM_URL,
+            logger: TestUtils.createTestLogger(),
+        });
+        const progress: DummyProgress = new DummyProgress();
+        await client
+            .xray()
+            .scan()
+            .graph({ component_id: 'engine' } as IGraphRequestModel, progress, () => undefined, '', ['watch-1']);
+        expect(scope.isDone()).toBeTruthy();
+        expect(progress.lastPercentage).toBe(100);
+    });
+
+    test('Watches test', async () => {
+        const uri: string = `/xray/api/v1/scan/graph`;
+        nock(PLATFORM_URL)
+            .post(uri + '?watch=watch-1&watch=watch-2')
+            .reply(200, { scan_id: '123' } as IGraphResponse);
+        const scope: nock.Scope = nock(PLATFORM_URL)
+            .get(uri + '/123?include_licenses=true&include_vulnerabilities=false')
+            .reply(200);
+        const client: JfrogClient = new JfrogClient({
+            platformUrl: PLATFORM_URL,
+            logger: TestUtils.createTestLogger(),
+        });
+        const progress: DummyProgress = new DummyProgress();
+        await client
+            .xray()
+            .scan()
+            .graph({ component_id: 'engine' } as IGraphRequestModel, progress, () => undefined, '', [
+                'watch-1',
+                'watch-2',
+            ]);
         expect(scope.isDone()).toBeTruthy();
         expect(progress.lastPercentage).toBe(100);
     });
@@ -70,7 +115,7 @@ describe('Scan graph tests', () => {
             await client
                 .xray()
                 .scan()
-                .graph(undefined as unknown as IGraphRequestModel, progress, () => undefined, '')
+                .graph(undefined as unknown as IGraphRequestModel, progress, () => undefined, '', [])
         ).toBeDefined();
         expect(progress.lastPercentage).toBe(100);
     });
@@ -94,7 +139,7 @@ describe('Scan graph tests', () => {
         await client
             .xray()
             .scan()
-            .graph({ component_id: 'engine' } as IGraphRequestModel, progress, () => undefined, '', 10);
+            .graph({ component_id: 'engine' } as IGraphRequestModel, progress, () => undefined, '', [], 10);
         expect(scope.isDone()).toBeTruthy();
         expect(progress.lastPercentage).toBe(100);
     });
@@ -117,7 +162,7 @@ describe('Scan graph tests', () => {
             await client
                 .xray()
                 .scan()
-                .graph({ component_id: 'engine' } as IGraphRequestModel, progress, () => undefined, '', 10);
+                .graph({ component_id: 'engine' } as IGraphRequestModel, progress, () => undefined, '', [], 10);
         }).rejects.toThrow(`Xray get scan graph exceeded the timeout.`);
         expect(progress.lastPercentage).toBe(100);
     });
@@ -146,7 +191,8 @@ describe('Scan graph tests', () => {
                     () => {
                         throw Error('Scan aborted.');
                     },
-                    ''
+                    '',
+                    []
                 );
         }).rejects.toThrow(`Scan aborted.`);
     });

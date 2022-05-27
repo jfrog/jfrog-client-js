@@ -16,33 +16,83 @@ export class XrayScanClient {
         progress: XrayScanProgress,
         checkCanceled: () => void,
         projectKey: string | undefined,
+        watches: string[] | undefined,
         sleepIntervalMilliseconds: number = XrayScanClient.SLEEP_INTERVAL_MILLISECONDS
     ): Promise<IGraphResponse> {
         try {
             if (!request) {
                 return {} as IGraphResponse;
             }
-
-            const projectProvided: boolean = projectKey !== undefined && projectKey.length > 0;
-            this.logger.debug('Sending POST scan/graph request...');
-            const requestParams: IRequestParams = {
-                url: XrayScanClient.scanGraphEndpoint + (projectProvided ? `?project=${projectKey}` : ''),
-                method: 'POST',
-                data: request,
-            };
-            this.logger.debug('data: ' + JSON.stringify(request));
             checkCanceled();
-            const response: IClientResponse = await this.httpClient.doAuthRequest(requestParams);
+            const response: IClientResponse = await this.postScanGraph(request, projectKey, watches);
             return await this.getScanGraphResults(
                 response.data.scan_id,
                 progress,
                 checkCanceled,
-                !projectProvided,
+                (!projectKey || projectKey.length === 0) && (!watches || watches.length === 0),
                 sleepIntervalMilliseconds
             );
         } finally {
             progress.setPercentage(100);
         }
+    }
+
+    /**
+     *
+     * Send 'POST /scan/graph' request to Xray.
+     *
+     * @param request - The Graph to scan
+     * @param projectKey - Project key or undefined
+     * @param watches - List of Watches or undefined
+     * @returns the graph response.
+     * @throws an exception if an unexpected response received from Xray.
+     */
+    private async postScanGraph(
+        request: IGraphRequestModel,
+        projectKey?: string,
+        watches?: string[]
+    ): Promise<IClientResponse> {
+        this.logger.debug('Sending POST scan/graph request...');
+        const requestParams: IRequestParams = {
+            url: this.getUrl(projectKey, watches),
+            method: 'POST',
+            data: request,
+        };
+        this.logger.debug('data: ' + JSON.stringify(request));
+        try {
+            return await this.httpClient.doAuthRequest(requestParams);
+        } catch (error) {
+            let requestError: any = <any>error;
+            if (!requestError.message) {
+                // Not an Axios error
+                throw error;
+            }
+            let message: string = requestError.message;
+            if (requestError.response?.data?.error) {
+                message += ': ' + requestError?.response?.data?.error;
+            }
+            throw new Error(`${message}`);
+        }
+    }
+
+    /**
+     * Get URL for "POST api/v1/scan/graph".
+     * If no project key provided - api/v1/scan/graph
+     * If project key was provided - api/v1/scan/graph?project=<projectKey>
+     * If watches provided - api/v1/scan/graph?watch=<watch-1>&watch=<watch-2>
+     * @param projectKey - Project key or undefined
+     * @param watches - List of Watches or undefined
+     * @returns URL for "POST api/v1/scan/graph"
+     */
+    private getUrl(projectKey: string | undefined, watches?: string[]): string {
+        let url: string = XrayScanClient.scanGraphEndpoint;
+        if (projectKey && projectKey.length > 0) {
+            url += `?project=${projectKey}`;
+        } else if (watches && watches.length > 0) {
+            url += '?watch=' + watches.join('&watch=');
+        }
+
+        return url;
     }
 
     /**

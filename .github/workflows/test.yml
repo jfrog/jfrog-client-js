@@ -1,9 +1,14 @@
-name: Build
+name: Tests
 
-on: push
+on:
+  push:
+  # Triggers the workflow on labeled PRs only.
+  pull_request_target:
+    types: [labeled]
 
 jobs:
   test:
+    if: contains(github.event.pull_request.labels.*.name, 'safe to test') || github.event_name == 'push'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -11,11 +16,13 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
     steps:
       # Prerequisites
-      - uses: actions/checkout@v1
-      - name: Setup NodeJS
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
         with:
-          node-version: "12.x"
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
 
       # Install project
       - name: Install
@@ -26,13 +33,7 @@ jobs:
         run: npm run lint
 
       # Run tests
-      - name: Basic Auth Tests
-        run: npm t
-        env:
-          CLIENTTESTS_PLATFORM_URL: ${{ secrets.CLIENTTESTS_PLATFORM_URL }}
-          CLIENTTESTS_PLATFORM_USERNAME: ${{ secrets.CLIENTTESTS_PLATFORM_USERNAME }}
-          CLIENTTESTS_PLATFORM_PASSWORD: ${{ secrets.CLIENTTESTS_PLATFORM_PASSWORD }}
-      - name: Access Token Tests
+      - name: Tests
         run: npm t
         env:
           CLIENTTESTS_PLATFORM_URL: ${{ secrets.CLIENTTESTS_PLATFORM_URL }}
