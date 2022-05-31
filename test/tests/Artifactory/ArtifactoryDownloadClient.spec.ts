@@ -9,8 +9,20 @@ const BUILD_INFO_REPO: string = '/artifactory-build-info/';
 
 describe('Artifactory Download tests', () => {
     const clientConfig: IJfrogClientConfig = TestUtils.getJfrogClientConfig();
+    let downloadFilePath: string;
+    let tmpDir: tmp.DirResult;
+
     beforeAll(() => {
         jfrogClient = new JfrogClient(clientConfig);
+    });
+
+    beforeEach(() => {
+        tmpDir = tmp.dirSync({ unsafeCleanup: true });
+        downloadFilePath = path.join(tmpDir.name, 'tmpFile');
+    });
+
+    afterEach(() => {
+        tmpDir.removeCallback();
     });
 
     test('Build artifact download test', async () => {
@@ -26,15 +38,27 @@ describe('Artifactory Download tests', () => {
         const result: IAqlSearchResult = await TestUtils.searchArtifactoryBuildRepo(jfrogClient);
         expect(result.results.length).toBeGreaterThan(0);
         const artifactPath: string = BUILD_INFO_REPO + result.results[0].path + '/' + result.results[0].name;
-        const tmpDir: tmp.DirResult = tmp.dirSync({ unsafeCleanup: true });
-        try {
-            const downloadFilePath: string = path.join(tmpDir.name, 'tmpFile');
-            await jfrogClient.artifactory().download().downloadArtifactToFile(artifactPath, downloadFilePath);
-            expect(fs.existsSync(downloadFilePath)).toBeTruthy();
-            expect(fs.statSync(downloadFilePath).size).toBeTruthy();
-        } finally {
-            tmpDir.removeCallback();
-        }
+        await jfrogClient.artifactory().download().downloadArtifactToFile(artifactPath, downloadFilePath);
+        expect(fs.existsSync(downloadFilePath)).toBeTruthy();
+        expect(fs.statSync(downloadFilePath).size).toEqual(result.results[0].size);
+    });
+
+    test('Download non-existed artifact to file', async () => {
+        await expect(
+            async () => await jfrogClient.artifactory().download().downloadArtifactToFile('not-exist', downloadFilePath)
+        ).rejects.toThrow('Request failed with status code 404');
+        expect(fs.existsSync(downloadFilePath)).toBeFalsy();
+    });
+
+    test('Download non-existed artifact to non-existed directory', async () => {
+        tmpDir.removeCallback();
+        const result: IAqlSearchResult = await TestUtils.searchArtifactoryBuildRepo(jfrogClient);
+        expect(result.results.length).toBeGreaterThan(0);
+        const artifactPath: string = BUILD_INFO_REPO + result.results[0].path + '/' + result.results[0].name;
+        await expect(
+            async () =>
+                await jfrogClient.artifactory().download().downloadArtifactToFile(artifactPath, downloadFilePath)
+        ).rejects.toThrow('no such file or directory');
     });
 
     test('Build artifact download checksum test', async () => {

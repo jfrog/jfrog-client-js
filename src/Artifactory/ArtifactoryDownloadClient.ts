@@ -27,23 +27,18 @@ export class ArtifactoryDownloadClient {
             method: 'GET',
             responseType: 'stream',
         };
-        const writer: fs.WriteStream = fs.createWriteStream(to, { flags: 'wx' });
+
+        let response: IClientResponse = await this.httpClient.doAuthRequest(requestParams);
         return new Promise((resolve, reject) => {
-            this.httpClient.doAuthRequest(requestParams).then((response) => {
-                if (response.status === 200) {
-                    response.data.pipe(writer);
-                } else {
-                    writer.close();
-                    reject(`Server responded with ${response.status}: ${response.data}`);
-                }
-            });
+            const writer: fs.WriteStream = fs.createWriteStream(to, { flags: 'w' });
+            response.data.pipe(writer);
             writer.on('finish', () => {
                 this.logger.debug('download from' + from + ' to ' + to + ' was successful');
+                writer.close();
                 resolve();
             });
             writer.on('error', (err) => {
                 this.logger.debug('download from' + from + ' to ' + to + ' was unsuccessful, Error:' + err);
-                writer.close();
                 reject(err);
             });
         });

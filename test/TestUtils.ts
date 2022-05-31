@@ -31,7 +31,7 @@ export class TestUtils {
                 'items.find({' +
                     '"repo":"artifactory-build-info",' +
                     '"path":{"$match":"*"}}' +
-                    ').include("name","repo","path","created").sort({"$desc":["created"]}).limit(1)'
+                    ').include("name","repo","path","created","size").sort({"$desc":["created"]}).limit(1)'
             );
     }
 
