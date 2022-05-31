@@ -52,6 +52,7 @@ pipelines:
             - jf audit
 
             # Publish
+            - npm config set tag-version-prefix ''
             - npm version $NEXT_VERSION --allow-same-version
             - jf npm p
             - jf rt bag && jf rt bce
