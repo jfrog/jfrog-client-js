@@ -7,7 +7,7 @@ pipelines:
           auto:
             language: node
             versions:
-              - "12"
+              - "16"
       environmentVariables:
         readOnly:
           NEXT_VERSION: 0.0.0
@@ -57,14 +57,13 @@ pipelines:
             - jf rt bag && jf rt bce
             - jf rt bp
 
-            # Update version
-            - git push
-            - git push --tags
-
             # Publish to npmjs
             - echo "//registry.npmjs.org/:_authToken=$int_npm_token" > .npmrc
             - npm publish --access public
 
+            # Update version
+            - git push
+            - git push --tags
           onComplete:
             # Clean up
             - rm -f .npmrc
