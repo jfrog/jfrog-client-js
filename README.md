@@ -9,7 +9,7 @@ JFrog Javascript Client is a Javascript library, which wraps some REST APIs expo
 
 ## Contributions
 
-We welcome pull requests from the community. To help us improving this project, please read our [contribution](./CONTRIBUTING.md#guidelines) Guide.
+We welcome pull requests from the community. To help us improve this project, please read our [contribution](./CONTRIBUTING.md#guidelines) guide.
 
 ## Getting started
 
@@ -34,6 +34,7 @@ Add jfrog-client-js as a dependency to your package.json file:
       - [Getting Xray Version](#getting-xray-version)
       - [Scanning Bulk of Dependencies](#scanning-bulk-of-dependencies)
       - [Scanning a Dependency Tree with Consideration to the JFrog Project](#scanning-a-dependency-tree-with-consideration-to-the-jfrog-project)
+      - [Scanning a Dependency Tree with Consideration to the Xray Watches](#scanning-a-dependency-tree-with-consideration-to-the-xray-watches)
       - [Retrieving Xray Build Details](#retrieving-xray-build-details)
     - [Artifactory](#artifactory)
       - [Pinging Artifactory](#pinging-artifactory)
@@ -127,7 +128,28 @@ const progress: XrayScanProgress = {
 jfrogClient.xray().scan().graph({
   component_id: 'root-node',
   nodes: [{component_id: 'npm://express:4.0.0'}, {component_id: 'npm://request:2.0.0'}]
-  }, progress, () => { /* if (something) throw Error('Aborted')*/ }, 'projectKey')
+  }, progress, () => { /* if (something) throw Error('Aborted')*/ }, 'projectKey', [])
+  .then(result => {
+    console.log(JSON.stringify(result));
+  })
+  .catch(error => {
+    console.error(error);
+  });
+```
+
+#### Scanning a Dependency Tree with Consideration to the Xray Watches
+
+```javascript
+const progress: XrayScanProgress = {
+    setPercentage(percentage: number): void {
+        // Add progress
+    },
+} as XrayScanProgress;
+
+jfrogClient.xray().scan().graph({
+  component_id: 'root-node',
+  nodes: [{component_id: 'npm://express:4.0.0'}, {component_id: 'npm://request:2.0.0'}]
+  }, progress, () => { /* if (something) throw Error('Aborted')*/ }, '', ['watch-1', 'watch-2'])
   .then(result => {
     console.log(JSON.stringify(result));
   })
@@ -197,7 +219,9 @@ jfrogClient
     console.error(error);
   });
 ```
+
 #### Downloading an Artifact content
+
 The content of the Artifact will be returned as a string.
 
 ```javascript
@@ -212,13 +236,14 @@ jfrogClient
     console.error(error);
   });
 ```
+
 #### Downloading an Artifact to file
 
 ```javascript
 jfrogClient
   .artifactory()
   .download()
-  .downloadArtifactToFile('path/to/artifact','local/path/to/download')
+  .downloadArtifactToFile('path/to/artifact', 'local/path/to/download')
   .then((result) => {
     console.log(JSON.stringify(result));
   })
@@ -226,6 +251,7 @@ jfrogClient
     console.error(error);
   });
 ```
+
 #### Downloading an Artifact checksum
 
 ```javascript
