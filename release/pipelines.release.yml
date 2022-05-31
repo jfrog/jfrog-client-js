@@ -49,10 +49,10 @@ pipelines:
 
             # Install and audit
             - jf npm install
-            - jf an
+            - jf audit
 
             # Publish
-            - npm version $NEXT_VERSION
+            - npm version $NEXT_VERSION --allow-same-version
             - jf npm p
             - jf rt bag && jf rt bce
             - jf rt bp
