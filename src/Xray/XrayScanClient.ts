@@ -5,7 +5,7 @@ import { IRequestParams } from '../HttpClient';
 import { XrayScanProgress } from './XrayScanProgress';
 
 export class XrayScanClient {
-    private static readonly scanGraphEndpoint: string = 'api/v1/scan/graph';
+    static readonly scanGraphEndpoint: string = 'api/v1/scan/graph';
     private static readonly SLEEP_INTERVAL_MILLISECONDS: number = 5000;
     private static readonly MAX_ATTEMPTS: number = 60;
 

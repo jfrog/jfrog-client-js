@@ -9,7 +9,7 @@ JFrog Javascript Client is a Javascript library, which wraps some REST APIs expo
 
 ## Contributions
 
-We welcome pull requests from the community. To help us to improve this project, please read our [contribution](./CONTRIBUTING.md#guidelines) guide.
+We welcome pull requests from the community. To help us improve this project, please read our [contribution](./CONTRIBUTING.md#guidelines) guide.
 
 ## Getting started
 
@@ -34,7 +34,7 @@ Add jfrog-client-js as a dependency to your package.json file:
       - [Getting Xray Version](#getting-xray-version)
       - [Scanning Bulk of Dependencies](#scanning-bulk-of-dependencies)
       - [Scanning a Dependency Tree with Consideration to the JFrog Project](#scanning-a-dependency-tree-with-consideration-to-the-jfrog-project)
-      - [Scanning a Dependency Tree with Consideration to the JFrog Watches](#scanning-a-dependency-tree-with-consideration-to-the-jfrog-watches)
+      - [Scanning a Dependency Tree with Consideration to the Xray Watches](#scanning-a-dependency-tree-with-consideration-to-the-xray-watches)
       - [Retrieving Xray Build Details](#retrieving-xray-build-details)
     - [Artifactory](#artifactory)
       - [Pinging Artifactory](#pinging-artifactory)
@@ -137,7 +137,7 @@ jfrogClient.xray().scan().graph({
   });
 ```
 
-#### Scanning a Dependency Tree with Consideration to the JFrog Watches
+#### Scanning a Dependency Tree with Consideration to the Xray Watches
 
 ```javascript
 const progress: XrayScanProgress = {
