@@ -34,11 +34,11 @@ export class ArtifactoryDownloadClient {
             response.data.pipe(writer);
             writer.on('finish', () => {
                 this.logger.debug('download from' + from + ' to ' + to + ' was successful');
-                writer.close();
                 resolve();
             });
             writer.on('error', (err) => {
                 this.logger.debug('download from' + from + ' to ' + to + ' was unsuccessful, Error:' + err);
+                writer.close();
                 reject(err);
             });
         });
