@@ -48,7 +48,7 @@ export class ArtifactoryDownloadClient {
         this.logger.debug('Sending head request to ' + artifactPath + '...');
         const requestParams: IRequestParams = {
             url: encodeURI(artifactPath),
-            timeout: 4000,
+            timeout: HttpClient.DEFAULT_TIMEOUT,
             method: 'HEAD',
         };
         const response: IClientResponse = await this.httpClient.doAuthRequest(requestParams);

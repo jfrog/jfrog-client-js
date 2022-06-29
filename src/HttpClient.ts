@@ -6,6 +6,7 @@ export class HttpClient {
     private static readonly AUTHORIZATION_HEADER: string = 'Authorization';
     private static readonly USER_AGENT_HEADER: string = 'User-Agent';
     private static readonly DEFAULT_RETRIES: number = 3;
+    public static readonly DEFAULT_TIMEOUT: number = 2000;
     private readonly _basicAuth: BasicAuth;
     private readonly _accessToken: string;
     private readonly _axiosInstance: AxiosInstance;

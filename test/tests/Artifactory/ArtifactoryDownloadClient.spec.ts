@@ -4,6 +4,7 @@ import { TestUtils } from '../../TestUtils';
 import * as path from 'path';
 import * as tmp from 'tmp';
 import * as fs from 'fs';
+import nock from 'nock';
 let jfrogClient: JfrogClient;
 const BUILD_INFO_REPO: string = '/artifactory-build-info/';
 
@@ -69,5 +70,15 @@ describe('Artifactory Download tests', () => {
         expect(checksum.md5).toBeTruthy();
         expect(checksum.sha1).toBeTruthy();
         expect(checksum.sha256).toBeTruthy();
+    });
+
+    test('Build artifact download checksum test', async () => {
+        const dummyClient: JfrogClient = (jfrogClient = new JfrogClient({
+            artifactoryUrl: 'http://localhost:8080/artifactory',
+        } as IJfrogClientConfig));
+        nock('http://localhost:8080').head('/artifactory/a/b/file').delay(6000).reply(200, 'RESPONSE');
+        await expect(
+            async () => await dummyClient.artifactory().download().getArtifactChecksum('a/b/file')
+        ).rejects.toThrow('timeout of 2000ms exceeded');
     });
 });

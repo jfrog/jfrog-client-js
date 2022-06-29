@@ -14,7 +14,7 @@ export class ArtifactorySystemClient {
         const requestParams: IRequestParams = {
             url: this.pingEndpoint,
             method: 'GET',
-            timeout: 2000,
+            timeout: HttpClient.DEFAULT_TIMEOUT,
         };
         try {
             return (await this.httpClient.doRequest(requestParams)).data;
