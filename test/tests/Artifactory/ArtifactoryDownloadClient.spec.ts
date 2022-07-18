@@ -72,9 +72,10 @@ describe('Artifactory Download tests', () => {
         expect(checksum.sha256).toBeTruthy();
     });
 
-    test('Build artifact download checksum test', async () => {
+    test('Build artifact download checksum timeout test', async () => {
         const dummyClient: JfrogClient = (jfrogClient = new JfrogClient({
             artifactoryUrl: 'http://localhost:8080/artifactory',
+            logger: TestUtils.createTestLogger(),
         } as IJfrogClientConfig));
         nock('http://localhost:8080').head('/artifactory/a/b/file').delay(6000).reply(200, 'RESPONSE');
         await expect(
