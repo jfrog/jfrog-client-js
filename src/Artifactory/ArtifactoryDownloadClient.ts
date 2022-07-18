@@ -33,11 +33,11 @@ export class ArtifactoryDownloadClient {
             const writer: fs.WriteStream = fs.createWriteStream(to, { flags: 'w' });
             response.data.pipe(writer);
             writer.on('finish', () => {
-                this.logger.debug('download from' + from + ' to ' + to + ' was successful');
+                this.logger.debug('download from ' + from + ' to ' + to + ' was successful');
                 resolve();
             });
             writer.on('error', (err) => {
-                this.logger.debug('download from' + from + ' to ' + to + ' was unsuccessful, Error:' + err);
+                this.logger.debug('download from ' + from + ' to ' + to + ' was unsuccessful, Error:' + err);
                 writer.close();
                 reject(err);
             });
@@ -48,6 +48,7 @@ export class ArtifactoryDownloadClient {
         this.logger.debug('Sending head request to ' + artifactPath + '...');
         const requestParams: IRequestParams = {
             url: encodeURI(artifactPath),
+            timeout: HttpClient.DEFAULT_TIMEOUT_IN_MILLISECONDS,
             method: 'HEAD',
         };
         const response: IClientResponse = await this.httpClient.doAuthRequest(requestParams);
