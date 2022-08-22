@@ -1,6 +1,6 @@
 {
     "name": "jfrog-client-js",
-    "version": "2.5.0",
+    "version": "2.5.1",
     "description": "JFrog Javascript Client is a javascript library, which wraps some of the REST APIs exposed by JFrog Services's different services.",
     "license": "Apache-2.0",
     "repository": {
