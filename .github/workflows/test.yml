@@ -36,8 +36,8 @@ jobs:
       - name: Tests
         run: npm t
         env:
-          CLIENTTESTS_PLATFORM_URL: ${{ secrets.CLIENTTESTS_PLATFORM_URL }}
-          CLIENTTESTS_PLATFORM_ACCESS_TOKEN: ${{ secrets.CLIENTTESTS_PLATFORM_ACCESS_TOKEN }}
+          CLIENTTESTS_PLATFORM_URL: ${{ secrets.PLATFORM_URL }}
+          CLIENTTESTS_PLATFORM_ACCESS_TOKEN: ${{ secrets.PLATFORM_ADMIN_TOKEN }}
 
       # Send tests coverage to Codecov
       - name: Send code coverage
