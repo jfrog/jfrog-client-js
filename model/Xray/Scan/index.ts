@@ -7,4 +7,4 @@ export { IViolation } from './Violation';
 export { IVulnerability } from './Vulnerability';
 export { IReference } from '../Scan/Reference';
 export { IResearch, ISeverityReasons } from './Research';
-export { ICve } from './Cve';
+export { IGraphCve } from './GraphCve';

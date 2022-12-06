@@ -1,4 +1,4 @@
-export interface ICve {
+export interface IGraphCve {
     cve: string;
     cvss_v2_score: string;
     cvss_v2_vector: string;
