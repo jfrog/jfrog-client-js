@@ -114,8 +114,8 @@ describe('Xray summary tests', () => {
         const fixedVersions: string[] | undefined = expressComponent?.fixed_versions;
         expect(fixedVersions).toBeTruthy();
         expect(fixedVersions?.length).toBeGreaterThanOrEqual(2);
-        expect(fixedVersions).toContain('[3.11]');
-        expect(fixedVersions).toContain('[4.5]');
+        expect(fixedVersions).toContain('[3.11.0]');
+        expect(fixedVersions).toContain('[4.5.0]');
     });
 
     test('Artifact summary component licenses', async () => {
