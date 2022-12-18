@@ -5,5 +5,6 @@ export interface IComponent {
     package_version: string;
     package_type: string;
     fixed_versions: string[];
+    infected_versions: string[];
     impact_paths: IImpactPath[][];
 }

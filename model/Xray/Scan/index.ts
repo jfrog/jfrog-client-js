@@ -6,5 +6,5 @@ export { IImpactPath } from './ImpactPath';
 export { IViolation } from './Violation';
 export { IVulnerability } from './Vulnerability';
 export { IReference } from '../Scan/Reference';
-export { IResearch, ISeverityReasons } from './Research';
+export { IExtendedInformation, ISeverityReasons } from './extendedInformation';
 export { IGraphCve } from './GraphCve';
