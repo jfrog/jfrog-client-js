@@ -19,11 +19,24 @@ describe('Xray System tests', () => {
         nock.cleanAll();
     });
 
-    test('Version', async () => {
-        const version: IXrayVersion = await jfrogClient.xray().system().version();
-        expect(version.xray_version).toBeTruthy();
-        expect(version.xray_revision).toBeTruthy();
-        expect(isPassedThroughProxy).toBeFalsy();
+    describe('Version tests', () => {
+        test('Version', async () => {
+            const version: IXrayVersion = await jfrogClient.xray().system().version();
+            expect(version.xray_version).toBeTruthy();
+            expect(version.xray_revision).toBeTruthy();
+            expect(isPassedThroughProxy).toBeFalsy();
+        });
+
+        test('Version failure - server not active', async () => {
+            const platformUrl: string = faker.internet.url();
+            const scope: nock.Scope = nock(platformUrl)
+                .get(`/xray/api/v1/system/version`)
+                .reply(302, { message: 'error', location: 'reactivate-server' });
+            const client: JfrogClient = new JfrogClient({ platformUrl, logger: TestUtils.createTestLogger() });
+            expect(await client.xray().system().version()).toThrowError();
+            expect(scope.isDone()).toBeTruthy();
+            expect(isPassedThroughProxy).toBeFalsy();
+        });
     });
 
     describe('Ping tests', () => {
