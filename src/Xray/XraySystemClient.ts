@@ -29,6 +29,7 @@ export class XraySystemClient {
         const requestParams: IRequestParams = {
             url: this.versionEndpoint,
             method: 'GET',
+            beforeRedirect: HttpClient.validateActiveServer,
         };
         return await (
             await this.httpClient.doAuthRequest(requestParams)
