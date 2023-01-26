@@ -32,9 +32,9 @@ describe('Xray System tests', () => {
             const scope: nock.Scope = nock(platformUrl)
                 .get(`/xray/api/v1/system/version`)
                 .reply(302, undefined, {
-                    Location: '/reactivate-server/Login',
+                    Location: platformUrl + '/reactivate-server',
                 })
-                .get('/reactivate-server/Login')
+                .get('/reactivate-server')
                 .reply(200, 'Here is the page');
             const client: JfrogClient = new JfrogClient({ platformUrl, logger: TestUtils.createTestLogger() });
             expect(await client.xray().system().version()).toThrowError();
