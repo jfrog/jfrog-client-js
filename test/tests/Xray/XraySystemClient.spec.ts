@@ -30,11 +30,11 @@ describe('Xray System tests', () => {
         test('Version failure - server not active', async () => {
             const platformUrl: string = faker.internet.url();
             const scope: nock.Scope = nock(platformUrl)
-                .get(platformUrl + `/xray/api/v1/system/version`)
+                .get('/xray/api/v1/system/version')
                 .reply(302, undefined, {
-                    Location: platformUrl + '/reactivate-server',
+                    'Location': platformUrl + '/reactivate-server',
                 })
-                .get(platformUrl + '/reactivate-server')
+                .get('/reactivate-server')
                 .reply(200, 'Here is the page');
             const client: JfrogClient = new JfrogClient({ platformUrl, logger: TestUtils.createTestLogger() });
             expect(await client.xray().system().version()).toThrowError();
