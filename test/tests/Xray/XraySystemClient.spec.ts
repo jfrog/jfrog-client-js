@@ -12,6 +12,12 @@ let jfrogClient: JfrogClient;
 
 describe('Xray System tests', () => {
     const clientConfig: IJfrogClientConfig = TestUtils.getJfrogClientConfig();
+
+    beforeEach(() => {
+        process.env.HTTPS_PROXY = '';
+        process.env.NO_PROXY = '';
+        isPassedThroughProxy = false;
+    });
     beforeAll(() => {
         jfrogClient = new JfrogClient(clientConfig);
     });
@@ -27,17 +33,27 @@ describe('Xray System tests', () => {
             expect(isPassedThroughProxy).toBeFalsy();
         });
 
+        beforeEach(nock.cleanAll.bind(nock));
+
         test('Version failure - server not active', async () => {
-            const platformUrl: string = faker.internet.url();
-            const scope: nock.Scope = nock(platformUrl)
+            const baseUrl: string = faker.internet.url();
+            const scope: nock.Scope = nock(baseUrl)
                 .get('/xray/api/v1/system/version')
-                .reply(302, undefined, {
-                    'Location': platformUrl + '/reactivate-server',
+                .reply(302, 'undefined', {
+                    Location: baseUrl + '/reactivate-server',
                 })
                 .get('/reactivate-server')
                 .reply(200, 'Here is the page');
-            const client: JfrogClient = new JfrogClient({ platformUrl, logger: TestUtils.createTestLogger() });
-            expect(await client.xray().system().version()).toThrowError();
+            const client: JfrogClient = new JfrogClient({ platformUrl: baseUrl, logger: TestUtils.createTestLogger() });
+            let errFound: boolean = false;
+            try {
+                await client.xray().system().version();
+            } catch (err: any) {
+                errFound = true;
+                expect(err.activationUrl).toBeDefined();
+                expect(err.activationUrl).toContain('/reactivate-server');
+            }
+            expect(errFound).toBeTruthy();
             expect(scope.isDone()).toBeTruthy();
             expect(isPassedThroughProxy).toBeFalsy();
         });
@@ -45,12 +61,6 @@ describe('Xray System tests', () => {
 
     describe('Ping tests', () => {
         const PING_RES: any = { status: 'pong' };
-
-        beforeEach(() => {
-            process.env.HTTPS_PROXY = '';
-            process.env.NO_PROXY = '';
-            isPassedThroughProxy = false;
-        });
 
         test('Ping success', async () => {
             const response: any = await jfrogClient.xray().system().ping();
@@ -127,9 +137,6 @@ describe('Xray System tests', () => {
                             'Basic ' + Buffer.from(PROXY_USER + ':' + PROXY_PASS).toString('base64');
                         expect(actualAuthHeader).toBe(expectAuthHeader);
                     });
-                });
-                afterAll(() => {
-                    authProxy.close();
                 });
 
                 test('Ping though auth proxy', async () => {
