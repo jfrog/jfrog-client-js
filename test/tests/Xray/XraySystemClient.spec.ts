@@ -4,7 +4,7 @@ import { createProxyServer, ServerOptions } from 'http-proxy';
 import nock from 'nock';
 import { IProxyConfig, IXrayVersion } from '../../../model';
 import { IJfrogClientConfig } from '../../../model/JfrogClientConfig';
-import { JfrogClient } from '../../../src';
+import { JfrogClient, XraySystemClient } from '../../../src';
 import { TestUtils } from '../../TestUtils';
 
 let isPassedThroughProxy: boolean;
@@ -36,25 +36,22 @@ describe('Xray System tests', () => {
         beforeEach(nock.cleanAll.bind(nock));
 
         test('Version failure - server not active', async () => {
-            const baseUrl: string = faker.internet.url();
-            const scope: nock.Scope = nock(baseUrl)
-                .get('/xray/api/v1/system/version')
-                .reply(302, 'undefined', {
-                    Location: baseUrl + '/reactivate-server',
-                })
-                .get('/reactivate-server')
-                .reply(200, 'Here is the page');
-            const client: JfrogClient = new JfrogClient({ platformUrl: baseUrl, logger: TestUtils.createTestLogger() });
+            const client: JfrogClient = new JfrogClient({
+                platformUrl: 'https://httpbin.org/redirect-to?url=reactivate-server',
+                logger: TestUtils.createTestLogger(),
+            });
             let errFound: boolean = false;
             try {
                 await client.xray().system().version();
             } catch (err: any) {
                 errFound = true;
                 expect(err.activationUrl).toBeDefined();
-                expect(err.activationUrl).toContain('/reactivate-server');
+                // This result only expected for the test (using httpbin with the redirect-to flag cause this).
+                // Actual activationUrl will be equal to the location without the added relative path to the version request.
+                // The JFrog client concat to the location the relative path of the version request.
+                expect(err.activationUrl).toBe('reactivate-server/xray' + XraySystemClient.versionEndpoint);
             }
             expect(errFound).toBeTruthy();
-            expect(scope.isDone()).toBeTruthy();
             expect(isPassedThroughProxy).toBeFalsy();
         });
     });
