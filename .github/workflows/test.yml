@@ -41,5 +41,5 @@ jobs:
 
       # Send tests coverage to Codecov
       - name: Send code coverage
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         if: runner.os == 'Linux'
