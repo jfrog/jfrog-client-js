@@ -4,7 +4,7 @@ import { createProxyServer, ServerOptions } from 'http-proxy';
 import nock from 'nock';
 import { IProxyConfig, IXrayVersion } from '../../../model';
 import { IJfrogClientConfig } from '../../../model/JfrogClientConfig';
-import { JfrogClient } from '../../../src';
+import { JfrogClient, XraySystemClient } from '../../../src';
 import { TestUtils } from '../../TestUtils';
 
 let isPassedThroughProxy: boolean;
@@ -12,6 +12,12 @@ let jfrogClient: JfrogClient;
 
 describe('Xray System tests', () => {
     const clientConfig: IJfrogClientConfig = TestUtils.getJfrogClientConfig();
+
+    beforeEach(() => {
+        process.env.HTTPS_PROXY = '';
+        process.env.NO_PROXY = '';
+        isPassedThroughProxy = false;
+    });
     beforeAll(() => {
         jfrogClient = new JfrogClient(clientConfig);
     });
@@ -19,21 +25,39 @@ describe('Xray System tests', () => {
         nock.cleanAll();
     });
 
-    test('Version', async () => {
-        const version: IXrayVersion = await jfrogClient.xray().system().version();
-        expect(version.xray_version).toBeTruthy();
-        expect(version.xray_revision).toBeTruthy();
-        expect(isPassedThroughProxy).toBeFalsy();
+    describe('Version tests', () => {
+        test('Version', async () => {
+            const version: IXrayVersion = await jfrogClient.xray().system().version();
+            expect(version.xray_version).toBeTruthy();
+            expect(version.xray_revision).toBeTruthy();
+            expect(isPassedThroughProxy).toBeFalsy();
+        });
+
+        beforeEach(nock.cleanAll.bind(nock));
+
+        test('Version failure - server not active', async () => {
+            const client: JfrogClient = new JfrogClient({
+                platformUrl: 'https://httpbin.org/redirect-to?url=reactivate-server',
+                logger: TestUtils.createTestLogger(),
+            });
+            let errFound: boolean = false;
+            try {
+                await client.xray().system().version();
+            } catch (err: any) {
+                errFound = true;
+                expect(err.activationUrl).toBeDefined();
+                // This result only expected for the test (using httpbin with the redirect-to flag cause this).
+                // Actual activationUrl will be equal to the location without the added relative path to the version request.
+                // The JFrog client concat to the location the relative path of the version request.
+                expect(err.activationUrl).toBe('reactivate-server/xray' + XraySystemClient.versionEndpoint);
+            }
+            expect(errFound).toBeTruthy();
+            expect(isPassedThroughProxy).toBeFalsy();
+        });
     });
 
     describe('Ping tests', () => {
         const PING_RES: any = { status: 'pong' };
-
-        beforeEach(() => {
-            process.env.HTTPS_PROXY = '';
-            process.env.NO_PROXY = '';
-            isPassedThroughProxy = false;
-        });
 
         test('Ping success', async () => {
             const response: any = await jfrogClient.xray().system().ping();

@@ -44,6 +44,17 @@ export class HttpClient {
         return this.doRequest(requestParams);
     }
 
+    /**
+     * Method to use for beforeRedirect attribute in IRequestParams.
+     * Before redirecting checks if the target location for the redirect is for 'reactivate-server' and throws ServerNotActiveError if so.
+     */
+    public static validateServerIsActive(_: Record<string, any>, responseDetails: { headers: Record<string, string> }) {
+        let movedLocation: string | undefined = responseDetails?.headers['location'];
+        if (movedLocation && movedLocation.includes('reactivate-server')) {
+            throw new ServerNotActiveError(movedLocation);
+        }
+    }
+
     private addUserAgentHeader(headers: { [key: string]: string }) {
         if (!headers[HttpClient.USER_AGENT_HEADER]) {
             headers[HttpClient.USER_AGENT_HEADER] = 'jfrog-client-js';
@@ -86,6 +97,12 @@ export class HttpClient {
     }
 }
 
+export class ServerNotActiveError extends Error {
+    constructor(public readonly activationUrl: string) {
+        super('Server is not active');
+    }
+}
+
 interface BasicAuth {
     username: string;
     password: string;
@@ -113,4 +130,5 @@ export interface IRequestParams {
     headers?: any;
     responseType?: responseType;
     validateStatus?: ((status: number) => boolean) | null;
+    beforeRedirect?: (options: Record<string, any>, responseDetails: { headers: Record<string, string> }) => void;
 }
