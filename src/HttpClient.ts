@@ -49,9 +49,7 @@ export class HttpClient {
      * Before redirecting checks if the target location for the redirect is for 'reactivate-server' and throws ServerNotActiveError if so.
      */
     public static validateServerIsActive(_: Record<string, any>, responseDetails: { headers: Record<string, string> }) {
-        let movedLocation: string | undefined = responseDetails.headers
-            ? responseDetails.headers['location']
-            : undefined;
+        let movedLocation: string | undefined = responseDetails?.headers['location'];
         if (movedLocation && movedLocation.includes('reactivate-server')) {
             throw new ServerNotActiveError(movedLocation);
         }
