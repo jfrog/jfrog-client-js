@@ -135,6 +135,9 @@ describe('Xray System tests', () => {
                         expect(actualAuthHeader).toBe(expectAuthHeader);
                     });
                 });
+                afterAll(() => {
+                    authProxy.close();
+                });
 
                 test('Ping though auth proxy', async () => {
                     const response: any = await proxyAuthJfrogClient.xray().system().ping();
