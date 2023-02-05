@@ -10,7 +10,7 @@ export class ArtifactoryClient {
     private readonly httpClient: HttpClient;
     private logger: ILogger;
 
-    public constructor(config: IClientSpecificConfig) {
+    public constructor(config: IClientSpecificConfig, private readonly clientId?: string) {
         const {
             serverUrl,
             logger = console,
@@ -29,7 +29,7 @@ export class ArtifactoryClient {
     }
 
     public system(): ArtifactorySystemClient {
-        return new ArtifactorySystemClient(this.httpClient, this.logger);
+        return new ArtifactorySystemClient(this.httpClient, this.logger, this.clientId);
     }
 
     public search(): ArtifactorySearchClient {

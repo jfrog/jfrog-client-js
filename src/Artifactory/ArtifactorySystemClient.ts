@@ -7,7 +7,11 @@ export class ArtifactorySystemClient {
     private readonly versionEndpoint: string = '/api/system/version';
     private readonly usageEndpoint: string = '/api/system/usage';
 
-    constructor(private readonly httpClient: HttpClient, private readonly logger: ILogger) {}
+    constructor(
+        private readonly httpClient: HttpClient,
+        private readonly logger: ILogger,
+        private readonly clientId?: string
+    ) {}
 
     public async ping(): Promise<boolean> {
         this.logger.debug('Sending ping request...');
@@ -37,7 +41,9 @@ export class ArtifactorySystemClient {
         const usageData: IUsageData = {
             productId: userAgent,
             features: featureArray,
+            uniqueClientId: this.clientId,
         };
+
         const requestParams: IRequestParams = {
             url: this.usageEndpoint,
             method: 'POST',
