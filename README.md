@@ -32,6 +32,7 @@ Add jfrog-client-js as a dependency to your package.json file:
     - [Xray](#xray)
       - [Pinging Xray](#pinging-xray)
       - [Getting Xray Version](#getting-xray-version)
+      - [Checking Xray Entitlement](#checking-xray-entitlement)
       - [Scanning Bulk of Dependencies](#scanning-bulk-of-dependencies)
       - [Scanning a Dependency Tree with Consideration to the JFrog Project](#scanning-a-dependency-tree-with-consideration-to-the-jfrog-project)
       - [Scanning a Dependency Tree with Consideration to the Xray Watches](#scanning-a-dependency-tree-with-consideration-to-the-xray-watches)
@@ -89,6 +90,22 @@ jfrogClient
   .xray()
   .system()
   .version()
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+#### Checking Xray Entitlement
+
+```javascript
+let feature = 'contextual_analysis';
+jfrogClient
+  .xray()
+  .entitlements()
+  .feature(feature)
   .then((result) => {
     console.log(result);
   })

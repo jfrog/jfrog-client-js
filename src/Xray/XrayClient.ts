@@ -6,6 +6,7 @@ import { XrayDetailsClient } from './XrayDetailsClient';
 import { IClientSpecificConfig } from '../../model/ClientSpecificConfig';
 import { ILogger } from '../../model/';
 import { XrayGraphClient as XrayScanClient } from '..';
+import { XrayEntitlementsClient } from './XrayEntitlementsClient';
 
 export class XrayClient {
     private readonly httpClient: HttpClient;
@@ -43,5 +44,9 @@ export class XrayClient {
 
     public scan(): XrayScanClient {
         return new XrayScanClient(this.httpClient, this.logger);
+    }
+
+    public entitlements(): XrayEntitlementsClient {
+        return new XrayEntitlementsClient(this.httpClient, this.logger);
     }
 }
