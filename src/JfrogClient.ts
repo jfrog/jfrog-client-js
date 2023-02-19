@@ -10,7 +10,7 @@ export class JfrogClient {
     private static readonly ARTIFACTORY_SUFFIX: string = 'artifactory';
     private static readonly XRAY_SUFFIX: string = 'xray';
 
-    private readonly clientId?: string;
+    public readonly clientId?: string;
 
     public constructor(private _jfrogConfig: IJfrogClientConfig) {
         if (!_jfrogConfig.platformUrl && !_jfrogConfig.xrayUrl && !_jfrogConfig.artifactoryUrl) {

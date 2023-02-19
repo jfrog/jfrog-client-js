@@ -17,6 +17,7 @@ describe('Jfrog client tests', () => {
         expect(jfrogClient.xray()).toBeInstanceOf(XrayClient);
         expect(jfrogClient.getServerUrl('artifactory', config.artifactoryUrl)).toBe(PLATFORM_URL + '/artifactory/');
         expect(jfrogClient.getServerUrl('xray', config.xrayUrl)).toBe(PLATFORM_URL + '/xray/');
+        expect(jfrogClient.clientId).toBeDefined();
     });
 
     test('Client initialization with custom Artifactory URL', () => {
