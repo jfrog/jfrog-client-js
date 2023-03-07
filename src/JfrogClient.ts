@@ -16,7 +16,7 @@ export class JfrogClient {
         if (!_jfrogConfig.platformUrl && !_jfrogConfig.xrayUrl && !_jfrogConfig.artifactoryUrl) {
             throw new Error('JFrog client: must provide platform or specific URLs');
         }
-        this.clientId = JfrogClient.getClientId();
+        this.clientId = JfrogClient.getClientId(Object.values(os.networkInterfaces()));
     }
 
     public artifactory(): ArtifactoryClient {
@@ -58,8 +58,8 @@ export class JfrogClient {
         return url + (url.endsWith('/') ? '' : '/');
     }
 
-    public static getClientId(): string | undefined {
-        for (const networkInterfaces of Object.values(os.networkInterfaces())) {
+    public static getClientId(interfaces: (os.NetworkInterfaceBase[] | undefined)[]): string | undefined {
+        for (const networkInterfaces of interfaces) {
             for (const networkInterface of networkInterfaces ?? []) {
                 if (networkInterface.mac) {
                     return this.hash('sha1', networkInterface.mac);

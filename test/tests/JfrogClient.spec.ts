@@ -1,3 +1,5 @@
+import * as os from 'os';
+
 import { JfrogClient } from '../../src';
 import { ArtifactoryClient } from '../../src/Artifactory/ArtifactoryClient';
 import { XrayClient } from '../../src/Xray/XrayClient';
@@ -46,5 +48,19 @@ describe('Jfrog client tests', () => {
         expect(() => {
             new JfrogClient({ logger: TestUtils.createTestLogger() });
         }).toThrow('JFrog client: must provide platform or specific URLs');
+    });
+
+    test('Generate client unique id', () => {
+        expect(JfrogClient.getClientId([undefined])).toBeUndefined();
+        let test: os.NetworkInterfaceBase = {
+            mac: 'aa:aa:aa:aa:aa:aa',
+            address: '',
+            netmask: '',
+            internal: false,
+            cidr: null,
+        };
+        expect(JfrogClient.getClientId([undefined, [], undefined, [test], undefined])).toBe(
+            'c7d2c26fea52066c5943777a3c2e1fc510350d55'
+        );
     });
 });
