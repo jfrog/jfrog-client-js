@@ -11,5 +11,3 @@ node_modules
 # Generated
 dist
 coverage
-
-.DS_Store
