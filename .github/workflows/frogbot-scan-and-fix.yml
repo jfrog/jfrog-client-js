@@ -1,0 +1,46 @@
+name: "Frogbot Scan and Fix"
+on:
+  push:
+    # Creating fix pull requests will be triggered by any push to one of the these branches.
+    # You can add or replace to any branch you want to open fix pull requests for.
+    branches:
+      - "master"
+permissions:
+  contents: write
+  pull-requests: write
+  security-events: write
+jobs:
+  create-fix-pull-requests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # Install prerequisites
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+
+      - uses: jfrog/frogbot@v2
+        env:
+          # [Mandatory]
+          # JFrog platform URL
+          JF_URL: ${{ secrets.JF_URL }}
+
+          # [Mandatory if JF_USER and JF_PASSWORD are not provided]
+          # JFrog access token with 'read' permissions on Xray service
+          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+
+          # [Mandatory]
+          # The GitHub token automatically generated for the job
+          JF_GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          ###########################################################################
+          ##   If your project uses a 'frogbot-config.yml' file, you can define     ##
+          ##   the following variables inside the file, instead of here.           ##
+          ###########################################################################
+
+
+          # [Mandatory if the `installCommand` variable isn't set in your frogbot-config.yml file]
+          # The command that installs the project dependencies (e.g "npm i")
+          JF_INSTALL_DEPS_CMD: "npm install"
