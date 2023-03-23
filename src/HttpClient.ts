@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosProxyConfig, AxiosRequestConfig } from 'axios';
 import { IClientResponse, IProxyConfig } from '../model';
 import axiosRetry, { IAxiosRetryConfig } from 'axios-retry';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 
 export class HttpClient {
     private static readonly AUTHORIZATION_HEADER: string = 'Authorization';
@@ -20,6 +21,7 @@ export class HttpClient {
             baseURL: config.serverUrl,
             headers: config.headers,
             proxy: this.getAxiosProxyConfig(config.proxy),
+            httpsAgent: HttpClient.getHttpToHttpsProxyConfig(config.proxy),
         } as AxiosRequestConfig);
         this._basicAuth = {
             username: config.username,
@@ -70,6 +72,13 @@ export class HttpClient {
         }
     }
 
+    public static getHttpToHttpsProxyConfig(proxyConfig: IProxyConfig | false | undefined): HttpsProxyAgent | undefined {
+        if (!proxyConfig || (proxyConfig.protocol && proxyConfig.protocol.includes('https'))) {
+            return undefined;
+        }
+        return new HttpsProxyAgent(`http://${proxyConfig.host}:${proxyConfig.port}`);
+    }
+
     /**
      * @param proxyConfig - Receives on of the three:
      * 1. IProxyConfig to use specific proxy config.
@@ -82,6 +91,10 @@ export class HttpClient {
         // Return false to disable proxy or undefined to use default environment variables.
         if (!proxyConfig) {
             return proxyConfig;
+        }
+        if (proxyConfig.protocol && !proxyConfig.protocol.includes('https')) {
+            // Disable default proxy handling
+            return false;
         }
         // Return undefined to use default environment variables.
         const proxyHost: string = proxyConfig.host;
