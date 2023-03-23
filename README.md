@@ -2,7 +2,7 @@
 
 JFrog Javascript Client is a Javascript library, which wraps some REST APIs exposed by JFrog's different services.
 
-## Project Status
+## Project Status 
 
 [![Tests](https://github.com/jfrog/jfrog-client-js/actions/workflows/test.yml/badge.svg)](https://github.com/jfrog/jfrog-client-js/actions/workflows/test.yml)
 [![Code coverage](https://codecov.io/github/jfrog/jfrog-client-js/coverage.svg?branch=master)](https://codecov.io/github/jfrog/jfrog-client-js?branch=master)
