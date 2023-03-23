@@ -72,8 +72,15 @@ export class HttpClient {
         }
     }
 
-    public static getHttpToHttpsProxyConfig(proxyConfig: IProxyConfig | false | undefined): HttpsProxyAgent | undefined {
-        if (!proxyConfig || (proxyConfig.protocol && proxyConfig.protocol.includes('https'))) {
+    public static getHttpToHttpsProxyConfig(
+        proxyConfig: IProxyConfig | false | undefined
+    ): HttpsProxyAgent | undefined {
+        if (
+            !proxyConfig ||
+            !proxyConfig.host ||
+            !proxyConfig.port ||
+            (proxyConfig.protocol && proxyConfig.protocol.includes('https'))
+        ) {
             return undefined;
         }
         return new HttpsProxyAgent(`http://${proxyConfig.host}:${proxyConfig.port}`);
