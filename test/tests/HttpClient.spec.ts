@@ -1,6 +1,7 @@
 import * as faker from 'faker';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 import nock from 'nock';
-import { IClientResponse } from '../../model';
+import { IClientResponse, IProxyConfig } from '../../model';
 import { HttpClient, IRequestParams } from '../../src/HttpClient';
 
 const subPath: string = '/subpath';
@@ -23,6 +24,46 @@ describe('Http client tests', () => {
         const client: HttpClient = new HttpClient({ serverUrl });
         expect(client).toBeInstanceOf(HttpClient);
     });
+
+    [
+        {
+            name: 'Http config',
+            config: { host: 'host', port: 1, protocol: 'http' } as IProxyConfig,
+            shouldExists: true,
+        },
+        {
+            name: 'Https config',
+            config: { host: 'host', port: 1, protocol: 'https' } as IProxyConfig,
+            shouldExists: false,
+        },
+        {
+            name: 'With empty config',
+            config: {} as IProxyConfig,
+            shouldExists: false,
+        },
+        {
+            name: 'With undefined',
+            config: undefined,
+            shouldExists: false,
+        },
+        {
+            name: 'With false',
+            config: false,
+            shouldExists: false,
+        },
+    ].forEach((testCase) => {
+        test('Constructing HttpToHttpsProxyConfig - ' + testCase.name, () => {
+            let res: HttpsProxyAgent | undefined = HttpClient.getHttpToHttpsProxyConfig(
+                <IProxyConfig | false | undefined>testCase.config
+            );
+            if (testCase.shouldExists) {
+                expect(res).toBeDefined();
+            } else {
+                expect(res).toBeUndefined();
+            }
+        });
+    });
+
     test('Do request', async () => {
         nock(serverUrl).post(subPath).matchHeader('User-Agent', 'http-client-test').reply(200, 'RESPONSE');
         const client: HttpClient = new HttpClient({ serverUrl, headers: { 'User-Agent': 'http-client-test' } });
