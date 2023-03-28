@@ -58,6 +58,10 @@ describe('Http client tests', () => {
             );
             if (testCase.shouldExists) {
                 expect(res).toBeDefined();
+                expect(res?.options).toBeDefined();
+                expect(res?.protocol).toBe('http:');
+                expect(res?.options.port).toBe((<IProxyConfig>testCase.config).port);
+                expect(res?.options.host).toBe((<IProxyConfig>testCase.config).host);
             } else {
                 expect(res).toBeUndefined();
             }

@@ -21,6 +21,7 @@ export class HttpClient {
             baseURL: config.serverUrl,
             headers: config.headers,
             proxy: this.getAxiosProxyConfig(config.proxy),
+            // Use instead of the default one since there is a bug in Axios if http -> https
             httpsAgent: HttpClient.getHttpToHttpsProxyConfig(config.proxy),
         } as AxiosRequestConfig);
         this._basicAuth = {
@@ -72,6 +73,15 @@ export class HttpClient {
         }
     }
 
+    /**
+     * Use to create httpsAgent to handle Http proxy sending to a https server.
+     * (Artifactory is https server, proxy protocol can be both)
+     * @param proxyConfig - Receives on of the three:
+     * 1. IProxyConfig to use specific proxy config.
+     * 2. 'false' to disable proxy.
+     * 3. 'undefined' to use environment variables if exist.
+     * @returns if the proxy is http protocol return httpsAgent else return undefined
+     */
     public static getHttpToHttpsProxyConfig(
         proxyConfig: IProxyConfig | false | undefined
     ): HttpsProxyAgent | undefined {
