@@ -1,6 +1,6 @@
 import { ILogger } from '../model/';
 
-export abstract class BaseLogger {
+export abstract class BaseLogger implements ILogger {
     protected constructor(private readonly logger: ILogger, private readonly prefix: string) {}
 
     public warn(str: string): void {
