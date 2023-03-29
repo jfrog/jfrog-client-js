@@ -48,7 +48,7 @@ pipelines:
             - jf npmc --repo-resolve ecosys-npm-remote --repo-deploy ecosys-npm-local
 
             # Install and audit
-            - jf npm install
+            - jf npm ci --ignore-scripts
             - jf audit
 
             # Publish

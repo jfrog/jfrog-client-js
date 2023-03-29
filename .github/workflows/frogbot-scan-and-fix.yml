@@ -13,7 +13,7 @@ jobs:
   create-fix-pull-requests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # Install prerequisites
       - name: Setup NodeJS
@@ -43,4 +43,4 @@ jobs:
 
           # [Mandatory if the `installCommand` variable isn't set in your frogbot-config.yml file]
           # The command that installs the project dependencies (e.g "npm i")
-          JF_INSTALL_DEPS_CMD: "npm install"
+          JF_INSTALL_DEPS_CMD: "npm ci --ignore-scripts"

@@ -14,6 +14,9 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
+    env:
+      NPM_CONFIG_IGNORE_SCRIPTS: true
+
     steps:
       # Prerequisites
       - uses: actions/checkout@v3
@@ -24,9 +27,9 @@ jobs:
         with:
           node-version: "16"
 
-      # Install project
-      - name: Install
-        run: npm i
+      # Clean install project
+      - name: Clean install
+        run: npm ci
 
       # Run lint
       - name: Lint
@@ -34,7 +37,7 @@ jobs:
 
       # Run tests
       - name: Tests
-        run: npm t
+        run: npm run pretest && npm t
         env:
           CLIENTTESTS_PLATFORM_URL: ${{ secrets.PLATFORM_URL }}
           CLIENTTESTS_PLATFORM_ACCESS_TOKEN: ${{ secrets.PLATFORM_ADMIN_TOKEN }}
