@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosProxyConfig, AxiosRequestConfig } from 'axios';
-import { IClientResponse, IProxyConfig } from '../model';
+import { IClientResponse, ILogger, IProxyConfig } from '../model';
 import axiosRetry, { IAxiosRetryConfig } from 'axios-retry';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 
@@ -14,7 +14,7 @@ export class HttpClient {
     private readonly _accessToken: string;
     private readonly _axiosInstance: AxiosInstance;
 
-    constructor(config: IHttpConfig) {
+    constructor(config: IHttpConfig, logger?: ILogger) {
         config.headers = config.headers || {};
         this.addUserAgentHeader(config.headers);
         this._axiosInstance = axios.create({
@@ -31,10 +31,10 @@ export class HttpClient {
         this._accessToken = config.accessToken || '';
         axiosRetry(this._axiosInstance, {
             retries: config.retries ? config.retries : HttpClient.DEFAULT_RETRIES,
-            retryDelay: (retryCount) => {
+            retryDelay: (retryCount, err) => {
+                logger?.debug(`Request ended with error: ${err}\nRetrying (attempt #${retryCount})...`);
                 // Delay between retries, in milliseconds
-                // this._logger?.warn(`Request ended with error: ${err}\nRetrying...`);
-                return retryCount * 1000;
+                return retryCount * 500;
             },
         } as IAxiosRetryConfig);
     }
