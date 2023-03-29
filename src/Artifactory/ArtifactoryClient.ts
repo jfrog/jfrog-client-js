@@ -24,11 +24,11 @@ export class ArtifactoryClient {
         if (!serverUrl) {
             throw new Error('Artifactory client : must provide platformUrl or artifactoryUrl');
         }
-        this.logger = new ArtifactoryLogger(logger);
+        
         this.httpClient = new HttpClient(
-            { serverUrl, username, password, accessToken, proxy, headers, retries },
-            this.logger
+            { serverUrl, username, password, accessToken, proxy, headers, retries }
         );
+        this.logger = new ArtifactoryLogger(logger);
     }
 
     public system(): ArtifactorySystemClient {
