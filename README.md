@@ -1,11 +1,10 @@
 # JFrog Javascript Client
 
-JFrog Javascript Client is a Javascript library, which wraps some REST APIs exposed by JFrog's different services.
-
-## Project Status
-
+[![Scanned by Frogbot](https://raw.github.com/jfrog/frogbot/master/images/frogbot-badge.svg)](https://github.com/jfrog/frogbot#readme)
 [![Tests](https://github.com/jfrog/jfrog-client-js/actions/workflows/test.yml/badge.svg)](https://github.com/jfrog/jfrog-client-js/actions/workflows/test.yml)
 [![Code coverage](https://codecov.io/github/jfrog/jfrog-client-js/coverage.svg?branch=master)](https://codecov.io/github/jfrog/jfrog-client-js?branch=master)
+
+JFrog Javascript Client is a Javascript library, which wraps some REST APIs exposed by JFrog's different services.
 
 ## Contributions
 
@@ -23,28 +22,23 @@ Add jfrog-client-js as a dependency to your package.json file:
 
 ## APIs
 
-- [JFrog Javascript Client](#jfrog-javascript-client)
-  - [Project Status](#project-status)
-  - [Contributions](#contributions)
-  - [Getting started](#getting-started)
-  - [APIs](#apis)
-    - [Setting up JFrog client](#setting-up-jfrog-client)
-    - [Xray](#xray)
-      - [Pinging Xray](#pinging-xray)
-      - [Getting Xray Version](#getting-xray-version)
-      - [Checking Xray Entitlement](#checking-xray-entitlement)
-      - [Scanning Bulk of Dependencies](#scanning-bulk-of-dependencies)
-      - [Scanning a Dependency Tree with Consideration to the JFrog Project](#scanning-a-dependency-tree-with-consideration-to-the-jfrog-project)
-      - [Scanning a Dependency Tree with Consideration to the Xray Watches](#scanning-a-dependency-tree-with-consideration-to-the-xray-watches)
-      - [Retrieving Xray Build Details](#retrieving-xray-build-details)
-    - [Artifactory](#artifactory)
-      - [Pinging Artifactory](#pinging-artifactory)
-      - [Getting Artifactory Version](#getting-artifactory-version)
-      - [Downloading an Artifact](#downloading-an-artifact)
-      - [Downloading an Artifact content](#downloading-an-artifact-content)
-      - [Downloading an Artifact to file](#downloading-an-artifact-to-file)
-      - [Downloading an Artifact checksum](#downloading-an-artifact-checksum)
-      - [Searching by AQL](#searching-by-aql)
+  - [Setting up JFrog client](#setting-up-jfrog-client)
+  - [Xray](#xray)
+    - [Pinging Xray](#pinging-xray)
+    - [Getting Xray Version](#getting-xray-version)
+    - [Checking Xray Entitlement](#checking-xray-entitlement)
+    - [Scanning Bulk of Dependencies](#scanning-bulk-of-dependencies)
+    - [Scanning a Dependency Tree with Consideration to the JFrog Project](#scanning-a-dependency-tree-with-consideration-to-the-jfrog-project)
+    - [Scanning a Dependency Tree with Consideration to the Xray Watches](#scanning-a-dependency-tree-with-consideration-to-the-xray-watches)
+    - [Retrieving Xray Build Details](#retrieving-xray-build-details)
+  - [Artifactory](#artifactory)
+    - [Pinging Artifactory](#pinging-artifactory)
+    - [Getting Artifactory Version](#getting-artifactory-version)
+    - [Downloading an Artifact](#downloading-an-artifact)
+    - [Downloading an Artifact content](#downloading-an-artifact-content)
+    - [Downloading an Artifact to file](#downloading-an-artifact-to-file)
+    - [Downloading an Artifact checksum](#downloading-an-artifact-checksum)
+    - [Searching by AQL](#searching-by-aql)
 
 ### Setting up JFrog client
 
