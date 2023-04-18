@@ -8,6 +8,7 @@ import { ILogger } from '../../model/';
 
 export class ArtifactoryClient {
     private readonly httpClient: HttpClient;
+    private readonly timeout?: number;
     private logger: ILogger;
 
     public constructor(config: IClientSpecificConfig, private readonly clientId?: string) {
@@ -20,11 +21,13 @@ export class ArtifactoryClient {
             proxy,
             headers,
             retries,
+            timeout,
         }: IClientSpecificConfig = config;
         if (!serverUrl) {
             throw new Error('Artifactory client : must provide platformUrl or artifactoryUrl');
         }
         this.logger = new ArtifactoryLogger(logger);
+        this.timeout = timeout;
         this.httpClient = new HttpClient(
             { serverUrl, username, password, accessToken, proxy, headers, retries },
             this.logger
@@ -32,7 +35,7 @@ export class ArtifactoryClient {
     }
 
     public system(): ArtifactorySystemClient {
-        return new ArtifactorySystemClient(this.httpClient, this.logger, this.clientId);
+        return new ArtifactorySystemClient(this.httpClient, this.logger, this.clientId, this.timeout);
     }
 
     public search(): ArtifactorySearchClient {
@@ -40,6 +43,6 @@ export class ArtifactoryClient {
     }
 
     public download(): ArtifactoryDownloadClient {
-        return new ArtifactoryDownloadClient(this.httpClient, this.logger);
+        return new ArtifactoryDownloadClient(this.httpClient, this.logger, this.timeout);
     }
 }

@@ -6,12 +6,12 @@ import { HttpsProxyAgent } from 'https-proxy-agent';
 export class HttpClient {
     private static readonly AUTHORIZATION_HEADER: string = 'Authorization';
     private static readonly USER_AGENT_HEADER: string = 'User-Agent';
-    private static readonly DEFAULT_RETRIES: number = 3;
+    private static readonly DEFAULT_RETRIES: number = 5;
     // Delay between retries, in milliseconds
-    private static readonly DEFAULT_RETRY_DELAY_IN_MILLISECONDS: number = 500;
+    private static readonly DEFAULT_RETRY_DELAY_IN_MILLISECONDS: number = 1000;
     // Specifies the number of milliseconds before the request times out.
     // If the request takes longer than `DEFAULT_TIMEOUT_IN_MILLISECONDS`, the request will be aborted.
-    public static readonly DEFAULT_TIMEOUT_IN_MILLISECONDS: number = 2000;
+    public static readonly DEFAULT_TIMEOUT_IN_MILLISECONDS: number = 10000;
     private readonly _basicAuth: BasicAuth;
     private readonly _accessToken: string;
     private readonly _axiosInstance: AxiosInstance;
@@ -32,7 +32,7 @@ export class HttpClient {
         } as BasicAuth;
         this._accessToken = config.accessToken || '';
         axiosRetry(this._axiosInstance, {
-            retries: config.retries ? config.retries : HttpClient.DEFAULT_RETRIES,
+            retries: config.retries ?? HttpClient.DEFAULT_RETRIES,
             retryDelay: (retryCount: number, err: AxiosError) => {
                 logger?.debug(`Request ended with error: ${err}\nRetrying (attempt #${retryCount})...`);
                 return retryCount * HttpClient.DEFAULT_RETRY_DELAY_IN_MILLISECONDS;
