@@ -21,6 +21,7 @@ export class XrayEntitlementsClient {
             let response: IClientResponse = await this.httpClient.doAuthRequest(requestParams);
             return response.data?.entitled;
         } catch (error) {
+            this.logger.debug(error);
             return false;
         }
     }
