@@ -10,8 +10,7 @@ export class ArtifactorySystemClient {
     constructor(
         private readonly httpClient: HttpClient,
         private readonly logger: ILogger,
-        private readonly clientId?: string,
-        private readonly timeout?: number
+        private readonly clientId?: string
     ) {}
 
     public async ping(): Promise<boolean> {
@@ -19,7 +18,6 @@ export class ArtifactorySystemClient {
         const requestParams: IRequestParams = {
             url: this.pingEndpoint,
             method: 'GET',
-            timeout: this.timeout ?? HttpClient.DEFAULT_TIMEOUT_IN_MILLISECONDS,
         };
         try {
             return (await this.httpClient.doRequest(requestParams)).data;

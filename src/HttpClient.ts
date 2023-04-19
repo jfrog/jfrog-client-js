@@ -11,7 +11,7 @@ export class HttpClient {
     private static readonly DEFAULT_RETRY_DELAY_IN_MILLISECONDS: number = 1000;
     // Specifies the number of milliseconds before the request times out.
     // If the request takes longer than `DEFAULT_TIMEOUT_IN_MILLISECONDS`, the request will be aborted.
-    public static readonly DEFAULT_TIMEOUT_IN_MILLISECONDS: number = 10000;
+    public static readonly DEFAULT_TIMEOUT_IN_MILLISECONDS: number = 60000;
     private readonly _basicAuth: BasicAuth;
     private readonly _accessToken: string;
     private readonly _axiosInstance: AxiosInstance;
@@ -22,6 +22,7 @@ export class HttpClient {
         this._axiosInstance = axios.create({
             baseURL: config.serverUrl,
             headers: config.headers,
+            timeout: config.timeout,
             proxy: this.getAxiosProxyConfig(config.proxy),
             // Use instead of the default one since there is a bug in Axios if http -> https
             httpsAgent: HttpClient.getHttpToHttpsProxyConfig(config.proxy),
@@ -152,6 +153,7 @@ export interface IHttpConfig {
     proxy?: IProxyConfig | false;
     headers?: { [key: string]: string };
     retries?: number;
+    timeout?: number;
 }
 
 export type method = 'GET' | 'POST' | 'HEAD';

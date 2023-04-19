@@ -10,7 +10,6 @@ import { XrayEntitlementsClient } from './XrayEntitlementsClient';
 
 export class XrayClient {
     private readonly httpClient: HttpClient;
-    private readonly timeout?: number;
     private logger: ILogger;
 
     public constructor(config: IClientSpecificConfig) {
@@ -29,9 +28,8 @@ export class XrayClient {
             throw new Error('Xray client : must provide platformUrl or xrayUrl');
         }
         this.logger = new XrayLogger(logger);
-        this.timeout = timeout;
         this.httpClient = new HttpClient(
-            { serverUrl, username, password, accessToken, proxy, headers, retries },
+            { serverUrl, username, password, accessToken, proxy, headers, retries, timeout },
             this.logger
         );
     }
@@ -41,7 +39,7 @@ export class XrayClient {
     }
 
     public system(): XraySystemClient {
-        return new XraySystemClient(this.httpClient, this.logger, this.timeout);
+        return new XraySystemClient(this.httpClient, this.logger);
     }
 
     public details(): XrayDetailsClient {
@@ -53,6 +51,6 @@ export class XrayClient {
     }
 
     public entitlements(): XrayEntitlementsClient {
-        return new XrayEntitlementsClient(this.httpClient, this.logger, this.timeout);
+        return new XrayEntitlementsClient(this.httpClient, this.logger);
     }
 }

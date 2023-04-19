@@ -8,11 +8,7 @@ export class ArtifactoryDownloadClient {
     private static readonly SHA1_HEADER: string = 'x-checksum-sha1';
     private static readonly SHA256_HEADER: string = 'x-checksum-sha256';
 
-    constructor(
-        private readonly httpClient: HttpClient,
-        private readonly logger: ILogger,
-        private readonly timeout?: number
-    ) {}
+    constructor(private readonly httpClient: HttpClient, private readonly logger: ILogger) {}
 
     public async downloadArtifact(artifactPath: string): Promise<string> {
         this.logger.debug('Sending download artifact request...');
@@ -52,7 +48,6 @@ export class ArtifactoryDownloadClient {
         this.logger.debug('Sending head request to ' + artifactPath + '...');
         const requestParams: IRequestParams = {
             url: encodeURI(artifactPath),
-            timeout: this.timeout ?? HttpClient.DEFAULT_TIMEOUT_IN_MILLISECONDS,
             method: 'HEAD',
         };
         const response: IClientResponse = await this.httpClient.doAuthRequest(requestParams);

@@ -6,18 +6,13 @@ export class XraySystemClient {
     private readonly pingEndpoint: string = '/api/v1/system/ping';
     public static readonly versionEndpoint: string = '/api/v1/system/version';
 
-    constructor(
-        private readonly httpClient: HttpClient,
-        private readonly logger: ILogger,
-        private readonly timeout?: number
-    ) {}
+    constructor(private readonly httpClient: HttpClient, private readonly logger: ILogger) {}
 
     public async ping(): Promise<boolean> {
         this.logger.debug('Sending ping request...');
         const requestParams: IRequestParams = {
             url: this.pingEndpoint,
             method: 'GET',
-            timeout: this.timeout ?? HttpClient.DEFAULT_TIMEOUT_IN_MILLISECONDS,
         };
         try {
             return await (
