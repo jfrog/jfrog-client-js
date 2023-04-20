@@ -55,8 +55,10 @@ let jfrogClient = new JfrogClient({
   // Optional parameters
   proxy: { host: '<organization>-xray.jfrog.io', port: 8081, protocol: 'https' },
   headers: { key1: 'value1', key2: 'value2' },
-  // Connection retries. If not defined, the default value is 3.
-  retries: 3,
+  // Connection retries. If not defined, the default value is 5.
+  retries: 5,
+  // Timeout before the connection is terminated in milliseconds, the default value is 60 seconds
+  timeout: 60000
 });
 ```
 

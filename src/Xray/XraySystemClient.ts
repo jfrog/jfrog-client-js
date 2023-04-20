@@ -13,7 +13,6 @@ export class XraySystemClient {
         const requestParams: IRequestParams = {
             url: this.pingEndpoint,
             method: 'GET',
-            timeout: HttpClient.DEFAULT_TIMEOUT_IN_MILLISECONDS,
         };
         try {
             return await (

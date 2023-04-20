@@ -20,13 +20,14 @@ export class ArtifactoryClient {
             proxy,
             headers,
             retries,
+            timeout,
         }: IClientSpecificConfig = config;
         if (!serverUrl) {
             throw new Error('Artifactory client : must provide platformUrl or artifactoryUrl');
         }
         this.logger = new ArtifactoryLogger(logger);
         this.httpClient = new HttpClient(
-            { serverUrl, username, password, accessToken, proxy, headers, retries },
+            { serverUrl, username, password, accessToken, proxy, headers, retries, timeout },
             this.logger
         );
     }

@@ -11,12 +11,12 @@ export class XrayEntitlementsClient {
         const requestParams: IRequestParams = {
             url: this.entitlementsFeatureEndpoint + feature,
             method: 'GET',
-            timeout: HttpClient.DEFAULT_TIMEOUT_IN_MILLISECONDS,
         };
         try {
             let response: IClientResponse = await this.httpClient.doAuthRequest(requestParams);
             return response.data?.entitled;
         } catch (error) {
+            this.logger.debug(error);
             return false;
         }
     }

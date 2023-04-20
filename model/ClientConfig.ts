@@ -9,4 +9,5 @@ export interface IClientConfig {
     logger?: ILogger;
     headers?: { [key: string]: string };
     retries?: number;
+    timeout?: number;
 }
