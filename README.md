@@ -1,5 +1,6 @@
 # JFrog Javascript Client
 
+
 [![Scanned by Frogbot](https://raw.github.com/jfrog/frogbot/master/images/frogbot-badge.svg)](https://github.com/jfrog/frogbot#readme)
 [![Tests](https://github.com/jfrog/jfrog-client-js/actions/workflows/test.yml/badge.svg)](https://github.com/jfrog/jfrog-client-js/actions/workflows/test.yml)
 [![Code coverage](https://codecov.io/github/jfrog/jfrog-client-js/coverage.svg?branch=master)](https://codecov.io/github/jfrog/jfrog-client-js?branch=master)
