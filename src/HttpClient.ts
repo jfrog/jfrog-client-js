@@ -16,7 +16,7 @@ export class HttpClient {
     private readonly _accessToken: string;
     private readonly _axiosInstance: AxiosInstance;
 
-    constructor(config: IHttpConfig, logger?: ILogger) {
+    constructor(config: IHttpConfig, private logger?: ILogger) {
         config.headers = config.headers || {};
         this.addUserAgentHeader(config.headers);
         this._axiosInstance = axios.create({
@@ -131,6 +131,38 @@ export class HttpClient {
             port: proxyConfig.port,
             protocol: proxyConfig.protocol,
         } as AxiosProxyConfig;
+    }
+    /**
+     * Performs polling on the provided URL for a given time interval.
+     * @param interval - The time interval in milliseconds at which the URL should be polled.
+     * @param url - The URL to poll.
+     * @param duration - The total duration of the polling process in milliseconds.
+     * @returns A Promise that resolves when the polling is completed.
+     */
+    public async pollURLForTime(interval: number, url: string, duration: number): Promise<IClientResponse | undefined> {
+        const endTime: number = Date.now() + duration;
+        const request: IRequestParams = {
+            url: url,
+            method: 'GET',
+        };
+        let response: IClientResponse | undefined;
+        while (Date.now() < endTime) {
+            try {
+                response = await this.doRequest(request);
+                this.logger?.debug(`Polling ended successfully from ${url} with status ${response.status}`);
+                return response;
+            } catch (error) {
+                this.logger?.debug(`Error polling ${url}:`, error);
+            }
+
+            // Delay in milliseconds
+            await this.delay(interval);
+        }
+        return response;
+    }
+
+    private async delay(ms: number): Promise<void> {
+        return new Promise((resolve) => setTimeout(resolve, ms));
     }
 }
 
