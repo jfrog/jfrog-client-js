@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosInstance, AxiosProxyConfig, AxiosRequestConfig 
 import { IClientResponse, ILogger, IProxyConfig } from '../model';
 import axiosRetry, { IAxiosRetryConfig } from 'axios-retry';
 import { HttpsProxyAgent } from 'https-proxy-agent';
-
+import { setTimeout } from 'timers/promises';
 export class HttpClient {
     private static readonly AUTHORIZATION_HEADER: string = 'Authorization';
     private static readonly USER_AGENT_HEADER: string = 'User-Agent';
@@ -140,29 +140,27 @@ export class HttpClient {
      * @returns A Promise that resolves when the polling is completed.
      */
     public async pollURLForTime(interval: number, url: string, duration: number): Promise<IClientResponse | undefined> {
+        let counter: number = 1;
         const endTime: number = Date.now() + duration;
         const request: IRequestParams = {
             url: url,
             method: 'GET',
         };
         let response: IClientResponse | undefined;
+        this.logger?.debug(`Start polling...`);
+
         while (Date.now() < endTime) {
             try {
                 response = await this.doRequest(request);
                 this.logger?.debug(`Polling ended successfully from ${url} with status ${response.status}`);
                 return response;
             } catch (error) {
-                this.logger?.debug(`Error polling ${url}:`, error);
+                this.logger?.debug(`Retry #${counter}`, JSON.stringify(error));
             }
-
-            // Delay in milliseconds
-            await this.delay(interval);
+            counter++;
+            await setTimeout(interval);
         }
         return response;
-    }
-
-    private async delay(ms: number): Promise<void> {
-        return new Promise((resolve) => setTimeout(resolve, ms));
     }
 }
 

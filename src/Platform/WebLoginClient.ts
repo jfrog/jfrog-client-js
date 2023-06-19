@@ -22,10 +22,7 @@ export class WebLoginClient {
             data: body,
         };
         const response: IClientResponse = await this.httpClient.doRequest(requestParams);
-        this.checkResponse(
-            response,
-            `'sendAuthRequest' failed to send request '${JSON.stringify(requestParams)}'.`
-        );
+        this.checkResponse(response, `'sendAuthRequest' failed to send request '${JSON.stringify(requestParams)}'.`);
     }
 
     /**
@@ -43,7 +40,7 @@ export class WebLoginClient {
     }
 
     private checkResponse(response: IClientResponse | undefined, prefix: string) {
-        if (response !== undefined  && (response.status >= 200 && response.status < 300)) {
+        if (response && response.status >= 200 && response.status < 300) {
             this.logger?.debug(`${prefix}. status: ${response.status}`);
             return response.data;
         }
