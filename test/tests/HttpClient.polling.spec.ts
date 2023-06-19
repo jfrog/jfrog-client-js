@@ -54,7 +54,8 @@ describe('Http client tests - polling', () => {
             expect(result).toBeUndefined();
             expect(doRequestMock).toHaveBeenCalledTimes(5);
             expect(doRequestMock).toHaveBeenCalledWith({ url: url, method: 'GET' });
-            expect(loggerMock.debug).toHaveBeenCalledWith(`Error polling ${url}:`, expectedError);
+            expect(loggerMock.debug).toHaveBeenCalledWith(`Retry #1`, JSON.stringify(expectedError));
+            expect(loggerMock.debug).toHaveBeenCalledWith(`Retry #2`, JSON.stringify(expectedError));
         });
     });
 });
