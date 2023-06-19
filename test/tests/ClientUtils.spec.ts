@@ -2,7 +2,7 @@ import { ClientUtils } from '../../src/ClientUtils';
 describe('ClientUtils', () => {
     describe('addTrailingSlashIfMissing', () => {
         const expectedOutput: string = 'https://example.com/';
-        
+
         it('should add a trailing slash when missing', () => {
             const input: string = 'https://example.com';
 

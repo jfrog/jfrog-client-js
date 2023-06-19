@@ -1,10 +1,11 @@
 import * as os from 'os';
 
-import { JfrogClient } from '../../src';
+import { ClientUtils, JfrogClient } from '../../src';
 import { ArtifactoryClient } from '../../src/Artifactory/ArtifactoryClient';
 import { XrayClient } from '../../src/Xray/XrayClient';
 import { IJfrogClientConfig } from '../../model/JfrogClientConfig';
 import { TestUtils } from '../TestUtils';
+import { PlatformClient } from '../../src/Platform/PlatformClient';
 
 const PLATFORM_URL: string = 'http://localhost:8000';
 const ARTIFACTORY_URL: string = 'http://localhost:8765/artifactory';
@@ -61,6 +62,18 @@ describe('Jfrog client tests', () => {
         };
         expect(JfrogClient.getClientId([undefined, [], undefined, [test], undefined])).toBe(
             'c7d2c26fea52066c5943777a3c2e1fc510350d55'
+        );
+    });
+
+    test('returns a PlatformClient instance when platformUrl is provided', () => {
+        const jfrogClient: JfrogClient = new JfrogClient({ platformUrl: PLATFORM_URL });
+        const result: PlatformClient = jfrogClient.platform();
+        expect(result).toBeInstanceOf(PlatformClient);
+    });
+
+    test('throws an error when platformUrl is not provided', () => {
+        expect(() => new JfrogClient({ xrayUrl: PLATFORM_URL }).platform()).toThrowError(
+            'JFrog client: must provide platform URLs'
         );
     });
 });
