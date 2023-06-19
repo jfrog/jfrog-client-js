@@ -298,3 +298,40 @@ jfrogClient.artifactory()
     console.error(error);
   });
 ```
+
+### Platform
+
+#### Web Login
+#### Register For Web Login
+To register for web login, use the following code:
+
+```javascript
+const sessionId = XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX // UUID
+jfrogClient
+  .platform()
+  .WebLogin()
+  .registerSessionId(sessionId)
+  .then((result) => {
+    ...
+  })
+  .catch((error) => {
+    ...
+  });
+```
+#### Get Access Token From Web Login
+To retrieve an access token from web login, use the following code:
+
+```javascript
+const sessionId = XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX // UUID
+jfrogClient
+  .platform()
+  .WebLogin()
+  .waitForToken(sessionId)
+  .then((result) => {
+    ...
+  })
+  .catch((error) => {
+    ...
+  });
+```
+Please note that you need to replace 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX' with the actual session ID you want to use.
