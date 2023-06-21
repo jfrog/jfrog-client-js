@@ -1,6 +1,6 @@
 import { HttpClient } from '../HttpClient';
-import { ILogger } from '../Logger';
 import { WebLoginClient } from './WebLoginClient';
+import { ILogger } from '../../model/';
 
 export class PlatformClient {
     private readonly httpClient: HttpClient;

@@ -1,8 +1,7 @@
 import { HttpClient, IRequestParams } from '../HttpClient';
-import { ILogger } from '../Logger';
+import { ILogger, AccessTokenResponse } from '../../model/';
 import { IClientResponse } from '../ClientResponse';
 import { IAuthRequest } from './AuthRequest';
-import { AccessTokenResponse } from './AccessTokenResponse';
 export class WebLoginClient {
     public static readonly ARTIFACTORY_MIN_VERSION: string = '7.57';
     private static readonly POLLING_INTERVAL: number = 10000; // 10 seconds
