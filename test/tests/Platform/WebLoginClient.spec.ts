@@ -2,7 +2,7 @@ import { IClientResponse, AccessTokenResponse } from '../../../model';
 import { HttpClient, IRequestParams } from '../../../src/HttpClient';
 import { WebLoginClient } from '../../../src/Platform/WebLoginClient';
 
-describe('WebLoginClient', () => {
+describe('Platform clients tests', () => {
     let webLoginClient: WebLoginClient;
     let httpClient: HttpClient;
     const sessionId: string = '1234567890';
@@ -19,13 +19,13 @@ describe('WebLoginClient', () => {
         jest.clearAllMocks();
     });
 
-    describe('registerSessionId', () => {
+    describe('Web login', () => {
         const expectedRequestParams: IRequestParams = {
             url: '/access/api/v2/authentication/jfrog_client_login/request',
             method: 'POST',
             data: { session: sessionId },
         };
-        it('should send authentication request', async () => {
+        it('Register session id', async () => {
             const expectedResponse: IClientResponse = {
                 status: 200,
             };
@@ -38,7 +38,7 @@ describe('WebLoginClient', () => {
             expect(httpClient.doRequest).toHaveBeenCalledWith(expectedRequestParams);
         });
 
-        it('should throw an error if the authentication request fails', async () => {
+        it('Register session id with error', async () => {
             const expectedResponse: IClientResponse = {
                 status: 400,
             };
@@ -51,14 +51,12 @@ describe('WebLoginClient', () => {
             expect(httpClient.doRequest).toHaveBeenCalledTimes(1);
             expect(httpClient.doRequest).toHaveBeenCalledWith(expectedRequestParams);
         });
-    });
 
-    describe('waitForToken', () => {
         const pollingInterval: number = 10000;
         const pollingDuration: number = 5 * 60000;
         const pollingEndpoint: string = `/access/api/v2/authentication/jfrog_client_login/token/${sessionId}`;
 
-        it('should poll URL for access token', async () => {
+        it('Wait for token', async () => {
             const expectedResponse: IClientResponse = {
                 status: 200,
                 data: {
