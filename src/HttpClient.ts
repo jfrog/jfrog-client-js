@@ -132,12 +132,13 @@ export class HttpClient {
             protocol: proxyConfig.protocol,
         } as AxiosProxyConfig;
     }
+
     /**
      * Performs polling on the provided URL for a given time interval.
      * @param interval - The time interval in milliseconds at which the URL should be polled.
      * @param url - The URL to poll.
      * @param duration - The total duration of the polling process in milliseconds.
-     * @returns A Promise that resolves when the polling is completed.
+     * @returns a Promise that resolves when the polling is completed.
      */
     public async pollURLForTime(interval: number, url: string, duration: number): Promise<IClientResponse | undefined> {
         let counter: number = 1;

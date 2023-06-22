@@ -1,9 +1,9 @@
 import { ClientUtils } from '../../src/ClientUtils';
-describe('ClientUtils', () => {
-    describe('addTrailingSlashIfMissing', () => {
+describe('ClientUtils tests', () => {
+    describe('AddTrailingSlashIfMissing', () => {
         const expectedOutput: string = 'https://example.com/';
 
-        it('should add a trailing slash when missing', () => {
+        it('URL without trailing slash', () => {
             const input: string = 'https://example.com';
 
             const result: string = ClientUtils.addTrailingSlashIfMissing(input);
@@ -11,7 +11,7 @@ describe('ClientUtils', () => {
             expect(result).toBe(expectedOutput);
         });
 
-        it('should not modify the URL if a trailing slash is already present', () => {
+        it('URL with trailing slash', () => {
             const input: string = 'https://example.com/';
 
             const result: string = ClientUtils.addTrailingSlashIfMissing(input);

@@ -1,9 +1,10 @@
-import { HttpClient, IRequestParams } from '../HttpClient';
-import { ILogger, AccessTokenResponse } from '../../model/';
+import { AccessTokenResponse, ILogger } from '../../model/';
 import { IClientResponse } from '../ClientResponse';
+import { HttpClient, IRequestParams } from '../HttpClient';
 import { IAuthRequest } from './AuthRequest';
+
 export class WebLoginClient {
-    public static readonly ARTIFACTORY_MIN_VERSION: string = '7.57';
+    private static readonly REGISTER_SESSION_ID_ENDPOINT: string = `/access/api/v2/authentication/jfrog_client_login/request`; // 10 seconds
     private static readonly POLLING_INTERVAL: number = 10000; // 10 seconds
     private static readonly POLLING_DURATION: number = 5 * 60000; // 5 minutes
     constructor(private readonly httpClient: HttpClient, private logger?: ILogger) {}
@@ -16,7 +17,7 @@ export class WebLoginClient {
     public async registerSessionId(sessionId: string): Promise<void> {
         const body: IAuthRequest = { session: sessionId };
         const requestParams: IRequestParams = {
-            url: `/access/api/v2/authentication/jfrog_client_login/request`,
+            url: WebLoginClient.REGISTER_SESSION_ID_ENDPOINT,
             method: 'POST',
             data: body,
         };

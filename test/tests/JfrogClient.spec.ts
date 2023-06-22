@@ -1,6 +1,6 @@
 import * as os from 'os';
 
-import { ClientUtils, JfrogClient } from '../../src';
+import { JfrogClient } from '../../src';
 import { ArtifactoryClient } from '../../src/Artifactory/ArtifactoryClient';
 import { XrayClient } from '../../src/Xray/XrayClient';
 import { IJfrogClientConfig } from '../../model/JfrogClientConfig';
@@ -65,15 +65,17 @@ describe('Jfrog client tests', () => {
         );
     });
 
-    test('returns a PlatformClient instance when platformUrl is provided', () => {
-        const jfrogClient: JfrogClient = new JfrogClient({ platformUrl: PLATFORM_URL });
-        const result: PlatformClient = jfrogClient.platform();
-        expect(result).toBeInstanceOf(PlatformClient);
-    });
+    describe('Platform client', () => {
+        test('Generate platform client with provided platform URL', () => {
+            const jfrogClient: JfrogClient = new JfrogClient({ platformUrl: PLATFORM_URL });
+            const result: PlatformClient = jfrogClient.platform();
+            expect(result).toBeInstanceOf(PlatformClient);
+        });
 
-    test('throws an error when platformUrl is not provided', () => {
-        expect(() => new JfrogClient({ xrayUrl: PLATFORM_URL }).platform()).toThrowError(
-            'JFrog client: must provide platform URLs'
-        );
+        test('Fail to Generate platform client with provided platform URL', () => {
+            expect(() => new JfrogClient({ xrayUrl: PLATFORM_URL }).platform()).toThrowError(
+                'JFrog client: must provide platform URLs'
+            );
+        });
     });
 });

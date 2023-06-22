@@ -18,7 +18,8 @@ describe('Http client tests - polling', () => {
     afterEach(() => {
         jest.clearAllMocks();
     });
-    describe('pollURLForTime', () => {
+
+    describe('Poll URL for time', () => {
         let doRequestMock: jest.SpyInstance<Promise<IClientResponse>, [requestParams: IRequestParams]>;
         const duration: number = 5000;
         const interval: number = 1000;
@@ -27,7 +28,7 @@ describe('Http client tests - polling', () => {
             doRequestMock = jest.spyOn(httpClient, 'doRequest');
         });
 
-        it('should resolve with response when polling is successful', async () => {
+        it('Polling is successful', async () => {
             const expectedResponse: IClientResponse = {
                 status: 200,
             };
@@ -44,7 +45,7 @@ describe('Http client tests - polling', () => {
             );
         });
 
-        it('should return undefined when polling is unsuccessful', async () => {
+        it('Polling is not successful', async () => {
             const expectedError: Error = new Error('Something went wrong');
 
             doRequestMock.mockRejectedValue(expectedError);

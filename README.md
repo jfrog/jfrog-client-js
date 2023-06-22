@@ -22,23 +22,26 @@ Add jfrog-client-js as a dependency to your package.json file:
 
 ## APIs
 
-  - [Setting up JFrog client](#setting-up-jfrog-client)
-  - [Xray](#xray)
-    - [Pinging Xray](#pinging-xray)
-    - [Getting Xray Version](#getting-xray-version)
-    - [Checking Xray Entitlement](#checking-xray-entitlement)
-    - [Scanning Bulk of Dependencies](#scanning-bulk-of-dependencies)
-    - [Scanning a Dependency Tree with Consideration to the JFrog Project](#scanning-a-dependency-tree-with-consideration-to-the-jfrog-project)
-    - [Scanning a Dependency Tree with Consideration to the Xray Watches](#scanning-a-dependency-tree-with-consideration-to-the-xray-watches)
-    - [Retrieving Xray Build Details](#retrieving-xray-build-details)
-  - [Artifactory](#artifactory)
-    - [Pinging Artifactory](#pinging-artifactory)
-    - [Getting Artifactory Version](#getting-artifactory-version)
-    - [Downloading an Artifact](#downloading-an-artifact)
-    - [Downloading an Artifact content](#downloading-an-artifact-content)
-    - [Downloading an Artifact to file](#downloading-an-artifact-to-file)
-    - [Downloading an Artifact checksum](#downloading-an-artifact-checksum)
-    - [Searching by AQL](#searching-by-aql)
+- [Setting up JFrog client](#setting-up-jfrog-client)
+- [Xray](#xray)
+  - [Pinging Xray](#pinging-xray)
+  - [Getting Xray Version](#getting-xray-version)
+  - [Checking Xray Entitlement](#checking-xray-entitlement)
+  - [Scanning Bulk of Dependencies](#scanning-bulk-of-dependencies)
+  - [Scanning a Dependency Tree with Consideration to the JFrog Project](#scanning-a-dependency-tree-with-consideration-to-the-jfrog-project)
+  - [Scanning a Dependency Tree with Consideration to the Xray Watches](#scanning-a-dependency-tree-with-consideration-to-the-xray-watches)
+  - [Retrieving Xray Build Details](#retrieving-xray-build-details)
+- [Artifactory](#artifactory)
+  - [Pinging Artifactory](#pinging-artifactory)
+  - [Getting Artifactory Version](#getting-artifactory-version)
+  - [Downloading an Artifact](#downloading-an-artifact)
+  - [Downloading an Artifact content](#downloading-an-artifact-content)
+  - [Downloading an Artifact to file](#downloading-an-artifact-to-file)
+  - [Downloading an Artifact checksum](#downloading-an-artifact-checksum)
+  - [Searching by AQL](#searching-by-aql)
+- [Platform](#platform)
+  - [Register For Web Login](#register-for-web-login)
+  - [Get Access Token From Web Login](#get-access-token-from-web-login)
 
 ### Setting up JFrog client
 
@@ -302,8 +305,8 @@ jfrogClient.artifactory()
 ### Platform
 
 #### Web Login
-#### Register For Web Login
-To register for web login, use the following code:
+
+##### Register For Web Login
 
 ```javascript
 const sessionId = XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX // UUID
@@ -318,8 +321,8 @@ jfrogClient
     ...
   });
 ```
-#### Get Access Token From Web Login
-To retrieve an access token from web login, use the following code:
+
+##### Get Access Token From Web Login
 
 ```javascript
 const sessionId = XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX // UUID
@@ -334,4 +337,5 @@ jfrogClient
     ...
   });
 ```
-Please note that you need to replace 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX' with the actual session ID you want to use.
+
+Please note that you need to replace 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX' with the actual session ID that you've generated for `registerSessionId`.
