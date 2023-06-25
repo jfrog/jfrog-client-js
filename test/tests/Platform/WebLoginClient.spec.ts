@@ -1,81 +1,68 @@
-import { IClientResponse, AccessTokenResponse } from '../../../model';
-import { HttpClient, IRequestParams } from '../../../src/HttpClient';
+import nock from 'nock';
+import { AccessTokenResponse } from '../../../model';
+import { HttpClient } from '../../../src/HttpClient';
 import { WebLoginClient } from '../../../src/Platform/WebLoginClient';
 
-describe('Platform clients tests', () => {
-    let webLoginClient: WebLoginClient;
-    let httpClient: HttpClient;
-    const sessionId: string = '1234567890';
+describe('WebLoginClient', () => {
+    const mockSessionId: string = 'mockSessionId';
+    const SERVER_URL: string = 'http://localhost:8000';
+    const mockAccessTokenResponse: AccessTokenResponse = {
+        access_token: 'mockAccessToken',
+        expires_in: 3600,
+        refresh_token: 'refresh_token',
+        scope: 'scope',
+        token_id: 'token_id',
+        token_type: 'Bearer',
+    };
 
     beforeEach(() => {
-        httpClient = {
-            doRequest: jest.fn(),
-            pollURLForTime: jest.fn(),
-        } as unknown as HttpClient;
-        webLoginClient = new WebLoginClient(httpClient, undefined);
+        nock.disableNetConnect();
     });
 
     afterEach(() => {
-        jest.clearAllMocks();
+        nock.cleanAll();
+        nock.enableNetConnect();
     });
 
-    describe('Web login', () => {
-        const expectedRequestParams: IRequestParams = {
-            url: '/access/api/v2/authentication/jfrog_client_login/request',
-            method: 'POST',
-            data: { session: sessionId },
-        };
-        it('Register session id', async () => {
-            const expectedResponse: IClientResponse = {
-                status: 200,
-            };
+    it('Register session id', async () => {
+        const httpClient: HttpClient = new HttpClient({ serverUrl: SERVER_URL });
+        const webLoginClient: WebLoginClient = new WebLoginClient(httpClient);
 
-            (httpClient.doRequest as jest.Mock).mockResolvedValue(expectedResponse);
+        nock(SERVER_URL).post('/access/api/v2/authentication/jfrog_client_login/request').reply(200);
 
-            await webLoginClient.registerSessionId(sessionId);
+        await webLoginClient.registerSessionId(mockSessionId);
+    });
 
-            expect(httpClient.doRequest).toHaveBeenCalledTimes(1);
-            expect(httpClient.doRequest).toHaveBeenCalledWith(expectedRequestParams);
-        });
+    it('Register session id with error', async () => {
+        const httpClient: HttpClient = new HttpClient({ serverUrl: SERVER_URL });
+        const webLoginClient: WebLoginClient = new WebLoginClient(httpClient);
+        const sessionId: string = 'mockInvalidSessionId';
 
-        it('Register session id with error', async () => {
-            const expectedResponse: IClientResponse = {
-                status: 400,
-            };
+        nock(SERVER_URL).post('/access/api/v2/authentication/jfrog_client_login/request').reply(400);
 
-            (httpClient.doRequest as jest.Mock).mockResolvedValue(expectedResponse);
+        await expect(webLoginClient.registerSessionId(sessionId)).rejects.toThrowError(
+            'Request failed with status code 400'
+        );
+    });
 
-            await expect(webLoginClient.registerSessionId(sessionId)).rejects.toThrowError(
-                'Web login failed while polling'
-            );
-            expect(httpClient.doRequest).toHaveBeenCalledTimes(1);
-            expect(httpClient.doRequest).toHaveBeenCalledWith(expectedRequestParams);
-        });
+    it('Wait for token', async () => {
+        const httpClient: HttpClient = new HttpClient({ serverUrl: SERVER_URL });
+        const webLoginClient: WebLoginClient = new WebLoginClient(httpClient);
 
-        const pollingInterval: number = 10000;
-        const pollingDuration: number = 5 * 60000;
-        const pollingEndpoint: string = `/access/api/v2/authentication/jfrog_client_login/token/${sessionId}`;
+        nock(SERVER_URL)
+            .get(`/access/api/v2/authentication/jfrog_client_login/token/${mockSessionId}`)
+            .reply(200, mockAccessTokenResponse);
 
-        it('Wait for token', async () => {
-            const expectedResponse: IClientResponse = {
-                status: 200,
-                data: {
-                    access_token: 'token',
-                    expires_in: 3600,
-                    refresh_token: 'refresh_token',
-                    scope: 'scope',
-                    token_id: 'token_id',
-                    token_type: 'Bearer',
-                } as AccessTokenResponse,
-            };
+        const accessToken: AccessTokenResponse = await webLoginClient.waitForToken(mockSessionId);
 
-            (httpClient.pollURLForTime as jest.Mock).mockResolvedValue(expectedResponse);
+        expect(accessToken).toEqual(mockAccessTokenResponse);
+    });
 
-            const result: AccessTokenResponse = await webLoginClient.waitForToken(sessionId);
+    it('Polling 10 seconds interval', () => {
+      expect(WebLoginClient.POLLING_INTERVAL).toEqual(10000);
+    });
 
-            expect(httpClient.pollURLForTime).toHaveBeenCalledTimes(1);
-            expect(httpClient.pollURLForTime).toHaveBeenCalledWith(pollingInterval, pollingEndpoint, pollingDuration);
-            expect(result).toEqual(expectedResponse.data);
-        });
+    it('Polling 5 min duration', () => {
+      expect(WebLoginClient.POLLING_DURATION).toEqual(5 * 60000);
     });
 });
