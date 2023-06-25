@@ -2,7 +2,6 @@ import axios, { AxiosError, AxiosInstance, AxiosProxyConfig, AxiosRequestConfig 
 import { IClientResponse, ILogger, IProxyConfig } from '../model';
 import axiosRetry, { IAxiosRetryConfig } from 'axios-retry';
 import { HttpsProxyAgent } from 'https-proxy-agent';
-import { setTimeout } from 'timers/promises';
 export class HttpClient {
     private static readonly AUTHORIZATION_HEADER: string = 'Authorization';
     private static readonly USER_AGENT_HEADER: string = 'User-Agent';
@@ -131,37 +130,6 @@ export class HttpClient {
             port: proxyConfig.port,
             protocol: proxyConfig.protocol,
         } as AxiosProxyConfig;
-    }
-
-    /**
-     * Performs polling on the provided URL for a given time interval.
-     * @param interval - The time interval in milliseconds at which the URL should be polled.
-     * @param url - The URL to poll.
-     * @param duration - The total duration of the polling process in milliseconds.
-     * @returns a Promise that resolves when the polling is completed.
-     */
-    public async pollURLForTime(interval: number, url: string, duration: number): Promise<IClientResponse | undefined> {
-        let counter: number = 1;
-        const endTime: number = Date.now() + duration;
-        const request: IRequestParams = {
-            url: url,
-            method: 'GET',
-        };
-        let response: IClientResponse | undefined;
-        this.logger?.debug(`Start polling...`);
-
-        while (Date.now() < endTime) {
-            try {
-                response = await this.doRequest(request);
-                this.logger?.debug(`Polling ended successfully from ${url} with status ${response.status}`);
-                return response;
-            } catch (error) {
-                this.logger?.debug(`Retry #${counter}`, JSON.stringify(error));
-            }
-            counter++;
-            await setTimeout(interval);
-        }
-        return response;
     }
 }
 

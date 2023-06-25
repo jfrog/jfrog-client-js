@@ -53,16 +53,8 @@ describe('WebLoginClient', () => {
             .get(`/access/api/v2/authentication/jfrog_client_login/token/${mockSessionId}`)
             .reply(200, mockAccessTokenResponse);
 
-        const accessToken: AccessTokenResponse = await webLoginClient.waitForToken(mockSessionId);
+        const accessToken: AccessTokenResponse = await webLoginClient.getToken(mockSessionId);
 
         expect(accessToken).toEqual(mockAccessTokenResponse);
-    });
-
-    it('Polling 10 seconds interval', () => {
-      expect(WebLoginClient.POLLING_INTERVAL).toEqual(10000);
-    });
-
-    it('Polling 5 min duration', () => {
-      expect(WebLoginClient.POLLING_DURATION).toEqual(5 * 60000);
     });
 });
