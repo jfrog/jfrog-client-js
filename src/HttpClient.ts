@@ -16,7 +16,7 @@ export class HttpClient {
     private readonly _accessToken: string;
     private readonly _axiosInstance: AxiosInstance;
 
-    constructor(config: IHttpConfig,private logger?: ILogger) {
+    constructor(config: IHttpConfig, private logger?: ILogger) {
         config.headers = config.headers || {};
         this.addUserAgentHeader(config.headers);
         this._axiosInstance = axios.create({
@@ -48,15 +48,24 @@ export class HttpClient {
     /**
      * Performs a request with polling using the provided request parameters.
      * @param requestParams - The request parameters.
+     * @param retries - number of retries.
+     * @param interval - The time interval in milliseconds between each retry.
      * @returns a promise that resolves with the client response.
      */
-    public async doRequestWithPolling(requestParams: IRequestParams): Promise<IClientResponse>{
+    public async doRequestWithPolling(
+        requestParams: IRequestParams,
+        retries?: number,
+        interval?: number
+    ): Promise<IClientResponse> {
+        retries = retries ?? HttpClient.DEFAULT_POLLING;
+        const i: number = interval ?? HttpClient.DEFAULT_RETRY_DELAY_IN_MILLISECONDS;
         axiosRetry(this._axiosInstance, {
-            retries: HttpClient.DEFAULT_POLLING,
-            retryCondition: (error: AxiosError) => (error.response?.status ?? 0 >= 500) || (error.response?.status === 400),
+            retries: retries,
+            retryCondition: (error: AxiosError) =>
+                (error.response?.status ?? 0 >= 500) || error.response?.status === 400,
             retryDelay: (retryCount: number) => {
                 this.logger?.debug(`Retry #${retryCount}...`);
-                return retryCount * HttpClient.DEFAULT_RETRY_DELAY_IN_MILLISECONDS;
+                return retryCount * i;
             },
         } as IAxiosRetryConfig);
         return await this.doRequest(requestParams);

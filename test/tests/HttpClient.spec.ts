@@ -76,6 +76,7 @@ describe('Http client tests', () => {
         expect(res.data).toBe('RESPONSE');
         expect(res.status).toBe(200);
     });
+
     test('Do auth request', async () => {
         nock(serverUrl)
             .post(subPath)
@@ -90,5 +91,29 @@ describe('Http client tests', () => {
         const res: IClientResponse = await client.doAuthRequest(requestParams);
         expect(res.data).toBe('RESPONSE');
         expect(res.status).toBe(200);
+    });
+
+    test('Do request with polling 200 status', async () => {
+        const requestParams: IRequestParams = {
+            url: subPath,
+            method: 'GET',
+        };
+        nock(serverUrl).get(subPath).reply(200, 'Response data');
+        const client: HttpClient = new HttpClient({ serverUrl });
+        const result: IClientResponse = await client.doRequestWithPolling(requestParams, 3, 1);
+        expect(result.data).toEqual('Response data');
+    });
+
+    test('Do request with polling 400 status', async () => {
+        const requestParams: IRequestParams = {
+            url: subPath,
+            method: 'GET',
+        };
+        const scope: nock.Scope = nock(serverUrl).get(subPath).reply(400);
+        const client: HttpClient = new HttpClient({ serverUrl });
+        await expect(async () => {
+            await client.doRequestWithPolling(requestParams, 3, 1);
+        }).rejects.toThrow();
+        expect(scope.isDone()).toBe(true);
     });
 });
