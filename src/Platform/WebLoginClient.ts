@@ -30,6 +30,6 @@ export class WebLoginClient {
             url: `/access/api/v2/authentication/jfrog_client_login/token/${sessionId}`,
             method: 'GET',
         };
-        return (await this.httpClient.doRequest(request)).data;
+        return (await this.httpClient.doRequestWithPolling(request)).data
     }
 }

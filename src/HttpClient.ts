@@ -6,6 +6,7 @@ export class HttpClient {
     private static readonly AUTHORIZATION_HEADER: string = 'Authorization';
     private static readonly USER_AGENT_HEADER: string = 'User-Agent';
     private static readonly DEFAULT_RETRIES: number = 5;
+    private static readonly DEFAULT_POLLING: number = 300;
     // Delay between retries, in milliseconds
     private static readonly DEFAULT_RETRY_DELAY_IN_MILLISECONDS: number = 1000;
     // Specifies the number of milliseconds before the request times out.
@@ -15,7 +16,7 @@ export class HttpClient {
     private readonly _accessToken: string;
     private readonly _axiosInstance: AxiosInstance;
 
-    constructor(config: IHttpConfig, private logger?: ILogger) {
+    constructor(config: IHttpConfig,private logger?: ILogger) {
         config.headers = config.headers || {};
         this.addUserAgentHeader(config.headers);
         this._axiosInstance = axios.create({
@@ -42,6 +43,23 @@ export class HttpClient {
 
     public async doRequest(requestParams: IRequestParams): Promise<IClientResponse> {
         return await this._axiosInstance(requestParams);
+    }
+
+    /**
+     * Performs a request with polling using the provided request parameters.
+     * @param requestParams - The request parameters.
+     * @returns a promise that resolves with the client response.
+     */
+    public async doRequestWithPolling(requestParams: IRequestParams): Promise<IClientResponse>{
+        axiosRetry(this._axiosInstance, {
+            retries: HttpClient.DEFAULT_POLLING,
+            retryCondition: (error: AxiosError) => (error.response?.status ?? 0 >= 500) || (error.response?.status === 400),
+            retryDelay: (retryCount: number) => {
+                this.logger?.debug(`Retry #${retryCount}...`);
+                return retryCount * HttpClient.DEFAULT_RETRY_DELAY_IN_MILLISECONDS;
+            },
+        } as IAxiosRetryConfig);
+        return await this.doRequest(requestParams);
     }
 
     public async doAuthRequest(requestParams: IRequestParams): Promise<IClientResponse> {
@@ -153,6 +171,7 @@ export interface IHttpConfig {
     headers?: { [key: string]: string };
     retries?: number;
     timeout?: number;
+    retryCondition?: (error: AxiosError) => boolean;
 }
 
 export type method = 'GET' | 'POST' | 'HEAD';
