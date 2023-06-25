@@ -329,7 +329,7 @@ const sessionId = XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX // UUID
 jfrogClient
   .platform()
   .WebLogin()
-  .waitForToken(sessionId)
+  .getToken(sessionId)
   .then((result) => {
     ...
   })
