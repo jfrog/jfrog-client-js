@@ -312,7 +312,7 @@ jfrogClient.artifactory()
 const sessionId = XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX // UUID
 jfrogClient
   .platform()
-  .WebLogin()
+  .webLogin()
   .registerSessionId(sessionId)
   .then((result) => {
     ...
@@ -328,7 +328,7 @@ jfrogClient
 const sessionId = XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX // UUID
 jfrogClient
   .platform()
-  .WebLogin()
+  .webLogin()
   .getToken(sessionId)
   .then((result) => {
     ...

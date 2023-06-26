@@ -29,7 +29,7 @@ export class PlatformClient {
         );
     }
 
-    public WebLogin(): WebLoginClient {
+    public webLogin(): WebLoginClient {
         return new WebLoginClient(this.httpClient);
     }
 }

@@ -8,7 +8,7 @@ export class WebLoginClient {
 
     /**
      * Sends an authentication request to the specified URL with the provided session ID.
-     * @param id - The session ID.
+     * @param sessionId - The session ID.
      * @returns A promise that resolves with the client response.
      */
     public async registerSessionId(sessionId: string): Promise<void> {
@@ -23,7 +23,7 @@ export class WebLoginClient {
 
     /**
      * Get an access token using the provided session ID.
-     * @param id - The session ID.
+     * @param sessionId - The session ID.
      */
     public async getToken(sessionId: string): Promise<AccessTokenResponse> {
         const request: IRequestParams = {
