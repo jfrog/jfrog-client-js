@@ -12,4 +12,6 @@ export interface IClientConfig {
     timeout?: number;
     // Status codes that trigger retries.
     retryOnStatusCode?:number[];
+    // Delay between retries.
+    retryDelay?: number;
 }

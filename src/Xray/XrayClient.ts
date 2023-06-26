@@ -24,13 +24,14 @@ export class XrayClient {
             retries,
             timeout,
             retryOnStatusCode,
+            retryDelay,
         }: IClientSpecificConfig = config;
         if (!serverUrl) {
             throw new Error('Xray client : must provide platformUrl or xrayUrl');
         }
         this.logger = new XrayLogger(logger);
         this.httpClient = new HttpClient(
-            { serverUrl, username, password, accessToken, proxy, headers, retries, timeout, retryOnStatusCode },
+            { serverUrl, username, password, accessToken, proxy, headers, retries, timeout, retryOnStatusCode, retryDelay },
             this.logger
         );
     }

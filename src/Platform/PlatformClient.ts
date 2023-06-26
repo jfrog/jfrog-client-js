@@ -20,11 +20,12 @@ export class PlatformClient {
             retries,
             timeout,
             retryOnStatusCode,
+            retryDelay,
         }: IClientSpecificConfig = config;
         this.logger = new PlatformLogger(logger);
 
         this.httpClient = new HttpClient(
-            { serverUrl, username, password, accessToken, proxy, headers, retries, timeout, retryOnStatusCode },
+            { serverUrl, username, password, accessToken, proxy, headers, retries, timeout, retryOnStatusCode, retryDelay},
             this.logger
         );
     }

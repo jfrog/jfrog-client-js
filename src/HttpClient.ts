@@ -45,8 +45,9 @@ export class HttpClient {
           },
           retryDelay: (retryCount: number, err: AxiosError) => {
             this.logger?.debug(`Request ended with error: ${err}\nRetrying (attempt #${retryCount})...`);
-            return retryCount * HttpClient.DEFAULT_RETRY_DELAY_IN_MILLISECONDS;
+            return config.retryDelay ?? HttpClient.DEFAULT_RETRY_DELAY_IN_MILLISECONDS;
           },
+          shouldResetTimeout:true
         };
 
         axiosRetry(this._axiosInstance, retryConfig);
@@ -164,6 +165,7 @@ export interface IHttpConfig {
     proxy?: IProxyConfig | false;
     headers?: { [key: string]: string };
     retries?: number;
+    retryDelay?: number;
     timeout?: number;
     retryOnStatusCode?:number[];
 }
