@@ -10,4 +10,6 @@ export interface IClientConfig {
     headers?: { [key: string]: string };
     retries?: number;
     timeout?: number;
+    // Status codes that trigger retries.
+    retryOnStatusCode?:number[];
 }

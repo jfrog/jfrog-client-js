@@ -1,10 +1,10 @@
-import { AccessTokenResponse, ILogger } from '../../model/';
+import { AccessTokenResponse } from '../../model/';
 import { HttpClient, IRequestParams } from '../HttpClient';
 import { IAuthRequest } from './AuthRequest';
 
 export class WebLoginClient {
     private static readonly REGISTER_SESSION_ID_ENDPOINT: string = `/access/api/v2/authentication/jfrog_client_login/request`;
-    constructor(private readonly httpClient: HttpClient, private logger?: ILogger) {}
+    constructor(private readonly httpClient: HttpClient) {}
 
     /**
      * Sends an authentication request to the specified URL with the provided session ID.
@@ -30,6 +30,6 @@ export class WebLoginClient {
             url: `/access/api/v2/authentication/jfrog_client_login/token/${sessionId}`,
             method: 'GET',
         };
-        return (await this.httpClient.doRequestWithPolling(request)).data;
+        return (await this.httpClient.doRequest(request)).data;
     }
 }

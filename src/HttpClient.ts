@@ -32,43 +32,28 @@ export class HttpClient {
             password: config.password,
         } as BasicAuth;
         this._accessToken = config.accessToken || '';
-        axiosRetry(this._axiosInstance, {
-            retries: config.retries ?? HttpClient.DEFAULT_RETRIES,
-            retryDelay: (retryCount: number, err: AxiosError) => {
-                logger?.debug(`Request ended with error: ${err}\nRetrying (attempt #${retryCount})...`);
-                return retryCount * HttpClient.DEFAULT_RETRY_DELAY_IN_MILLISECONDS;
-            },
-        } as IAxiosRetryConfig);
+        this.addRetryInterceptor(config);
     }
+
+    private addRetryInterceptor(config: IHttpConfig): void {
+        const retryConfig: IAxiosRetryConfig = {
+          retries: config.retries ?? HttpClient.DEFAULT_RETRIES,
+          retryCondition: (error: AxiosError) => {
+            const isNetworkOrIdempotentError: boolean = axiosRetry.isNetworkOrIdempotentRequestError(error);
+            const isRetryStatusCode: boolean = !!error.response && !!config.retryOnStatusCode?.includes(error.response.status);
+            return isNetworkOrIdempotentError || isRetryStatusCode;
+          },
+          retryDelay: (retryCount: number, err: AxiosError) => {
+            this.logger?.debug(`Request ended with error: ${err}\nRetrying (attempt #${retryCount})...`);
+            return retryCount * HttpClient.DEFAULT_RETRY_DELAY_IN_MILLISECONDS;
+          },
+        };
+
+        axiosRetry(this._axiosInstance, retryConfig);
+      }
 
     public async doRequest(requestParams: IRequestParams): Promise<IClientResponse> {
         return await this._axiosInstance(requestParams);
-    }
-
-    /**
-     * Performs a request with polling using the provided request parameters.
-     * @param requestParams - The request parameters.
-     * @param retries - number of retries.
-     * @param interval - The time interval in milliseconds between each retry.
-     * @returns a promise that resolves with the client response.
-     */
-    public async doRequestWithPolling(
-        requestParams: IRequestParams,
-        retries?: number,
-        interval?: number
-    ): Promise<IClientResponse> {
-        retries = retries ?? HttpClient.DEFAULT_POLLING;
-        const i: number = interval ?? HttpClient.DEFAULT_RETRY_DELAY_IN_MILLISECONDS;
-        axiosRetry(this._axiosInstance, {
-            retries: retries,
-            retryCondition: (error: AxiosError) =>
-                (error.response?.status ?? 0 >= 500) || error.response?.status === 400,
-            retryDelay: (retryCount: number) => {
-                this.logger?.debug(`Retry #${retryCount}...`);
-                return retryCount * i;
-            },
-        } as IAxiosRetryConfig);
-        return await this.doRequest(requestParams);
     }
 
     public async doAuthRequest(requestParams: IRequestParams): Promise<IClientResponse> {
@@ -180,7 +165,7 @@ export interface IHttpConfig {
     headers?: { [key: string]: string };
     retries?: number;
     timeout?: number;
-    retryCondition?: (error: AxiosError) => boolean;
+    retryOnStatusCode?:number[];
 }
 
 export type method = 'GET' | 'POST' | 'HEAD';
