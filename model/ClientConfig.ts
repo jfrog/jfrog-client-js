@@ -16,4 +16,4 @@ export interface IClientConfig {
     retryDelay?: number;
 }
 
-export type RetryOnStatusCode = (error?: number) => boolean;
+export type RetryOnStatusCode = (statusCode?: number) => boolean;
