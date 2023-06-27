@@ -45,7 +45,7 @@ export class PlatformClient {
     public webLogin(): WebLoginClient {
         return new WebLoginClient(this.httpClient);
     }
-    
+
     public static retryOnStatusCodeSso: (error?: AxiosError) => boolean = (error?: AxiosError): boolean => {
         return error?.response?.status === 400;
     };
