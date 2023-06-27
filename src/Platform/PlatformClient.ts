@@ -4,6 +4,7 @@ import { ILogger } from '../../model/';
 import { PlatformLogger } from './PlatformLogger';
 import { IClientSpecificConfig } from '../../model/ClientSpecificConfig';
 import { AxiosError } from 'axios';
+import axiosRetry from 'axios-retry';
 
 export class PlatformClient {
     private readonly httpClient: HttpClient;
@@ -46,7 +47,13 @@ export class PlatformClient {
         return new WebLoginClient(this.httpClient);
     }
 
-    public static retryOnStatusCodeSso: (error?: AxiosError) => boolean = (error?: AxiosError): boolean => {
-        return error?.response?.status === 400;
+    public static retryOnStatusCodeSso: (error: Error) => boolean = (error: Error): boolean => {
+        if (axiosRetry.isNetworkOrIdempotentRequestError(error)) {
+            return true;
+        }
+        if (error instanceof AxiosError) {
+            return error.response?.status === 400;
+        }
+        return false;
     };
 }

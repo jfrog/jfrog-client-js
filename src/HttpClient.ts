@@ -39,11 +39,7 @@ export class HttpClient {
     private addRetryInterceptor(config: IHttpConfig): void {
         const retryConfig: IAxiosRetryConfig = {
             retries: config.retries ?? HttpClient.DEFAULT_RETRIES,
-            retryCondition: (error: AxiosError) => {
-                const isNetworkOrIdempotentError: boolean = axiosRetry.isNetworkOrIdempotentRequestError(error);
-                const isRetryStatusCode: boolean = !!config.retryOnStatusCode?.(error);
-                return isNetworkOrIdempotentError || isRetryStatusCode;
-            },
+            retryCondition: (error: AxiosError) => !!config.retryOnStatusCode?.(error),
             retryDelay: (retryCount: number, err: AxiosError) => {
                 this.logger?.debug(`Request ended with error: ${err}\nRetrying (attempt #${retryCount})...`);
                 return config.retryDelay ?? HttpClient.DEFAULT_RETRY_DELAY_IN_MILLISECONDS;
