@@ -36,7 +36,7 @@ export class JfrogClient {
         if (!this._jfrogConfig.platformUrl) {
             throw new Error('JFrog client: must provide platform URLs');
         }
-        return new PlatformClient({ serverUrl:this._jfrogConfig.platformUrl, ...this._jfrogConfig });
+        return new PlatformClient({ serverUrl: this._jfrogConfig.platformUrl, ...this._jfrogConfig });
     }
 
     /**

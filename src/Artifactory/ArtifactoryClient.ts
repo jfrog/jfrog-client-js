@@ -29,7 +29,18 @@ export class ArtifactoryClient {
         }
         this.logger = new ArtifactoryLogger(logger);
         this.httpClient = new HttpClient(
-            { serverUrl, username, password, accessToken, proxy, headers, retries, timeout, retryOnStatusCode, retryDelay },
+            {
+                serverUrl,
+                username,
+                password,
+                accessToken,
+                proxy,
+                headers,
+                retries,
+                timeout,
+                retryOnStatusCode,
+                retryDelay,
+            },
             this.logger
         );
     }

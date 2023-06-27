@@ -1,3 +1,4 @@
+import { RetryOnStatusCode } from './HttpClient';
 import { ILogger } from './Logger';
 import { IProxyConfig } from './ProxyConfig';
 
@@ -11,7 +12,6 @@ export interface IClientConfig {
     retries?: number;
     timeout?: number;
     // Status codes that trigger retries.
-    retryOnStatusCode?:number[];
-    // Delay between retries.
+    retryOnStatusCode?: RetryOnStatusCode; // Delay between retries.
     retryDelay?: number;
 }

@@ -31,7 +31,18 @@ export class XrayClient {
         }
         this.logger = new XrayLogger(logger);
         this.httpClient = new HttpClient(
-            { serverUrl, username, password, accessToken, proxy, headers, retries, timeout, retryOnStatusCode, retryDelay },
+            {
+                serverUrl,
+                username,
+                password,
+                accessToken,
+                proxy,
+                headers,
+                retries,
+                timeout,
+                retryOnStatusCode,
+                retryDelay,
+            },
             this.logger
         );
     }

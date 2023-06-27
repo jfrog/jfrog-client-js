@@ -37,21 +37,22 @@ export class HttpClient {
 
     private addRetryInterceptor(config: IHttpConfig): void {
         const retryConfig: IAxiosRetryConfig = {
-          retries: config.retries ?? HttpClient.DEFAULT_RETRIES,
-          retryCondition: (error: AxiosError) => {
-            const isNetworkOrIdempotentError: boolean = axiosRetry.isNetworkOrIdempotentRequestError(error);
-            const isRetryStatusCode: boolean = !!error.response && !!config.retryOnStatusCode?.includes(error.response.status);
-            return isNetworkOrIdempotentError || isRetryStatusCode;
-          },
-          retryDelay: (retryCount: number, err: AxiosError) => {
-            this.logger?.debug(`Request ended with error: ${err}\nRetrying (attempt #${retryCount})...`);
-            return config.retryDelay ?? HttpClient.DEFAULT_RETRY_DELAY_IN_MILLISECONDS;
-          },
-          shouldResetTimeout:true
+            retries: config.retries ?? HttpClient.DEFAULT_RETRIES,
+            retryCondition: (error: AxiosError) => {
+                const isNetworkOrIdempotentError: boolean = axiosRetry.isNetworkOrIdempotentRequestError(error);
+                const isRetryStatusCode: boolean =
+                    !!error.response && !!config.retryOnStatusCode && config.retryOnStatusCode(error.response.status);
+                return isNetworkOrIdempotentError || isRetryStatusCode;
+            },
+            retryDelay: (retryCount: number, err: AxiosError) => {
+                this.logger?.debug(`Request ended with error: ${err}\nRetrying (attempt #${retryCount})...`);
+                return config.retryDelay ?? HttpClient.DEFAULT_RETRY_DELAY_IN_MILLISECONDS;
+            },
+            shouldResetTimeout: true,
         };
 
         axiosRetry(this._axiosInstance, retryConfig);
-      }
+    }
 
     public async doRequest(requestParams: IRequestParams): Promise<IClientResponse> {
         return await this._axiosInstance(requestParams);
@@ -167,9 +168,14 @@ export interface IHttpConfig {
     retries?: number;
     retryDelay?: number;
     timeout?: number;
-    retryOnStatusCode?:number[];
+    retryOnStatusCode?: RetryOnStatusCode;
 }
 
+export const retryOnStatusCodeSso: (statusCode: number) => boolean = (statusCode: number): boolean => {
+    return statusCode === 400;
+};
+
+export type RetryOnStatusCode = typeof retryOnStatusCodeSso;
 export type method = 'GET' | 'POST' | 'HEAD';
 export type responseType = 'arraybuffer' | 'blob' | 'document' | 'json' | 'text' | 'stream';
 

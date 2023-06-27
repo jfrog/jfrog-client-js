@@ -25,7 +25,18 @@ export class PlatformClient {
         this.logger = new PlatformLogger(logger);
 
         this.httpClient = new HttpClient(
-            { serverUrl, username, password, accessToken, proxy, headers, retries, timeout, retryOnStatusCode, retryDelay},
+            {
+                serverUrl,
+                username,
+                password,
+                accessToken,
+                proxy,
+                headers,
+                retries,
+                timeout,
+                retryOnStatusCode,
+                retryDelay,
+            },
             this.logger
         );
     }
