@@ -40,8 +40,7 @@ export class HttpClient {
             retries: config.retries ?? HttpClient.DEFAULT_RETRIES,
             retryCondition: (error: AxiosError) => {
                 const isNetworkOrIdempotentError: boolean = axiosRetry.isNetworkOrIdempotentRequestError(error);
-                const isRetryStatusCode: boolean =
-                    !!error.response && !!config.retryOnStatusCode && config.retryOnStatusCode(error.response.status);
+                const isRetryStatusCode: boolean = !!config.retryOnStatusCode?.(error);
                 return isNetworkOrIdempotentError || isRetryStatusCode;
             },
             retryDelay: (retryCount: number, err: AxiosError) => {
@@ -171,8 +170,8 @@ export interface IHttpConfig {
     retryOnStatusCode?: RetryOnStatusCode;
 }
 
-export const retryOnStatusCodeSso: (statusCode: number) => boolean = (statusCode: number): boolean => {
-    return statusCode === 400;
+export const retryOnStatusCodeSso: (error?: AxiosError) => boolean = (error?: AxiosError): boolean => {
+    return error?.response?.status === 400;
 };
 
 export type RetryOnStatusCode = typeof retryOnStatusCodeSso;
