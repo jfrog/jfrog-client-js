@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosInstance, AxiosProxyConfig, AxiosRequestConfig 
 import { IClientResponse, ILogger, IProxyConfig } from '../model';
 import axiosRetry, { IAxiosRetryConfig } from 'axios-retry';
 import { HttpsProxyAgent } from 'https-proxy-agent';
+import { RetryOnStatusCode } from './ClientConfig';
 export class HttpClient {
     private static readonly AUTHORIZATION_HEADER: string = 'Authorization';
     private static readonly USER_AGENT_HEADER: string = 'User-Agent';
@@ -170,11 +171,6 @@ export interface IHttpConfig {
     retryOnStatusCode?: RetryOnStatusCode;
 }
 
-export const retryOnStatusCodeSso: (error?: AxiosError) => boolean = (error?: AxiosError): boolean => {
-    return error?.response?.status === 400;
-};
-
-export type RetryOnStatusCode = typeof retryOnStatusCodeSso;
 export type method = 'GET' | 'POST' | 'HEAD';
 export type responseType = 'arraybuffer' | 'blob' | 'document' | 'json' | 'text' | 'stream';
 

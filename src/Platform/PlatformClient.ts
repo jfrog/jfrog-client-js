@@ -3,6 +3,7 @@ import { WebLoginClient } from './WebLoginClient';
 import { ILogger } from '../../model/';
 import { PlatformLogger } from './PlatformLogger';
 import { IClientSpecificConfig } from '../../model/ClientSpecificConfig';
+import { AxiosError } from 'axios';
 
 export class PlatformClient {
     private readonly httpClient: HttpClient;
@@ -44,4 +45,8 @@ export class PlatformClient {
     public webLogin(): WebLoginClient {
         return new WebLoginClient(this.httpClient);
     }
+    
+    public static retryOnStatusCodeSso: (error?: AxiosError) => boolean = (error?: AxiosError): boolean => {
+        return error?.response?.status === 400;
+    };
 }
