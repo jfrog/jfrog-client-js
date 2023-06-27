@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios';
 import { ILogger } from './Logger';
 import { IProxyConfig } from './ProxyConfig';
 
@@ -17,4 +16,4 @@ export interface IClientConfig {
     retryDelay?: number;
 }
 
-export type RetryOnStatusCode = (error?: Error) => boolean;
+export type RetryOnStatusCode = (error?: number) => boolean;
