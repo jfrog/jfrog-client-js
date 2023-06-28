@@ -7,7 +7,6 @@ export class HttpClient {
     private static readonly AUTHORIZATION_HEADER: string = 'Authorization';
     private static readonly USER_AGENT_HEADER: string = 'User-Agent';
     private static readonly DEFAULT_RETRIES: number = 5;
-    private static readonly DEFAULT_POLLING: number = 300;
     // Delay between retries, in milliseconds
     private static readonly DEFAULT_RETRY_DELAY_IN_MILLISECONDS: number = 1000;
     // Specifies the number of milliseconds before the request times out.
