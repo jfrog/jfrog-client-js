@@ -40,13 +40,17 @@ describe('Xray System tests', () => {
                 platformUrl: 'https://httpbin.org/redirect-to?url=reactivate-server',
                 logger: TestUtils.createTestLogger(),
             });
+            const mockXraySystemVersion: jest.SpyInstance<Promise<IXrayVersion>, []> = jest.spyOn(client.xray().system(), 'version');
+            mockXraySystemVersion.mockRejectedValueOnce({
+                activationUrl: 'reactivate-server/xray' + XraySystemClient.versionEndpoint,
+            });
             let errFound: boolean = false;
             try {
                 await client.xray().system().version();
             } catch (err: any) {
                 errFound = true;
                 expect(err.activationUrl).toBeDefined();
-                // This result only expected for the test (using httpbin with the redirect-to flag cause this).
+                // This result only expected for the test.
                 // Actual activationUrl will be equal to the location without the added relative path to the version request.
                 // The JFrog client concat to the location the relative path of the version request.
                 expect(err.activationUrl).toBe('reactivate-server/xray' + XraySystemClient.versionEndpoint);
