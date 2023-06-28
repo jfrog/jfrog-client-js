@@ -15,3 +15,4 @@ export { Severity } from './Xray/Severity';
 export * from './Xray/Summary';
 export { IXrayVersion } from './Xray/System/Version';
 export { AccessTokenResponse } from './Platform/AccessTokenResponse';
+export { RetryOnStatusCode } from './ClientConfig'
