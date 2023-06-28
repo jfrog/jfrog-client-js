@@ -61,7 +61,11 @@ let jfrogClient = new JfrogClient({
   // Connection retries. If not defined, the default value is 5.
   retries: 5,
   // Timeout before the connection is terminated in milliseconds, the default value is 60 seconds
-  timeout: 60000
+  timeout: 60000,
+  // Status codes that trigger retries. the default is network error or a 5xx status code.
+  retryOnStatusCode: (statusCode: number) => statusCode >= 500;,
+  // Delay between retries, in milliseconds. The default is 1000 milliseconds.
+  retryDelay: 1000,
 });
 ```
 
