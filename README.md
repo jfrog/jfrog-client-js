@@ -22,23 +22,26 @@ Add jfrog-client-js as a dependency to your package.json file:
 
 ## APIs
 
-  - [Setting up JFrog client](#setting-up-jfrog-client)
-  - [Xray](#xray)
-    - [Pinging Xray](#pinging-xray)
-    - [Getting Xray Version](#getting-xray-version)
-    - [Checking Xray Entitlement](#checking-xray-entitlement)
-    - [Scanning Bulk of Dependencies](#scanning-bulk-of-dependencies)
-    - [Scanning a Dependency Tree with Consideration to the JFrog Project](#scanning-a-dependency-tree-with-consideration-to-the-jfrog-project)
-    - [Scanning a Dependency Tree with Consideration to the Xray Watches](#scanning-a-dependency-tree-with-consideration-to-the-xray-watches)
-    - [Retrieving Xray Build Details](#retrieving-xray-build-details)
-  - [Artifactory](#artifactory)
-    - [Pinging Artifactory](#pinging-artifactory)
-    - [Getting Artifactory Version](#getting-artifactory-version)
-    - [Downloading an Artifact](#downloading-an-artifact)
-    - [Downloading an Artifact content](#downloading-an-artifact-content)
-    - [Downloading an Artifact to file](#downloading-an-artifact-to-file)
-    - [Downloading an Artifact checksum](#downloading-an-artifact-checksum)
-    - [Searching by AQL](#searching-by-aql)
+- [Setting up JFrog client](#setting-up-jfrog-client)
+- [Xray](#xray)
+  - [Pinging Xray](#pinging-xray)
+  - [Getting Xray Version](#getting-xray-version)
+  - [Checking Xray Entitlement](#checking-xray-entitlement)
+  - [Scanning Bulk of Dependencies](#scanning-bulk-of-dependencies)
+  - [Scanning a Dependency Tree with Consideration to the JFrog Project](#scanning-a-dependency-tree-with-consideration-to-the-jfrog-project)
+  - [Scanning a Dependency Tree with Consideration to the Xray Watches](#scanning-a-dependency-tree-with-consideration-to-the-xray-watches)
+  - [Retrieving Xray Build Details](#retrieving-xray-build-details)
+- [Artifactory](#artifactory)
+  - [Pinging Artifactory](#pinging-artifactory)
+  - [Getting Artifactory Version](#getting-artifactory-version)
+  - [Downloading an Artifact](#downloading-an-artifact)
+  - [Downloading an Artifact content](#downloading-an-artifact-content)
+  - [Downloading an Artifact to file](#downloading-an-artifact-to-file)
+  - [Downloading an Artifact checksum](#downloading-an-artifact-checksum)
+  - [Searching by AQL](#searching-by-aql)
+- [Platform](#platform)
+  - [Register For Web Login](#register-for-web-login)
+  - [Get Access Token From Web Login](#get-access-token-from-web-login)
 
 ### Setting up JFrog client
 
@@ -58,7 +61,11 @@ let jfrogClient = new JfrogClient({
   // Connection retries. If not defined, the default value is 5.
   retries: 5,
   // Timeout before the connection is terminated in milliseconds, the default value is 60 seconds
-  timeout: 60000
+  timeout: 60000,
+  // Status codes that trigger retries. the default is network error or a 5xx status code.
+  retryOnStatusCode: (statusCode: number) => statusCode >= 500;,
+  // Delay between retries, in milliseconds. The default is 1000 milliseconds.
+  retryDelay: 1000,
 });
 ```
 
@@ -298,3 +305,41 @@ jfrogClient.artifactory()
     console.error(error);
   });
 ```
+
+### Platform
+
+#### Web Login
+
+##### Register For Web Login
+
+```javascript
+const sessionId = XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX // UUID
+jfrogClient
+  .platform()
+  .webLogin()
+  .registerSessionId(sessionId)
+  .then((result) => {
+    ...
+  })
+  .catch((error) => {
+    ...
+  });
+```
+
+##### Get Access Token From Web Login
+
+```javascript
+const sessionId = XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX // UUID
+jfrogClient
+  .platform()
+  .webLogin()
+  .getToken(sessionId)
+  .then((result) => {
+    ...
+  })
+  .catch((error) => {
+    ...
+  });
+```
+
+Please note that you need to replace 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX' with the actual session ID that you've generated for `registerSessionId`.

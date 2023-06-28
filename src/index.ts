@@ -8,3 +8,4 @@ export { XrayScanClient as XrayGraphClient } from './Xray/XrayScanClient';
 export { XraySummaryClient } from './Xray/XraySummaryClient';
 export { XraySystemClient } from './Xray/XraySystemClient';
 export { XrayScanProgress } from './Xray/XrayScanProgress';
+export { ClientUtils } from './ClientUtils';

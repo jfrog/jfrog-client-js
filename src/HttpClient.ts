@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosInstance, AxiosProxyConfig, AxiosRequestConfig 
 import { IClientResponse, ILogger, IProxyConfig } from '../model';
 import axiosRetry, { IAxiosRetryConfig } from 'axios-retry';
 import { HttpsProxyAgent } from 'https-proxy-agent';
-
+import { RetryOnStatusCode } from './ClientConfig';
 export class HttpClient {
     private static readonly AUTHORIZATION_HEADER: string = 'Authorization';
     private static readonly USER_AGENT_HEADER: string = 'User-Agent';
@@ -16,7 +16,7 @@ export class HttpClient {
     private readonly _accessToken: string;
     private readonly _axiosInstance: AxiosInstance;
 
-    constructor(config: IHttpConfig, logger?: ILogger) {
+    constructor(config: IHttpConfig, private logger?: ILogger) {
         config.headers = config.headers || {};
         this.addUserAgentHeader(config.headers);
         this._axiosInstance = axios.create({
@@ -32,13 +32,28 @@ export class HttpClient {
             password: config.password,
         } as BasicAuth;
         this._accessToken = config.accessToken || '';
-        axiosRetry(this._axiosInstance, {
+        this.addRetryInterceptor(config);
+    }
+
+    private addRetryInterceptor(config: IHttpConfig): void {
+        const retryConfig: IAxiosRetryConfig = {
             retries: config.retries ?? HttpClient.DEFAULT_RETRIES,
+            retryCondition: (error: AxiosError) => this.shouldRetry(config, error),
             retryDelay: (retryCount: number, err: AxiosError) => {
-                logger?.debug(`Request ended with error: ${err}\nRetrying (attempt #${retryCount})...`);
-                return retryCount * HttpClient.DEFAULT_RETRY_DELAY_IN_MILLISECONDS;
+                this.logger?.debug(`Request ended with error: ${err}\nRetrying (attempt #${retryCount})...`);
+                return config.retryDelay ?? HttpClient.DEFAULT_RETRY_DELAY_IN_MILLISECONDS;
             },
-        } as IAxiosRetryConfig);
+            shouldResetTimeout: true,
+        };
+
+        axiosRetry(this._axiosInstance, retryConfig);
+    }
+
+    private shouldRetry(config: IHttpConfig, error: AxiosError): boolean {
+        if (config.retryOnStatusCode) {
+            return !!error.response && config.retryOnStatusCode(error.response.status);
+        }
+        return axiosRetry.isNetworkOrIdempotentRequestError(error);
     }
 
     public async doRequest(requestParams: IRequestParams): Promise<IClientResponse> {
@@ -153,7 +168,9 @@ export interface IHttpConfig {
     proxy?: IProxyConfig | false;
     headers?: { [key: string]: string };
     retries?: number;
+    retryDelay?: number;
     timeout?: number;
+    retryOnStatusCode?: RetryOnStatusCode;
 }
 
 export type method = 'GET' | 'POST' | 'HEAD';

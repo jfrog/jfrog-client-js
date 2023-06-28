@@ -10,4 +10,10 @@ export interface IClientConfig {
     headers?: { [key: string]: string };
     retries?: number;
     timeout?: number;
+    // Status codes that trigger retries.
+    retryOnStatusCode?: RetryOnStatusCode;
+    // Delay between retries.
+    retryDelay?: number;
 }
+
+export type RetryOnStatusCode = (statusCode: number) => boolean;

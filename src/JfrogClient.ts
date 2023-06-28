@@ -5,6 +5,8 @@ import { IClientSpecificConfig } from '../model/ClientSpecificConfig';
 
 import * as os from 'os';
 import crypto from 'crypto'; // Important - Don't import '*'. It'll import deprecated encryption methods
+import { PlatformClient } from './Platform/PlatformClient';
+import { ClientUtils } from './ClientUtils';
 
 export class JfrogClient {
     private static readonly ARTIFACTORY_SUFFIX: string = 'artifactory';
@@ -30,6 +32,13 @@ export class JfrogClient {
         return new XrayClient(this.getSpecificClientConfig(JfrogClient.XRAY_SUFFIX, this._jfrogConfig.xrayUrl));
     }
 
+    public platform(): PlatformClient {
+        if (!this._jfrogConfig.platformUrl) {
+            throw new Error('JFrog client: must provide platform URLs');
+        }
+        return new PlatformClient({ serverUrl: this._jfrogConfig.platformUrl, ...this._jfrogConfig });
+    }
+
     /**
      * Creates a server specific config from the provided JFrog config.
      * @param serverSuffix - server specific suffix.
@@ -49,13 +58,9 @@ export class JfrogClient {
             if (!this._jfrogConfig.platformUrl) {
                 throw new Error(serverSuffix + ' client: must provide platform or specific URLs');
             }
-            url = JfrogClient.addTrailingSlashIfMissing(this._jfrogConfig.platformUrl) + serverSuffix + '/';
+            url = ClientUtils.addTrailingSlashIfMissing(this._jfrogConfig.platformUrl) + serverSuffix + '/';
         }
         return url;
-    }
-
-    private static addTrailingSlashIfMissing(url: string): string {
-        return url + (url.endsWith('/') ? '' : '/');
     }
 
     public static getClientId(interfaces: (os.NetworkInterfaceBase[] | undefined)[]): string | undefined {

@@ -76,6 +76,7 @@ describe('Http client tests', () => {
         expect(res.data).toBe('RESPONSE');
         expect(res.status).toBe(200);
     });
+
     test('Do auth request', async () => {
         nock(serverUrl)
             .post(subPath)
