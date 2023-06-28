@@ -44,8 +44,4 @@ export class PlatformClient {
     public webLogin(): WebLoginClient {
         return new WebLoginClient(this.httpClient);
     }
-
-    public static retryOnStatusCodeSso: (statusCode: number) => boolean = (statusCode: number): boolean => {
-            return statusCode === 400;
-    };
 }
