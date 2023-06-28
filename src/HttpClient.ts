@@ -1,8 +1,7 @@
 import axios, { AxiosError, AxiosInstance, AxiosProxyConfig, AxiosRequestConfig } from 'axios';
-import { IClientResponse, ILogger, IProxyConfig } from '../model';
+import { IClientResponse, ILogger, IProxyConfig, RetryOnStatusCode } from '../model';
 import axiosRetry, { IAxiosRetryConfig } from 'axios-retry';
 import { HttpsProxyAgent } from 'https-proxy-agent';
-import { RetryOnStatusCode } from './ClientConfig';
 export class HttpClient {
     private static readonly AUTHORIZATION_HEADER: string = 'Authorization';
     private static readonly USER_AGENT_HEADER: string = 'User-Agent';
