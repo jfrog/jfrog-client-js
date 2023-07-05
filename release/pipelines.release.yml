@@ -20,7 +20,7 @@ pipelines:
             - name: jfrogClientJsReleaseGit
           integrations:
             - name: il_automation
-            - name: entplus_deployer
+            - name: ecosys_entplus_deployer
             - name: npm
         execution:
           onExecute:
@@ -44,7 +44,7 @@ pipelines:
             # Configure JFrog CLI
             - curl -fL https://install-cli.jfrog.io | sh
             - jf c rm --quiet
-            - jf c add internal --url=$int_entplus_deployer_url --user=$int_entplus_deployer_user --password=$int_entplus_deployer_apikey
+            - jf c add internal --url=$int_ecosys_entplus_deployer_url --user=$int_ecosys_entplus_deployer_user --password=$int_ecosys_entplus_deployer_apikey
             - jf npmc --repo-resolve ecosys-npm-remote --repo-deploy ecosys-npm-local
 
             # Install and audit
