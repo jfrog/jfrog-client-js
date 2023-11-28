@@ -36,8 +36,9 @@ describe('Xray System tests', () => {
         beforeEach(nock.cleanAll.bind(nock));
 
         test('Version failure - server not active', async () => {
+            const baseUrl: string = 'https://landing.jfrog.info/reactivate-server/ecosysjfrog';
             const client: JfrogClient = new JfrogClient({
-                platformUrl: 'https://httpbin.org/redirect-to?url=reactivate-server',
+                platformUrl: 'https://httpbin.org/redirect-to?url=' + baseUrl,
                 logger: TestUtils.createTestLogger(),
             });
             let errFound: boolean = false;
@@ -46,10 +47,10 @@ describe('Xray System tests', () => {
             } catch (err: any) {
                 errFound = true;
                 expect(err.activationUrl).toBeDefined();
-                // This result only expected for the test (using httpbin with the redirect-to flag cause this).
+                // This result only expected for the test.
                 // Actual activationUrl will be equal to the location without the added relative path to the version request.
                 // The JFrog client concat to the location the relative path of the version request.
-                expect(err.activationUrl).toBe('reactivate-server/xray' + XraySystemClient.versionEndpoint);
+                expect(err.activationUrl).toBe(baseUrl + '/xray' + XraySystemClient.versionEndpoint);
             }
             expect(errFound).toBeTruthy();
             expect(isPassedThroughProxy).toBeFalsy();

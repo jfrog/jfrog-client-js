@@ -72,10 +72,10 @@ export class HttpClient {
      * Method to use for beforeRedirect attribute in IRequestParams.
      * Before redirecting checks if the target location for the redirect is for 'reactivate-server' and throws ServerNotActiveError if so.
      */
-    public static validateServerIsActive(_: Record<string, any>, responseDetails: { headers: Record<string, string> }) {
-        let movedLocation: string | undefined = responseDetails?.headers['location'];
-        if (movedLocation && movedLocation.includes('reactivate-server')) {
-            throw new ServerNotActiveError(movedLocation);
+    public static validateServerIsActive(responseDetails: Record<string, any>, _: { headers: Record<string, string> }) {
+        let redirectedUrl: string | undefined = responseDetails?.href;
+        if (redirectedUrl && redirectedUrl.includes('/reactivate-server/')) {
+            throw new ServerNotActiveError(redirectedUrl);
         }
     }
 
