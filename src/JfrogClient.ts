@@ -1,6 +1,7 @@
 import { IJfrogClientConfig } from '../model/JfrogClientConfig';
 import { XrayClient } from './Xray/XrayClient';
 import { ArtifactoryClient } from './Artifactory/ArtifactoryClient';
+import { XscClient } from './Xsc/XscClient';
 import { IClientSpecificConfig } from '../model/ClientSpecificConfig';
 
 import * as os from 'os';
@@ -11,6 +12,7 @@ import { ClientUtils } from './ClientUtils';
 export class JfrogClient {
     private static readonly ARTIFACTORY_SUFFIX: string = 'artifactory';
     private static readonly XRAY_SUFFIX: string = 'xray';
+    private static readonly XSC_SUFFIX: string = 'xsc';
 
     public readonly clientId?: string;
 
@@ -37,6 +39,10 @@ export class JfrogClient {
             throw new Error('JFrog client: must provide platform URLs');
         }
         return new PlatformClient({ serverUrl: this._jfrogConfig.platformUrl, ...this._jfrogConfig });
+    }
+
+    public xsc(): XscClient {
+        return new XscClient(this.getSpecificClientConfig(JfrogClient.XSC_SUFFIX, this._jfrogConfig.xscUrl));
     }
 
     /**
