@@ -7,10 +7,12 @@ import * as os from 'os';
 import crypto from 'crypto'; // Important - Don't import '*'. It'll import deprecated encryption methods
 import { PlatformClient } from './Platform/PlatformClient';
 import { ClientUtils } from './ClientUtils';
+import { XscClient } from './Xsc/XscClient';
 
 export class JfrogClient {
     private static readonly ARTIFACTORY_SUFFIX: string = 'artifactory';
     private static readonly XRAY_SUFFIX: string = 'xray';
+    private static readonly XSC_SUFFIX: string = 'xsc';
 
     public readonly clientId?: string;
 
@@ -37,6 +39,10 @@ export class JfrogClient {
             throw new Error('JFrog client: must provide platform URLs');
         }
         return new PlatformClient({ serverUrl: this._jfrogConfig.platformUrl, ...this._jfrogConfig });
+    }
+
+    public xsc(): XscClient {
+        return new XscClient(this.getSpecificClientConfig(JfrogClient.XSC_SUFFIX, this._jfrogConfig.xscUrl));
     }
 
     /**

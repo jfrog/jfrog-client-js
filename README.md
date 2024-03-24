@@ -42,6 +42,10 @@ Add jfrog-client-js as a dependency to your package.json file:
 - [Platform](#platform)
   - [Register For Web Login](#register-for-web-login)
   - [Get Access Token From Web Login](#get-access-token-from-web-login)
+- [Xsc](#xsc)
+  - [Sending Log Message Event](#sending-log-mesage-event)
+  - [Sending Start Scan Event](#sending-start-scan-event)
+  - [Sending End Scan Event](#sending-end-scan-event)
 
 ### Setting up JFrog client
 
@@ -343,3 +347,19 @@ jfrogClient
 ```
 
 Please note that you need to replace 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX' with the actual session ID that you've generated for `registerSessionId`.
+
+### Xsc
+
+#### Event
+
+##### Sending Log Message Event
+
+```javascript
+jfrogClient
+  .xsc()
+  .event()
+  .log({log_level: 'error', source: 'js-client', message: 'error message to report as an event'})
+  .catch((error) => {
+    console.error(error);
+  });
+```
