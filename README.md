@@ -363,3 +363,35 @@ jfrogClient
     console.error(error);
   });
 ```
+
+##### Sending Start Scan Event
+
+```javascript
+jfrogClient
+  .xsc()
+  .event()
+  .startScan({product: 'product', os_platform: 'windows', jfrog_user: 'user-name'})
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+##### Sending End Scan Event
+
+```javascript
+const scanEvent = {multi_scan_id: 'some-scan-id', event_status: 'completed'}
+jfrogClient
+  .xsc()
+  .event()
+  .endScan({product: 'product', os_platform: 'windows', jfrog_user: 'user-name'})
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+

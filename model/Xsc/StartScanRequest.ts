@@ -1,6 +1,8 @@
+import { ScanEventStatus } from './XscTypes';
+
 export interface StartScanRequest {
     event_type?: number;
-    event_status?: string;
+    event_status?: ScanEventStatus;
     product?: string;
     product_version?: string;
     jfrog_user?: string;
