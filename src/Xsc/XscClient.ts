@@ -24,7 +24,7 @@ export class XscClient {
             retryDelay,
         }: IClientSpecificConfig = config;
         if (!serverUrl) {
-            throw new Error('Xsc client : must provide platformUrl or xrayUrl');
+            throw new Error('Xsc client : must provide platformUrl');
         }
         this.logger = new XscLogger(logger);
         this.httpClient = new HttpClient(

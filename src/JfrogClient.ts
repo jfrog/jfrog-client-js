@@ -42,7 +42,7 @@ export class JfrogClient {
     }
 
     public xsc(): XscClient {
-        return new XscClient(this.getSpecificClientConfig(JfrogClient.XSC_SUFFIX, this._jfrogConfig.xscUrl));
+        return new XscClient(this.getSpecificClientConfig(JfrogClient.XSC_SUFFIX, undefined));
     }
 
     /**

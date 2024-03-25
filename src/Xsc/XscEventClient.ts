@@ -1,38 +1,83 @@
 import { HttpClient } from '..';
 import { IRequestParams } from '../HttpClient';
 
-import { ILogger } from '../../model/';
+import { IClientResponse, ILogger } from '../../model/';
 import { XscLog } from './XscLog';
+import { StartScanRequest } from './StartScanRequest';
+import { ScanEvent } from './ScanEvent';
 
 export class XscEventClient {
-    static readonly logEventEndpoint: string = 'api/v1/event/logMessage';
-    static readonly startScanEventEndpoint: string = 'api/v1/scan/graph';
-    static readonly endScanEventEndpoint: string = 'api/v1/scan/graph';
+    static readonly eventEndpoint: string = 'api/v1/event';
+    static readonly logEventEndpoint: string = XscEventClient.eventEndpoint + '/logMessage';
 
     constructor(private readonly httpClient: HttpClient, private readonly logger: ILogger) {}
 
+    /**
+     *
+     * Send 'POST /event/logMessage' request to Xsc.
+     *
+     * @param logEvent - The Log event to send
+     * @returns true if the log was sent successfully, false otherwise.
+     */
     public async log(logEvent: XscLog): Promise<boolean> {
-        this.logger.debug("Sending POST event/logMessage request...");
+        this.logger.debug('Sending POST event/logMessage request...');
         const requestParams: IRequestParams = {
             url: XscEventClient.logEventEndpoint,
             method: 'POST',
             data: logEvent,
         };
         try {
-            await this.httpClient.doAuthRequest(requestParams);
-            return true;
+            let response: IClientResponse | undefined = await this.httpClient.doAuthRequest(requestParams);
+            return response?.status === 200;
         } catch (error) {
             this.logger.debug(error);
             return false;
         }
     }
 
-    public async startScan(): Promise<string> {
-        //
-        return '';
+    /**
+     *
+     * Send 'POST /event' request to Xsc.
+     *
+     * @param eventInfo - The Scan request information that is requested to start
+     * @returns the scan event information that started.
+     * @throws an exception if an unexpected response received from Xsc.
+     */
+    public async startScan(eventInfo: StartScanRequest): Promise<ScanEvent> {
+        this.logger.debug('Sending POST event request...');
+        eventInfo.event_status = 'started';
+        const requestParams: IRequestParams = {
+            url: XscEventClient.eventEndpoint,
+            method: 'POST',
+            data: eventInfo,
+            validateStatus: (status: number) => status === 201,
+        };
+        this.logger.debug('data: ' + JSON.stringify(eventInfo));
+        return await (
+            await this.httpClient.doAuthRequest(requestParams)
+        ).data;
     }
 
-    public async endScan(msi: string): Promise<void> {
-        //
+    /**
+     *
+     * Send 'PUT /event' request to Xsc.
+     *
+     * @param eventInfo - The Scan event to end
+     * @returns true if the scan ending information sent successfully, false otherwise.
+     */
+    public async endScan(event: ScanEvent): Promise<boolean> {
+        this.logger.debug('Sending PUT event request...');
+        const requestParams: IRequestParams = {
+            url: XscEventClient.eventEndpoint,
+            method: 'PUT',
+            data: event,
+        };
+        try {
+            let response: IClientResponse | undefined = await this.httpClient.doAuthRequest(requestParams);
+            return response?.status === 200;
+        } catch (error) {
+            this.logger.debug(error);
+            return false;
+        }
     }
 }
