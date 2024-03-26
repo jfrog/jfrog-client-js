@@ -2,9 +2,9 @@ import { HttpClient } from '..';
 import { IRequestParams } from '../HttpClient';
 
 import { IClientResponse, ILogger } from '../../model/';
-import { XscLog } from './XscLog';
-import { StartScanRequest } from './StartScanRequest';
-import { ScanEvent } from './ScanEvent';
+import { XscLog } from './Event/XscLog';
+import { StartScanRequest } from './Event/StartScanRequest';
+import { ScanEvent } from './Event/ScanEvent';
 
 export class XscEventClient {
     static readonly eventEndpoint: string = 'api/v1/event';

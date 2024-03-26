@@ -16,4 +16,5 @@ export * from './Xray/Summary';
 export { IXrayVersion } from './Xray/System/Version';
 export { AccessTokenResponse } from './Platform/AccessTokenResponse';
 export { RetryOnStatusCode } from './ClientConfig';
-export * from './Xsc';
+export * from './Xsc/Event';
+export { IXscVersion } from './Xsc/System/Version';

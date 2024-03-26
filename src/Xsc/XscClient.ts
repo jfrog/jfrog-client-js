@@ -4,6 +4,7 @@ import { XscLogger } from './XscLogger';
 import { IClientSpecificConfig } from '../../model/ClientSpecificConfig';
 
 import { XscEventClient } from './XscEventClient';
+import { XscSystemClient } from './XscSystemClient';
 
 export class XscClient {
     private readonly httpClient: HttpClient;
@@ -46,5 +47,9 @@ export class XscClient {
 
     public event(): XscEventClient {
         return new XscEventClient(this.httpClient, this.logger);
+    }
+
+    public system(): XscSystemClient {
+        return new XscSystemClient(this.httpClient, this.logger);
     }
 }
