@@ -1,7 +1,7 @@
 import { HttpClient } from '..';
 import { IRequestParams } from '../HttpClient';
 
-import { IClientResponse, ILogger } from '../../model/';
+import { IClientResponse, ILogger, ScanEventStatus, ScanEventType } from '../../model/';
 import { XscLog } from './Event/XscLog';
 import { StartScanRequest } from './Event/StartScanRequest';
 import { ScanEvent } from './Event/ScanEvent';
@@ -45,7 +45,8 @@ export class XscEventClient {
      */
     public async startScan(eventInfo: StartScanRequest): Promise<ScanEvent> {
         this.logger.debug('Sending POST event request...');
-        eventInfo.event_status = 'started';
+        eventInfo.event_status = ScanEventStatus.Started;
+        eventInfo.event_type = ScanEventType.SourceCode;
         const requestParams: IRequestParams = {
             url: XscEventClient.eventEndpoint,
             method: 'POST',

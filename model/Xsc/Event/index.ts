@@ -2,5 +2,14 @@ export { ScanEvent } from './ScanEvent';
 export { StartScanRequest } from './StartScanRequest';
 export { XscLog } from './XscLog';
 
+export enum ScanEventStatus {
+    Started = 'started',
+    Completed = 'completed',
+    Failed = 'failed',
+}
+
+export enum ScanEventType {
+    SourceCode = 1,
+}
+
 export type XscLogLevel = 'debug' | 'info' | 'warning' | 'error';
-export type ScanEventStatus = 'started' | 'completed' | 'failed';

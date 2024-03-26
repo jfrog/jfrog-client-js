@@ -1,7 +1,7 @@
-import { ScanEventStatus } from './index';
+import { ScanEventType, ScanEventStatus } from './index';
 
 export interface StartScanRequest {
-    event_type?: number;
+    event_type?: ScanEventType;
     event_status?: ScanEventStatus;
     product?: string;
     product_version?: string;
