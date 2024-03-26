@@ -43,6 +43,7 @@ Add jfrog-client-js as a dependency to your package.json file:
   - [Register For Web Login](#register-for-web-login)
   - [Get Access Token From Web Login](#get-access-token-from-web-login)
 - [Xsc](#xsc)
+  - [Getting Xsc Version](#getting-xsc-version)
   - [Sending Log Message Event](#sending-log-mesage-event)
   - [Sending Start Scan Event](#sending-start-scan-event)
   - [Sending End Scan Event](#sending-end-scan-event)
@@ -350,6 +351,23 @@ Please note that you need to replace 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX' with
 
 ### Xsc
 
+#### System
+
+##### Getting Xsc Version
+
+```javascript
+jfrogClient
+  .xsc()
+  .system()
+  .version()
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
 #### Event
 
 ##### Sending Log Message Event
@@ -394,4 +412,3 @@ jfrogClient
     console.error(error);
   });
 ```
-
