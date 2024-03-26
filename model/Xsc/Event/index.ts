@@ -5,6 +5,7 @@ export { XscLog } from './XscLog';
 export enum ScanEventStatus {
     Started = 'started',
     Completed = 'completed',
+    Cancelled = 'cancelled',
     Failed = 'failed',
 }
 
