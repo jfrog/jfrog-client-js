@@ -1,4 +1,4 @@
-import { IClientResponse, IXrayVersion } from '../../model';
+import { IClientResponse, IXrayVersion, IXscVersion } from '../../model';
 import { HttpClient, IRequestParams } from '../HttpClient';
 import { ILogger } from '../../model/';
 
@@ -7,7 +7,7 @@ export class XscSystemClient {
 
     constructor(private readonly httpClient: HttpClient, private readonly logger: ILogger) {}
 
-    public async version(): Promise<IXrayVersion> {
+    public async version(): Promise<IXscVersion> {
         this.logger.debug('Sending version request...');
         const requestParams: IRequestParams = {
             url: XscSystemClient.versionEndpoint,
