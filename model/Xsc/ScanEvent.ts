@@ -1,4 +1,4 @@
-import { ScanEventStatus } from './XscTypes';
+import { ScanEventStatus } from './index';
 
 export interface ScanEvent {
     multi_scan_id: string;
