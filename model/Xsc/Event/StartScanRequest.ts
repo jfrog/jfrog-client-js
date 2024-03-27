@@ -5,6 +5,7 @@ export interface StartScanRequest {
     event_status?: ScanEventStatus;
     product?: string;
     product_version?: string;
+    jpd_version?: string;
     jfrog_user?: string;
     os_platform?: string;
     os_architecture?: string;
