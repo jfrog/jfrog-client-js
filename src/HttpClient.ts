@@ -172,7 +172,7 @@ export interface IHttpConfig {
     retryOnStatusCode?: RetryOnStatusCode;
 }
 
-export type method = 'GET' | 'POST' | 'HEAD';
+export type method = 'GET' | 'POST' | 'HEAD' | 'PUT';
 export type responseType = 'arraybuffer' | 'blob' | 'document' | 'json' | 'text' | 'stream';
 
 export interface IRequestParams {
