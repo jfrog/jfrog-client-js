@@ -5,5 +5,5 @@ export interface ScanEvent {
     event_status?: ScanEventStatus;
     total_findings?: number;
     total_ignored_findings?: number;
-    total_scan_duration?: number;
+    total_scan_duration?: string;
 }
