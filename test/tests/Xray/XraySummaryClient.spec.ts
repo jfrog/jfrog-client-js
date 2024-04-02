@@ -69,7 +69,7 @@ describe('Xray summary tests', () => {
         expect(firstIssue.severity).toBe('Medium');
         expect(firstIssue.summary).toBe(FIRST_ISSUE_SUMMARY);
         expect(secondIssue.description).toBeTruthy();
-        expect(secondIssue.severity).toBe('Critical');
+        expect(secondIssue.severity).toBe('High');
         expect(secondIssue.summary).toBe(SECOND_ISSUE_SUMMARY);
     });
 
