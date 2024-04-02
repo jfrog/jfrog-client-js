@@ -28,7 +28,7 @@ export class XscEventClient {
         };
         try {
             let response: IClientResponse | undefined = await this.httpClient.doAuthRequest(requestParams);
-            return response?.status === 200;
+            return response?.status === 201;
         } catch (error) {
             this.logger.debug(error);
             return false;
