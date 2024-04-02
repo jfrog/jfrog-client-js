@@ -17,6 +17,8 @@ export class XrayScanClient {
         checkCanceled: () => void,
         projectKey: string | undefined,
         watches: string[] | undefined,
+        multiScanId: string | undefined,
+        technologies: string[] | undefined,
         sleepIntervalMilliseconds: number = XrayScanClient.SLEEP_INTERVAL_MILLISECONDS
     ): Promise<IGraphResponse> {
         try {
@@ -24,7 +26,7 @@ export class XrayScanClient {
                 return {} as IGraphResponse;
             }
             checkCanceled();
-            const response: IClientResponse = await this.postScanGraph(request, projectKey, watches);
+            const response: IClientResponse = await this.postScanGraph(request, projectKey, watches, multiScanId, technologies);
             return await this.getScanGraphResults(
                 response.data.scan_id,
                 progress,
@@ -50,11 +52,13 @@ export class XrayScanClient {
     private async postScanGraph(
         request: IGraphRequestModel,
         projectKey?: string,
-        watches?: string[]
+        watches?: string[],
+        multiScanId?: string,
+        technologies?: string[],
     ): Promise<IClientResponse> {
         this.logger.debug('Sending POST scan/graph request...');
         const requestParams: IRequestParams = {
-            url: this.getUrl(projectKey, watches),
+            url: this.getUrl(projectKey, watches, multiScanId, technologies),
             method: 'POST',
             data: request,
         };
@@ -84,15 +88,23 @@ export class XrayScanClient {
      * @param watches - List of Watches or undefined
      * @returns URL for "POST api/v1/scan/graph"
      */
-    private getUrl(projectKey: string | undefined, watches?: string[]): string {
+    private getUrl(projectKey: string | undefined, watches?: string[], multiScanId?: string, technologies?: string[]): string {
         let url: string = XrayScanClient.scanGraphEndpoint;
+        let params: string[] = [];
+
         if (projectKey && projectKey.length > 0) {
-            url += `?project=${projectKey}`;
+            params.push(`project=${projectKey}`);
         } else if (watches && watches.length > 0) {
-            url += '?watch=' + watches.join('&watch=');
+            params.push(`watch=${watches.join('&watch=')}`);
+        }
+        if (multiScanId) {
+            params.push(`multi_scan_id=${multiScanId}`);
+        }
+        if (technologies && technologies.length > 0) {
+            params.push(`tech=${technologies.join('&tech=')}`);
         }
 
-        return url;
+        return params.length > 0 ? url + "?" + params.join("&") : url;
     }
 
     /**

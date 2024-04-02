@@ -5,6 +5,7 @@ import { IClientSpecificConfig } from '../../model/ClientSpecificConfig';
 
 import { XscEventClient } from './XscEventClient';
 import { XscSystemClient } from './XscSystemClient';
+import { XrayScanClient } from '../Xray/XrayScanClient';
 
 export class XscClient {
     private readonly httpClient: HttpClient;
@@ -43,6 +44,10 @@ export class XscClient {
             },
             this.logger
         );
+    }
+
+    public scan(): XrayScanClient {
+        return new XrayScanClient(this.httpClient, this.logger);
     }
 
     public event(): XscEventClient {
