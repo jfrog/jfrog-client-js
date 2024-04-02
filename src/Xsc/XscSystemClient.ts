@@ -1,4 +1,4 @@
-import { IClientResponse, IXrayVersion, IXscVersion } from '../../model';
+import { IClientResponse, IXscVersion } from '../../model';
 import { HttpClient, IRequestParams } from '../HttpClient';
 import { ILogger } from '../../model/';
 

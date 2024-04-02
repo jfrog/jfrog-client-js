@@ -1,10 +1,15 @@
 import { HttpClient } from '..';
 import { IRequestParams } from '../HttpClient';
 
-import { IClientResponse, ILogger, ScanEventStatus, ScanEventType } from '../../model/';
-import { XscLog } from './Event/XscLog';
-import { StartScanRequest } from './Event/StartScanRequest';
-import { ScanEvent } from './Event/ScanEvent';
+import {
+    IClientResponse,
+    ILogger,
+    ScanEventStatus,
+    ScanEventType,
+    XscLog,
+    StartScanRequest,
+    ScanEvent,
+} from '../../model/';
 
 export class XscEventClient {
     static readonly eventEndpoint: string = 'api/v1/event';
