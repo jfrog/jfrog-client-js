@@ -18,8 +18,7 @@ const jsYaml: ISummaryRequestModel = {
 const FIRST_ISSUE_ID: string = 'XRAY-79036';
 const FIRST_ISSUE_SUMMARY: string = 'Denial of Service in js-yaml';
 const SECOND_ISSUE_ID: string = 'XRAY-80240';
-const SECOND_ISSUE_SUMMARY: string =
-    'JS-YAML lib/js-yaml/loader.js storeMappingPair() Function Object Property Handling Arbitrary Code Execution';
+const SECOND_ISSUE_SUMMARY: string = 'Code Injection in js-yaml';
 
 const express: ISummaryRequestModel = {
     component_details: [new ComponentDetails('npm://express:4.0.0')],
