@@ -10,7 +10,11 @@ export class XrayScanClient {
     private static readonly SLEEP_INTERVAL_MILLISECONDS: number = 5000;
     private static readonly MAX_ATTEMPTS: number = 60;
 
-    constructor(private readonly httpClient: HttpClient, private readonly logger: ILogger) {}
+    constructor(
+        private readonly httpClient: HttpClient,
+        private readonly xsc: boolean,
+        private readonly logger: ILogger
+    ) {}
 
     public async graph(
         request: IGraphRequestModel,
@@ -18,8 +22,8 @@ export class XrayScanClient {
         checkCanceled: () => void,
         projectKey: string | undefined,
         watches: string[] | undefined,
-        multiScanId: string | undefined,
-        technologies: string[] | undefined,
+        multiScanId?: string,
+        technologies?: string[],
         sleepIntervalMilliseconds: number = XrayScanClient.SLEEP_INTERVAL_MILLISECONDS
     ): Promise<IGraphResponse> {
         try {
@@ -39,7 +43,6 @@ export class XrayScanClient {
                 progress,
                 checkCanceled,
                 (!projectKey || projectKey.length === 0) && (!watches || watches.length === 0),
-                multiScanId !== undefined && multiScanId.length > 0,
                 sleepIntervalMilliseconds
             );
         } finally {
@@ -88,13 +91,17 @@ export class XrayScanClient {
     }
 
     /**
-     * Get URL for "POST api/v1/scan/graph".
-     * If no project key provided - api/v1/scan/graph
-     * If project key was provided - api/v1/scan/graph?project=<projectKey>
-     * If watches provided - api/v1/scan/graph?watch=<watch-1>&watch=<watch-2>
+     * Get URL for "POST scan/graph" (Xray: api/v1/scan/graph, XSC: api/v1/sca/scan/graph).
+     * If no project key provided - /scan/graph
+     * If project key was provided - /scan/graph?project=<projectKey>
+     * If watches provided - /scan/graph?watch=<watch-1>&watch=<watch-2>
+     * If multiScanId provided - /scan/graph?multi_scan_id=<multiScanId>
+     * If technologies provided - /scan/graph?tech=<tech-1>&tech=<tech-2>
      * @param projectKey - Project key or undefined
      * @param watches - List of Watches or undefined
-     * @returns URL for "POST api/v1/scan/graph"
+     * @param multiScanId - Multi scan ID or undefined
+     * @param technologies - List of technologies or undefined
+     * @returns URL for "POST /scan/graph"
      */
     private getUrl(
         projectKey: string | undefined,
@@ -102,7 +109,7 @@ export class XrayScanClient {
         multiScanId?: string,
         technologies?: string[]
     ): string {
-        let url: string = XrayScanClient.scanGraphEndpoint;
+        let url: string = this.xsc ? XrayScanClient.xscScanGraphEndpoint : XrayScanClient.scanGraphEndpoint;
         let params: string[] = [];
 
         if (projectKey && projectKey.length > 0) {
@@ -112,7 +119,6 @@ export class XrayScanClient {
         }
         if (multiScanId) {
             params.push(`multi_scan_id=${multiScanId}`);
-            url = XrayScanClient.xscScanGraphEndpoint;
         }
         if (technologies && technologies.length > 0) {
             params.push(`tech=${technologies.join('&tech=')}`);
@@ -140,10 +146,9 @@ export class XrayScanClient {
         progress: XrayScanProgress,
         checkCanceled: () => void,
         includeVulnerabilities: boolean,
-        xsc: boolean,
         sleepIntervalMilliseconds: number
     ): Promise<IGraphResponse> {
-        const scanGraphUrl: string = xsc
+        const scanGraphUrl: string = this.xsc
             ? XrayScanClient.xscScanGraphEndpoint
             : XrayScanClient.scanGraphEndpoint +
               '/' +

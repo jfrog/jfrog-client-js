@@ -47,7 +47,7 @@ export class XscClient {
     }
 
     public scan(): XrayScanClient {
-        return new XrayScanClient(this.httpClient, this.logger);
+        return new XrayScanClient(this.httpClient, true, this.logger);
     }
 
     public event(): XscEventClient {

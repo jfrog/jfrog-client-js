@@ -120,7 +120,16 @@ describe('Scan graph tests', () => {
         await client
             .xray()
             .scan()
-            .graph({ component_id: 'engine' } as IGraphRequestModel, progress, () => undefined, '', [], 10);
+            .graph(
+                { component_id: 'engine' } as IGraphRequestModel,
+                progress,
+                () => undefined,
+                '',
+                [],
+                undefined,
+                undefined,
+                10
+            );
         expect(scope.isDone()).toBeTruthy();
         expect(progress.lastPercentage).toBe(100);
     });
@@ -139,7 +148,16 @@ describe('Scan graph tests', () => {
             await client
                 .xray()
                 .scan()
-                .graph({ component_id: 'engine' } as IGraphRequestModel, progress, () => undefined, '', [], 10);
+                .graph(
+                    { component_id: 'engine' } as IGraphRequestModel,
+                    progress,
+                    () => undefined,
+                    '',
+                    [],
+                    undefined,
+                    undefined,
+                    10
+                );
         }).rejects.toThrow(`Xray get scan graph exceeded the timeout.`);
         expect(progress.lastPercentage).toBe(100);
     });

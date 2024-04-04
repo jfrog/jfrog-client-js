@@ -10,6 +10,7 @@ import {
     StartScanRequest,
     ScanEvent,
 } from '../../model/';
+import { ScanEventResponse } from './Event/ScanEventResponse';
 
 export class XscEventClient {
     static readonly eventEndpoint: string = 'api/v1/event';
@@ -85,5 +86,17 @@ export class XscEventClient {
             this.logger.debug(error);
             return false;
         }
+    }
+
+    public async getScanEvent(multiScanId: string): Promise<ScanEventResponse> {
+        this.logger.debug(`Sending GET event/${multiScanId} request...`);
+        const requestParams: IRequestParams = {
+            url: XscEventClient.eventEndpoint + '/' + multiScanId,
+            method: 'GET',
+            validateStatus: (status: number) => status === 200,
+        };
+        return await (
+            await this.httpClient.doAuthRequest(requestParams)
+        ).data;
     }
 }

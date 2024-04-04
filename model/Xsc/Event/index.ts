@@ -1,5 +1,6 @@
 export { ScanEvent } from './ScanEvent';
 export { StartScanRequest } from './StartScanRequest';
+export { ScanEventResponse } from './ScanEventResponse';
 export { XscLog } from './XscLog';
 
 export enum ScanEventStatus {

@@ -60,7 +60,7 @@ export class XrayClient {
     }
 
     public scan(): XrayScanClient {
-        return new XrayScanClient(this.httpClient, this.logger);
+        return new XrayScanClient(this.httpClient, false, this.logger);
     }
 
     public entitlements(): XrayEntitlementsClient {

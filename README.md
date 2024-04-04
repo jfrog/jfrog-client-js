@@ -47,6 +47,7 @@ Add jfrog-client-js as a dependency to your package.json file:
   - [Sending Log Message Event](#sending-log-mesage-event)
   - [Sending Start Scan Event](#sending-start-scan-event)
   - [Sending End Scan Event](#sending-end-scan-event)
+  - [Getting Scan Event Details](#getting-scan-event-details)
 
 ### Setting up JFrog client
 
@@ -412,3 +413,21 @@ jfrogClient
     console.error(error);
   });
 ```
+
+##### Getting Scan Event Details
+
+```javascript
+const multiScanId = XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX // UUID
+jfrogClient
+  .xsc()
+  .event()
+  .getScanEvent(multiScanId)
+  .then((result) => {
+    ...
+  })
+  .catch((error) => {
+    ...
+  });
+```
+
+Please note that you need to replace 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX' with the actual multi scan ID that you've generated with `startScan`.
