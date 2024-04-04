@@ -8,9 +8,9 @@ import {
     ScanEventType,
     XscLog,
     StartScanRequest,
+    ScanEventResponse,
     ScanEvent,
 } from '../../model/';
-import { ScanEventResponse } from './Event/ScanEventResponse';
 
 export class XscEventClient {
     static readonly eventEndpoint: string = 'api/v1/event';
