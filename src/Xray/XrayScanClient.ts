@@ -5,14 +5,12 @@ import { IRequestParams } from '../HttpClient';
 import { XrayScanProgress } from './XrayScanProgress';
 
 export class XrayScanClient {
-    static readonly scanGraphEndpoint: string = 'api/v1/scan/graph';
-    static readonly xscScanGraphEndpoint: string = 'api/v1/sca/scan/graph';
     private static readonly SLEEP_INTERVAL_MILLISECONDS: number = 5000;
     private static readonly MAX_ATTEMPTS: number = 60;
 
     constructor(
         private readonly httpClient: HttpClient,
-        private readonly xsc: boolean,
+        private readonly endPoint: string,
         private readonly logger: ILogger
     ) {}
 
@@ -109,7 +107,7 @@ export class XrayScanClient {
         multiScanId?: string,
         technologies?: string[]
     ): string {
-        let url: string = this.xsc ? XrayScanClient.xscScanGraphEndpoint : XrayScanClient.scanGraphEndpoint;
+        let url: string = this.endPoint;
         let params: string[] = [];
 
         if (projectKey && projectKey.length > 0) {
@@ -148,13 +146,12 @@ export class XrayScanClient {
         includeVulnerabilities: boolean,
         sleepIntervalMilliseconds: number
     ): Promise<IGraphResponse> {
-        const scanGraphUrl: string = this.xsc
-            ? XrayScanClient.xscScanGraphEndpoint
-            : XrayScanClient.scanGraphEndpoint +
-              '/' +
-              scanId +
-              '?include_licenses=true' +
-              `&include_vulnerabilities=${includeVulnerabilities}`;
+        const scanGraphUrl: string =
+            this.endPoint +
+            '/' +
+            scanId +
+            '?include_licenses=true' +
+            `&include_vulnerabilities=${includeVulnerabilities}`;
         for (let i: number = 0; i < XrayScanClient.MAX_ATTEMPTS; i++) {
             checkCanceled();
             this.logger.debug(`Sending GET ${scanGraphUrl} request...`);

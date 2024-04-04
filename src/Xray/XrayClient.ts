@@ -9,6 +9,8 @@ import { XrayGraphClient as XrayScanClient } from '..';
 import { XrayEntitlementsClient } from './XrayEntitlementsClient';
 
 export class XrayClient {
+    static readonly scanGraphEndpoint: string = 'api/v1/scan/graph';
+
     private readonly httpClient: HttpClient;
     private logger: ILogger;
 
@@ -60,7 +62,7 @@ export class XrayClient {
     }
 
     public scan(): XrayScanClient {
-        return new XrayScanClient(this.httpClient, false, this.logger);
+        return new XrayScanClient(this.httpClient, XrayClient.scanGraphEndpoint, this.logger);
     }
 
     public entitlements(): XrayEntitlementsClient {

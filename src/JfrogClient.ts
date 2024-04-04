@@ -42,7 +42,7 @@ export class JfrogClient {
     }
 
     public xsc(): XscClient {
-        return new XscClient(this.getSpecificClientConfig(JfrogClient.XSC_SUFFIX, undefined));
+        return new XscClient(this.getSpecificClientConfig(JfrogClient.XSC_SUFFIX));
     }
 
     /**
@@ -51,10 +51,7 @@ export class JfrogClient {
      * @param providedCustomUrl - custom server URL, if provided.
      * @private
      */
-    private getSpecificClientConfig(
-        serverSuffix: string,
-        providedCustomUrl: string | undefined
-    ): IClientSpecificConfig {
+    private getSpecificClientConfig(serverSuffix: string, providedCustomUrl?: string): IClientSpecificConfig {
         return { serverUrl: this.getServerUrl(serverSuffix, providedCustomUrl), ...this._jfrogConfig };
     }
 

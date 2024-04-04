@@ -42,7 +42,7 @@ Add jfrog-client-js as a dependency to your package.json file:
 - [Platform](#platform)
   - [Register For Web Login](#register-for-web-login)
   - [Get Access Token From Web Login](#get-access-token-from-web-login)
-- [Xsc](#xsc)
+- [Xray Source Control](#xray-source-control)
   - [Getting Xsc Version](#getting-xsc-version)
   - [Sending Log Message Event](#sending-log-mesage-event)
   - [Sending Start Scan Event](#sending-start-scan-event)
@@ -350,7 +350,7 @@ jfrogClient
 
 Please note that you need to replace 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX' with the actual session ID that you've generated for `registerSessionId`.
 
-### Xsc
+### Xray Source Control
 
 #### System
 
