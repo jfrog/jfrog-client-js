@@ -3,9 +3,9 @@ import nock from 'nock';
 import { IGraphRequestModel } from '../../../model/Xray/Scan/GraphRequestModel';
 import { IGraphResponse } from '../../../model/Xray/Scan/GraphResponse';
 import { JfrogClient } from '../../../src';
-import { XrayScanClient } from '../../../src/Xray/XrayScanClient';
 import { XrayScanProgress } from '../../../src/Xray/XrayScanProgress';
 import { TestUtils } from '../../TestUtils';
+import { XrayClient } from '../../../src/Xray/XrayClient';
 
 const PLATFORM_URL: string = faker.internet.url();
 beforeAll(() => {
@@ -23,7 +23,7 @@ describe('Scan graph tests', () => {
         logger: TestUtils.createTestLogger(),
     });
     test('Unexpected response', async () => {
-        const uri: string = '/xray/' + XrayScanClient.scanGraphEndpoint;
+        const uri: string = '/xray/' + XrayClient.scanGraphEndpoint;
         nock(PLATFORM_URL)
             .post(uri)
             .reply(200, { scan_id: '123' } as IGraphResponse);
@@ -41,7 +41,7 @@ describe('Scan graph tests', () => {
     });
 
     test('Project test', async () => {
-        const uri: string = '/xray/' + XrayScanClient.scanGraphEndpoint;
+        const uri: string = '/xray/' + XrayClient.scanGraphEndpoint;
         nock(PLATFORM_URL)
             .post(uri + '?project=ecosys')
             .reply(200, { scan_id: '123' } as IGraphResponse);
@@ -58,7 +58,7 @@ describe('Scan graph tests', () => {
     });
 
     test('Watch test', async () => {
-        const uri: string = '/xray/' + XrayScanClient.scanGraphEndpoint;
+        const uri: string = '/xray/' + XrayClient.scanGraphEndpoint;
         nock(PLATFORM_URL)
             .post(uri + '?watch=watch-1')
             .reply(200, { scan_id: '123' } as IGraphResponse);
@@ -75,7 +75,7 @@ describe('Scan graph tests', () => {
     });
 
     test('Watches test', async () => {
-        const uri: string = '/xray/' + XrayScanClient.scanGraphEndpoint;
+        const uri: string = '/xray/' + XrayClient.scanGraphEndpoint;
         nock(PLATFORM_URL)
             .post(uri + '?watch=watch-1&watch=watch-2')
             .reply(200, { scan_id: '123' } as IGraphResponse);
@@ -106,7 +106,7 @@ describe('Scan graph tests', () => {
     });
 
     test('202 test', async () => {
-        const uri: string = '/xray/' + XrayScanClient.scanGraphEndpoint;
+        const uri: string = '/xray/' + XrayClient.scanGraphEndpoint;
         nock(PLATFORM_URL)
             .post(uri)
             .reply(200, { scan_id: '123' } as IGraphResponse);
@@ -120,13 +120,22 @@ describe('Scan graph tests', () => {
         await client
             .xray()
             .scan()
-            .graph({ component_id: 'engine' } as IGraphRequestModel, progress, () => undefined, '', [], 10);
+            .graph(
+                { component_id: 'engine' } as IGraphRequestModel,
+                progress,
+                () => undefined,
+                '',
+                [],
+                undefined,
+                undefined,
+                10
+            );
         expect(scope.isDone()).toBeTruthy();
         expect(progress.lastPercentage).toBe(100);
     });
 
     test('Timeout', async () => {
-        const uri: string = '/xray/' + XrayScanClient.scanGraphEndpoint;
+        const uri: string = '/xray/' + XrayClient.scanGraphEndpoint;
         nock(PLATFORM_URL)
             .post(uri)
             .reply(200, { scan_id: '123' } as IGraphResponse);
@@ -139,13 +148,22 @@ describe('Scan graph tests', () => {
             await client
                 .xray()
                 .scan()
-                .graph({ component_id: 'engine' } as IGraphRequestModel, progress, () => undefined, '', [], 10);
+                .graph(
+                    { component_id: 'engine' } as IGraphRequestModel,
+                    progress,
+                    () => undefined,
+                    '',
+                    [],
+                    undefined,
+                    undefined,
+                    10
+                );
         }).rejects.toThrow(`Xray get scan graph exceeded the timeout.`);
         expect(progress.lastPercentage).toBe(100);
     });
 
     test('Check cancelled', async () => {
-        const uri: string = '/xray/' + XrayScanClient.scanGraphEndpoint;
+        const uri: string = '/xray/' + XrayClient.scanGraphEndpoint;
         nock(PLATFORM_URL)
             .post(uri)
             .reply(200, { scan_id: '123' } as IGraphResponse);

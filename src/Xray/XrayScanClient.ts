@@ -5,11 +5,14 @@ import { IRequestParams } from '../HttpClient';
 import { XrayScanProgress } from './XrayScanProgress';
 
 export class XrayScanClient {
-    static readonly scanGraphEndpoint: string = 'api/v1/scan/graph';
     private static readonly SLEEP_INTERVAL_MILLISECONDS: number = 5000;
     private static readonly MAX_ATTEMPTS: number = 60;
 
-    constructor(private readonly httpClient: HttpClient, private readonly logger: ILogger) {}
+    constructor(
+        private readonly httpClient: HttpClient,
+        private readonly endPoint: string,
+        private readonly logger: ILogger
+    ) {}
 
     public async graph(
         request: IGraphRequestModel,
@@ -17,6 +20,8 @@ export class XrayScanClient {
         checkCanceled: () => void,
         projectKey: string | undefined,
         watches: string[] | undefined,
+        multiScanId?: string,
+        technologies?: string[],
         sleepIntervalMilliseconds: number = XrayScanClient.SLEEP_INTERVAL_MILLISECONDS
     ): Promise<IGraphResponse> {
         try {
@@ -24,7 +29,13 @@ export class XrayScanClient {
                 return {} as IGraphResponse;
             }
             checkCanceled();
-            const response: IClientResponse = await this.postScanGraph(request, projectKey, watches);
+            const response: IClientResponse = await this.postScanGraph(
+                request,
+                projectKey,
+                watches,
+                multiScanId,
+                technologies
+            );
             return await this.getScanGraphResults(
                 response.data.scan_id,
                 progress,
@@ -50,11 +61,13 @@ export class XrayScanClient {
     private async postScanGraph(
         request: IGraphRequestModel,
         projectKey?: string,
-        watches?: string[]
+        watches?: string[],
+        multiScanId?: string,
+        technologies?: string[]
     ): Promise<IClientResponse> {
         this.logger.debug('Sending POST scan/graph request...');
         const requestParams: IRequestParams = {
-            url: this.getUrl(projectKey, watches),
+            url: this.getUrl(projectKey, watches, multiScanId, technologies),
             method: 'POST',
             data: request,
         };
@@ -76,23 +89,40 @@ export class XrayScanClient {
     }
 
     /**
-     * Get URL for "POST api/v1/scan/graph".
-     * If no project key provided - api/v1/scan/graph
-     * If project key was provided - api/v1/scan/graph?project=<projectKey>
-     * If watches provided - api/v1/scan/graph?watch=<watch-1>&watch=<watch-2>
+     * Get URL for "POST scan/graph" (Xray: api/v1/scan/graph, XSC: api/v1/sca/scan/graph).
+     * If no project key provided - /scan/graph
+     * If project key was provided - /scan/graph?project=<projectKey>
+     * If watches provided - /scan/graph?watch=<watch-1>&watch=<watch-2>
+     * If multiScanId provided - /scan/graph?multi_scan_id=<multiScanId>
+     * If technologies provided - /scan/graph?tech=<tech-1>&tech=<tech-2>
      * @param projectKey - Project key or undefined
      * @param watches - List of Watches or undefined
-     * @returns URL for "POST api/v1/scan/graph"
+     * @param multiScanId - Multi scan ID or undefined
+     * @param technologies - List of technologies or undefined
+     * @returns URL for "POST /scan/graph"
      */
-    private getUrl(projectKey: string | undefined, watches?: string[]): string {
-        let url: string = XrayScanClient.scanGraphEndpoint;
+    private getUrl(
+        projectKey: string | undefined,
+        watches?: string[],
+        multiScanId?: string,
+        technologies?: string[]
+    ): string {
+        let url: string = this.endPoint;
+        let params: string[] = [];
+
         if (projectKey && projectKey.length > 0) {
-            url += `?project=${projectKey}`;
+            params.push(`project=${projectKey}`);
         } else if (watches && watches.length > 0) {
-            url += '?watch=' + watches.join('&watch=');
+            params.push(`watch=${watches.join('&watch=')}`);
+        }
+        if (multiScanId) {
+            params.push(`multi_scan_id=${multiScanId}`);
+        }
+        if (technologies && technologies.length > 0) {
+            params.push(`tech=${technologies.join('&tech=')}`);
         }
 
-        return url;
+        return params.length > 0 ? url + '?' + params.join('&') : url;
     }
 
     /**
@@ -117,7 +147,7 @@ export class XrayScanClient {
         sleepIntervalMilliseconds: number
     ): Promise<IGraphResponse> {
         const scanGraphUrl: string =
-            XrayScanClient.scanGraphEndpoint +
+            this.endPoint +
             '/' +
             scanId +
             '?include_licenses=true' +

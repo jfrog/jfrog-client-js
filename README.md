@@ -42,6 +42,12 @@ Add jfrog-client-js as a dependency to your package.json file:
 - [Platform](#platform)
   - [Register For Web Login](#register-for-web-login)
   - [Get Access Token From Web Login](#get-access-token-from-web-login)
+- [Xray Source Control](#xray-source-control)
+  - [Getting Xsc Version](#getting-xsc-version)
+  - [Sending Log Message Event](#sending-log-mesage-event)
+  - [Sending Start Scan Event](#sending-start-scan-event)
+  - [Sending End Scan Event](#sending-end-scan-event)
+  - [Getting Scan Event Details](#getting-scan-event-details)
 
 ### Setting up JFrog client
 
@@ -343,3 +349,85 @@ jfrogClient
 ```
 
 Please note that you need to replace 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX' with the actual session ID that you've generated for `registerSessionId`.
+
+### Xray Source Control
+
+#### System
+
+##### Getting Xsc Version
+
+```javascript
+jfrogClient
+  .xsc()
+  .system()
+  .version()
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+#### Event
+
+##### Sending Log Message Event
+
+```javascript
+jfrogClient
+  .xsc()
+  .event()
+  .log({log_level: 'error', source: 'js-client', message: 'error message to report as an event'})
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+##### Sending Start Scan Event
+
+```javascript
+jfrogClient
+  .xsc()
+  .event()
+  .startScan({product: 'product', os_platform: 'windows', jfrog_user: 'user-name'})
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+##### Sending End Scan Event
+
+```javascript
+const scanEvent = {multi_scan_id: 'some-scan-id', event_status: 'completed'}
+jfrogClient
+  .xsc()
+  .event()
+  .endScan({product: 'product', os_platform: 'windows', jfrog_user: 'user-name'})
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+##### Getting Scan Event Details
+
+```javascript
+const multiScanId = XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX // UUID
+jfrogClient
+  .xsc()
+  .event()
+  .getScanEvent(multiScanId)
+  .then((result) => {
+    ...
+  })
+  .catch((error) => {
+    ...
+  });
+```
+
+Please note that you need to replace 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX' with the actual multi scan ID that you've generated with `startScan`.

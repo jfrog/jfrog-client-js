@@ -20,7 +20,7 @@ export class TestUtils {
             accessToken: process.env.CLIENTTESTS_PLATFORM_ACCESS_TOKEN,
             logger: TestUtils.createTestLogger(),
             retries: 5,
-            retryDelay:5000
+            retryDelay: 5000,
         } as IJfrogClientConfig;
     }
 
