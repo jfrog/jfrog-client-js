@@ -7,6 +7,7 @@ import { IClientSpecificConfig } from '../../model/ClientSpecificConfig';
 import { ILogger } from '../../model/';
 import { XrayGraphClient as XrayScanClient } from '..';
 import { XrayEntitlementsClient } from './XrayEntitlementsClient';
+import { XrayJasConfigClient } from './XrayJasConfigClient';
 
 export class XrayClient {
     static readonly scanGraphEndpoint: string = 'api/v1/scan/graph';
@@ -67,5 +68,9 @@ export class XrayClient {
 
     public entitlements(): XrayEntitlementsClient {
         return new XrayEntitlementsClient(this.httpClient, this.logger);
+    }
+
+    public jasconfig(): XrayJasConfigClient {
+      return new XrayJasConfigClient(this.httpClient, this.logger);
     }
 }
