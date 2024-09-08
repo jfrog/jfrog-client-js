@@ -71,6 +71,6 @@ export class XrayClient {
     }
 
     public jasconfig(): XrayJasConfigClient {
-      return new XrayJasConfigClient(this.httpClient, this.logger);
+        return new XrayJasConfigClient(this.httpClient, this.logger);
     }
 }
