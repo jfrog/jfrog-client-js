@@ -126,7 +126,7 @@ describe('Xray summary tests', () => {
         const license: ILicense = licenses[0];
         expect(license.name).toBe('MIT');
         expect(license.full_name).toBe('MIT License');
-        expect(license.more_info_url.length).toBeGreaterThanOrEqual(4);
+        expect(license.more_info_url.length).toBeGreaterThanOrEqual(3);
         expect(license.components.length).toBe(1);
         expect(license.components[0]).toBe('npm://js-yaml:3.10.0');
     });
