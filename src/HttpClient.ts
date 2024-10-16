@@ -1,11 +1,4 @@
-import axios, {
-    AxiosError,
-    AxiosInstance,
-    AxiosProxyConfig,
-    AxiosRequestConfig,
-    AxiosResponse,
-    AxiosResponseHeaders
-} from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosProxyConfig, AxiosRequestConfig } from 'axios';
 import { IClientResponse, ILogger, IProxyConfig, RetryOnStatusCode } from '../model';
 import axiosRetry, { IAxiosRetryConfig } from 'axios-retry';
 import { HttpsProxyAgent } from 'https-proxy-agent';
@@ -21,10 +14,12 @@ export class HttpClient {
     private readonly _basicAuth: BasicAuth;
     private readonly _accessToken: string;
     private readonly _axiosInstance: AxiosInstance;
+    private readonly _proxy: any
 
     constructor(config: IHttpConfig, private logger?: ILogger) {
         config.headers = config.headers || {};
         this.addUserAgentHeader(config.headers);
+        this._proxy = this.getAxiosProxyConfig(config.proxy);
         this._axiosInstance = axios.create({
             baseURL: config.serverUrl,
             headers: config.headers,
@@ -63,15 +58,16 @@ export class HttpClient {
     }
 
     public async doRequest(requestParams: IRequestParams): Promise<IClientResponse> {
-        const response : AxiosResponse = await this._axiosInstance(requestParams);
+        // Example proxy configuration
 
-        return {
-            data: response.data,
-            headers: this.mapHeaders(response.headers),  // Use your mapHeaders function
-            status: response.status,
+        // Merge the proxy config into the request params
+        const requestWithProxy : any = {
+            ...requestParams,           // Keep original request params
+            proxy: this._proxy          // Add proxy configuration
         };
-    }
 
+        return await this._axiosInstance(requestWithProxy);
+    }
 
 
     public async doAuthRequest(requestParams: IRequestParams): Promise<IClientResponse> {
@@ -107,23 +103,6 @@ export class HttpClient {
         if (!requestParams.headers[HttpClient.AUTHORIZATION_HEADER]) {
             requestParams.headers[HttpClient.AUTHORIZATION_HEADER] = 'Bearer ' + this._accessToken;
         }
-    }
-
-    private mapHeaders(headers?: AxiosResponseHeaders): { [key: string]: string } {
-        const mappedHeaders: { [key: string]: string } = {};
-
-        if (!headers) {
-            return mappedHeaders;
-        }
-
-        Object.keys(headers).forEach((key) => {
-            const headerValue : string | undefined = headers[key];
-            if (headerValue !== undefined) {
-                mappedHeaders[key] = headerValue.toString();
-            }
-        });
-
-        return mappedHeaders;
     }
 
     /**
