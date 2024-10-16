@@ -64,27 +64,12 @@ export class HttpClient {
 
     public async doRequest(requestParams: IRequestParams): Promise<IClientResponse> {
         const response : AxiosResponse = await this._axiosInstance(requestParams);
+
         return {
             data: response.data,
-            headers: this.mapHeaders(response.headers),
-            status: response.status
+            headers: this.mapHeaders(response.headers),  // Use your mapHeaders function
+            status: response.status,
         };
-    }
-
-    private mapHeaders(headers?: AxiosResponseHeaders): { [key: string]: string } {
-        const mappedHeaders: { [key: string]: string } = {};
-        if (!headers) {
-            return mappedHeaders; // Return an empty object if headers are undefined
-        }
-
-        Object.keys(headers).forEach((key) => {
-            const headerValue : string | undefined = headers[key];
-            if (headerValue !== undefined) {
-                mappedHeaders[key] = headerValue.toString();
-            }
-        });
-
-        return mappedHeaders;
     }
 
 
@@ -115,7 +100,6 @@ export class HttpClient {
         }
     }
 
-
     private addAuthHeader(requestParams: IRequestParams) {
         if (!requestParams.headers) {
             requestParams.headers = {};
@@ -123,6 +107,23 @@ export class HttpClient {
         if (!requestParams.headers[HttpClient.AUTHORIZATION_HEADER]) {
             requestParams.headers[HttpClient.AUTHORIZATION_HEADER] = 'Bearer ' + this._accessToken;
         }
+    }
+
+    private mapHeaders(headers?: AxiosResponseHeaders): { [key: string]: string } {
+        const mappedHeaders: { [key: string]: string } = {};
+
+        if (!headers) {
+            return mappedHeaders;
+        }
+
+        Object.keys(headers).forEach((key) => {
+            const headerValue : string | undefined = headers[key];
+            if (headerValue !== undefined) {
+                mappedHeaders[key] = headerValue.toString();
+            }
+        });
+
+        return mappedHeaders;
     }
 
     /**
