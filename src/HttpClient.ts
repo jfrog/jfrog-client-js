@@ -1,4 +1,11 @@
-import axios, { AxiosError, AxiosInstance, AxiosProxyConfig, AxiosRequestConfig } from 'axios';
+import axios, {
+    AxiosError,
+    AxiosInstance,
+    AxiosProxyConfig,
+    AxiosRequestConfig,
+    AxiosResponse,
+    AxiosResponseHeaders
+} from 'axios';
 import { IClientResponse, ILogger, IProxyConfig, RetryOnStatusCode } from '../model';
 import axiosRetry, { IAxiosRetryConfig } from 'axios-retry';
 import { HttpsProxyAgent } from 'https-proxy-agent';
@@ -56,8 +63,31 @@ export class HttpClient {
     }
 
     public async doRequest(requestParams: IRequestParams): Promise<IClientResponse> {
-        return await this._axiosInstance(requestParams);
+        const response : AxiosResponse = await this._axiosInstance(requestParams);
+        return {
+            data: response.data,
+            headers: this.mapHeaders(response.headers),
+            status: response.status
+        };
     }
+
+    private mapHeaders(headers?: AxiosResponseHeaders): { [key: string]: string } {
+        const mappedHeaders: { [key: string]: string } = {};
+        if (!headers) {
+            return mappedHeaders; // Return an empty object if headers are undefined
+        }
+
+        Object.keys(headers).forEach((key) => {
+            const headerValue : string | undefined = headers[key];
+            if (headerValue !== undefined) {
+                mappedHeaders[key] = headerValue.toString();
+            }
+        });
+
+        return mappedHeaders;
+    }
+
+
 
     public async doAuthRequest(requestParams: IRequestParams): Promise<IClientResponse> {
         if (this._accessToken !== '') {
@@ -84,6 +114,7 @@ export class HttpClient {
             headers[HttpClient.USER_AGENT_HEADER] = 'jfrog-client-js';
         }
     }
+
 
     private addAuthHeader(requestParams: IRequestParams) {
         if (!requestParams.headers) {
