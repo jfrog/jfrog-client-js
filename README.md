@@ -31,6 +31,7 @@ Add jfrog-client-js as a dependency to your package.json file:
   - [Scanning a Dependency Tree with Consideration to the JFrog Project](#scanning-a-dependency-tree-with-consideration-to-the-jfrog-project)
   - [Scanning a Dependency Tree with Consideration to the Xray Watches](#scanning-a-dependency-tree-with-consideration-to-the-xray-watches)
   - [Retrieving Xray Build Details](#retrieving-xray-build-details)
+  - [Retrieving JAS configuration](#retrieving-jas-configuration)
 - [Artifactory](#artifactory)
   - [Pinging Artifactory](#pinging-artifactory)
   - [Getting Artifactory Version](#getting-artifactory-version)
@@ -191,6 +192,20 @@ jfrogClient
   .xray()
   .details()
   .build('Build Name', '1', 'Optional Project Key')
+  .then((result) => {
+    console.log(JSON.stringify(result));
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+#### Retrieving JAS configuration
+```javascript
+jfrogClient
+  .xray()
+  .jasconfig()
+  .getJasConfig()      
   .then((result) => {
     console.log(JSON.stringify(result));
   })
