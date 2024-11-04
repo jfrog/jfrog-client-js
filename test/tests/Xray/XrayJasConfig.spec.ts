@@ -2,8 +2,6 @@ import faker from 'faker';
 import nock from 'nock';
 import { JfrogClient } from '../../../src';
 import { TestUtils } from '../../TestUtils';
-import { IGraphRequestModel } from '../../../model';
-import { IJasConfig } from '../../../model/Xray/JasConfig/JasConfig';
 
 describe('Xray jas config tests', () => {
     test('Get jas config', async () => {
