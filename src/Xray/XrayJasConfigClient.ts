@@ -1,5 +1,5 @@
 import { HttpClient, IRequestParams } from '../HttpClient';
-import { IClientResponse, ILogger } from '../../model';
+import { ILogger } from '../../model';
 import { IJasConfig } from '../../model/Xray/JasConfig/JasConfig';
 
 export class XrayJasConfigClient {
