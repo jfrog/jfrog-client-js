@@ -14,10 +14,12 @@ export class HttpClient {
     private readonly _basicAuth: BasicAuth;
     private readonly _accessToken: string;
     private readonly _axiosInstance: AxiosInstance;
+    private readonly _proxy: any
 
     constructor(config: IHttpConfig, private logger?: ILogger) {
         config.headers = config.headers || {};
         this.addUserAgentHeader(config.headers);
+        this._proxy = this.getAxiosProxyConfig(config.proxy);
         this._axiosInstance = axios.create({
             baseURL: config.serverUrl,
             headers: config.headers,
@@ -56,8 +58,17 @@ export class HttpClient {
     }
 
     public async doRequest(requestParams: IRequestParams): Promise<IClientResponse> {
-        return await this._axiosInstance(requestParams);
+        // Example proxy configuration
+
+        // Merge the proxy config into the request params
+        const requestWithProxy : any = {
+            ...requestParams,           // Keep original request params
+            proxy: this._proxy          // Add proxy configuration
+        };
+
+        return await this._axiosInstance(requestWithProxy);
     }
+
 
     public async doAuthRequest(requestParams: IRequestParams): Promise<IClientResponse> {
         if (this._accessToken !== '') {
