@@ -27,6 +27,12 @@ jobs:
         with:
           node-version: "16"
 
+      - name: Start FastCI Optimization
+        uses: jfrog-fastci/fastci@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          fastci_otel_token: ${{ secrets.FASTCI_TOKEN }}
+
       # Clean install project
       - name: Clean install
         run: npm ci
