@@ -19,13 +19,13 @@ jobs:
 
     steps:
       # Prerequisites
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Setup NodeJS
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
-          node-version: "16"
+          node-version-file: ".tool-versions"
 
       # Clean install project
       - name: Clean install
@@ -44,5 +44,5 @@ jobs:
 
       # Send tests coverage to Codecov
       - name: Send code coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         if: runner.os == 'Linux'

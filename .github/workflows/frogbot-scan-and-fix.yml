@@ -15,13 +15,13 @@ jobs:
   create-fix-pull-requests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       # Install prerequisites
       - name: Setup NodeJS
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
-          node-version: "16.x"
+          node-version-file: ".tool-versions"
 
       - uses: jfrog/frogbot@v2
         env:
